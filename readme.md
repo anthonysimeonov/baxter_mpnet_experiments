@@ -17,7 +17,7 @@ Install ROS and the necessary ROS packages below in a catkin workspace.
 [Baxter MoveIt! Configuration](http://sdk.rethinkrobotics.com/wiki/MoveIt_Tutorial)
 
 ### Virtual Environment Setup
-Navigate to wherever you keep your Python virtual environments, and create a new one for PyTorch with Python 2.7, and the other Python packages required to run (replace $PYTHON2_PATH with the absolute path to your system's python 2.7 -- for example, ```/usr/bin/python```).
+Navigate to wherever you keep your Python virtual environments, and create a new one for PyTorch with Python 2.7, and the other Python packages required to run (replace $PYTHON2_PATH with the absolute path to your system's python 2.7 -- for example, ```/usr/bin/python```). See this [link](https://help.dreamhost.com/hc/en-us/articles/215489338-Installing-and-using-virtualenv-with-Python-2) for more details on Python virtual environments.
 
 ```
 virtualenv pytorch-python2 -p $PYTHON2_PATH
