@@ -1,0 +1,16 @@
+data/train/paths/*.pkl
+data/train/pcd/*.pcd
+data/train/targets/*.pkl
+
+data/test/paths/*.pkl
+data/test/pcd/*.pcd
+data/test/targets/*.pkl
+
+path_samples/good_path_samples/*
+path_samples/bad_path_samples/*
+models/sample/*.pkl
+
+*.json
+*.ipynb_checkpoints/*
+*.pyc
+*.dat
