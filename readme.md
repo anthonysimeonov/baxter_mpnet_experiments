@@ -71,8 +71,13 @@ Make sure that both the Baxter planning scene are launched and PyTorch Python2 v
 ```
 
 ### Data Analysis and Path Playback
+During testing, the MPNet algorithm will plan paths and a collision checker will verify if they are feasible or not. The paths are then stored in the local ```path_samples``` directory, and can be played back on the simulated Baxter with the ```path_playback_smooth.py``` script. This is a very minimal working example of playing a saved path from start to goal, so USE WITH CAUTION --- ESPECIALLY IF RUNNING ON THE REAL ROBOT.
 
+```
+python path_playback_smooth.py
+```
 
+<!-- 
 # Setting Up Experiments
 The main script, ```motion_planning_data_gen.py``` uses the MoveIt Python API for setting up the environment and creating motion plan requests. The program can be used with the default MoveIt OMPL motion planners as is. To use non-default OMPL planners with the Baxter MoveIt interface, this can be done by modifying the ```planning_context_manager.cpp``` file in the ```moveit_planners_ompl``` package to include the necessary OMPL headers and register the planner in the ```registerDefaultPlanners()``` function. Then in the ```baxter_moveit_config``` package, the file ```config/ompl_planning.yaml``` file can be modified to configure the planner and apply it as the default planner (using BIT* as an example):
 
@@ -119,4 +124,4 @@ and then the Python script ```motion_planning_data_gen.py``` can be run with a R
 python motion_planning_data_gen.py test
 ```
 
-The path planning data for each environment, including the paths, planning time, path cost (C-space euclidean length), and number of successful/total planning requests are recorded in a dictionary and periodically saved in the ```data/``` folder to be analyzed or played back on the robot. ```comparison.ipynb```  in ```analysis/``` and the ```playback_path.ipynb``` notebooks are simplified examples of using the saved planning data for data analysis or visualizing the paths on the robot using the Baxter interface (ensure the robot is enabled before playing back paths, with ```rosrun baxter_tools enable_robot.py -e``` in the terminal).
+The path planning data for each environment, including the paths, planning time, path cost (C-space euclidean length), and number of successful/total planning requests are recorded in a dictionary and periodically saved in the ```data/``` folder to be analyzed or played back on the robot. ```comparison.ipynb```  in ```analysis/``` and the ```playback_path.ipynb``` notebooks are simplified examples of using the saved planning data for data analysis or visualizing the paths on the robot using the Baxter interface (ensure the robot is enabled before playing back paths, with ```rosrun baxter_tools enable_robot.py -e``` in the terminal). -->
