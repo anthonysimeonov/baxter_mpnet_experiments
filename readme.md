@@ -77,6 +77,31 @@ During testing, the MPNet algorithm will plan paths and a collision checker will
 python path_playback_smooth.py
 ```
 
+# Docker container with system dependencies
+The experiments can alternatively be run in a container which has all the system dependencies set up, if the local system is incompatible with any of the supporting packages/libraries. The docker requires the local system to have a GPU and Nvidida drivers compatible with CUDA 9.0 (it can be easily adapted to work with CPU-only systems). To build the container, navigate to the ```docker``` folder, and execute the command
+```
+docker build -t baxter-moveit-docker .
+```
+Once the container has been built, navigate the root directory, and run the ```run image.bash``` executable. This will run the docker image and open a new terminal inside the container, and this repository and all its source code for running the experiments will be mounted inside the image. All the scripts and environments can then be run inside the container (see below for details).
+
+In the terminal opened after launching the image, follow the below steps to set up the MoveIt! planning environment.
+```
+source devel/setup.bash
+catkin build
+roslaunch baxter_mpnet_experiments baxter_mpnet.launch
+```
+
+Then in a new terminal, enter the container with the command (replace $CONTAINER_NAME with whatever name was assigned to the container that was just started)
+```
+docker exec -it $CONTAINER_NAME bash
+```
+and once inside the container, 
+```
+source devel/setup.bash
+roscd baxter_mpnet_experiments
+```
+And all the MPNet scripts can be run as described in the section above. 
+
 <!-- 
 # Setting Up Experiments
 The main script, ```motion_planning_data_gen.py``` uses the MoveIt Python API for setting up the environment and creating motion plan requests. The program can be used with the default MoveIt OMPL motion planners as is. To use non-default OMPL planners with the Baxter MoveIt interface, this can be done by modifying the ```planning_context_manager.cpp``` file in the ```moveit_planners_ompl``` package to include the necessary OMPL headers and register the planner in the ```registerDefaultPlanners()``` function. Then in the ```baxter_moveit_config``` package, the file ```config/ompl_planning.yaml``` file can be modified to configure the planner and apply it as the default planner (using BIT* as an example):
