@@ -205,16 +205,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--env_data_path', type=str, default='./env/environment_data/')
-    # parser.add_argument('--env_data_file', type=str, default='trainEnvironments_GazeboPatch.pkl')
     parser.add_argument('--env_data_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--targets_data_path', type=str, default='./data/train/targets/')
-    # parser.add_argument('--targets_data_file', type=str, default='trainTargetsLarge_GoalsCorrect_Verified.pkl')
     parser.add_argument('--targets_data_file', type=str, default='trainTargets.pkl')
     parser.add_argument('--path_data_path', type=str, default='./data/train/paths/')
     parser.add_argument('--path_data_file', type=str, default='path_data_sample')
 
     parser.add_argument('--paths_to_save', type=int, default=5)
-    parser.add_argument('--max_time', type=int, default=60)
+    parser.add_argument('--max_time', type=int, default=5)
 
     args = parser.parse_args()
     main(args)
