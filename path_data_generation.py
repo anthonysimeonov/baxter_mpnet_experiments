@@ -3,6 +3,7 @@ import pickle
 import rospy
 import argparse
 import baxter_interface
+import os
 
 from tools.planning_scene_editor import *
 
@@ -58,7 +59,10 @@ def main(args):
 
     # Dictionary to save path data, and filename to save the data to in the end
     pathsDict = {}
-    # pathsFile = "data/train/path_data_example"
+
+    if not os.path.exists(args.path_data_path):
+        os.makedirs(args.path_data_path)
+
     pathsFile = args.path_data_path+args.path_data_file
 
     # load data from environment files for obstacle locations and collision free goal poses
