@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="mpnet_bottle">
+    <pose frame="world">1 0 0.0 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://mpnet_bottle/meshes/bottle.stl</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

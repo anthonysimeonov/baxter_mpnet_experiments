@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="MPNet_Bookshelf">
+    <pose frame="world">1.2 0.0 0.75 1.5708 0 -1.5708</pose>
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://MPNet_Bookshelf/meshes/bookshelf_light.stl</uri>
+            <scale>0.022 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

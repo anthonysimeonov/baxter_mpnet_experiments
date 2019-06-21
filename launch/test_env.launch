@@ -1,0 +1,16 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="recording" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+  <node name="spawn_kinect" pkg="gazebo_ros" type="spawn_model" args="-file /home/anthony/.gazebo/models/kinect_ros/model.sdf -sdf -x -1.244454 -z 2.148085 -P 0.189397 -Y 0.0 -model kinect_ros"/>
+
+  <node name="spawn_duck" pkg="gazebo_ros" type="spawn_model" args="-file /home/anthony/.gazebo/models/MPNet_Duck/model.sdf -sdf -model MPNet_Duck"/>
+  <node name="spawn_shelf" pkg="gazebo_ros" type="spawn_model" args="-file /home/anthony/.gazebo/models/MPNet_Bookshelf/model.sdf -sdf -model MPNet_Bookshelf"/>
+  <node name="spawn_right_table" pkg="gazebo_ros" type="spawn_model" args="-file /home/anthony/.gazebo/models/MPNet_TableRight/model.sdf -sdf -model MPNet_TableRight"/>
+  <node name="spawn_left_table" pkg="gazebo_ros" type="spawn_model" args="-file /home/anthony/.gazebo/models/MPNet_TableLeft/model.sdf -sdf -model MPNet_TableLeft"/>
+  <node name="spawn_center_table" pkg="gazebo_ros" type="spawn_model" args="-file /home/anthony/.gazebo/models/MPNet_TableCenter/model.sdf -sdf -model MPNet_TableCenter"/>
+</launch>

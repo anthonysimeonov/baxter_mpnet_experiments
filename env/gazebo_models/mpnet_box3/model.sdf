@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="MPNet_TableCenter">
+    <pose frame="world">1 0 0.0 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.03 0.05 0.7</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

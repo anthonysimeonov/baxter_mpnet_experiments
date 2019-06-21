@@ -1,0 +1,15 @@
+<launch>
+  <include file="$(find baxter_gazebo)/launch/baxter_world.launch">
+    <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+  </include>
+  <node name="action_server" pkg="baxter_interface" type="joint_trajectory_action_server.py" />
+  <node name="remapper" pkg="baxter_mpnet" type="remap.py"/>
+
+
+  <include file="$(find baxter_moveit_config)/launch/baxter_grippers.launch" />
+</launch>

@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="MPNet_Duck">
+    <pose frame="world">0.87 -0.4 0.24 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://MPNet_Duck/meshes/duck.stl</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
