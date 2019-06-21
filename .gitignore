@@ -16,3 +16,5 @@ models/sample/*.pkl
 *.dat
 *.deb
 *.tgz
+
+docker/.vscode/*
