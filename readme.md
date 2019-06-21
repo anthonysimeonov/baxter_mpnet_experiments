@@ -36,7 +36,7 @@ git clone https://github.com/anthonysimeonov/baxter_mpnet_experiments.git
 catkin build
 ```
 
-Navigate to ```data``` folder, download and unzip [this]() file to obtain a sample dataset for paths, collision free targets, and point clouds. Navigate to ```models``` folder, and download and unzip [this]() file to obtain a set of trained neural network models that produce similar results as described in the paper.
+Navigate to ```data``` folder, download and unzip [this](https://drive.google.com/file/d/1WMK_uoKzAuetUXcO_suJc2meG9zQrPrq/view?usp=sharing) file to obtain a sample dataset for paths, collision free targets, and point clouds. Navigate to ```models``` folder, and download and unzip [this](https://drive.google.com/file/d/1iblAH9u5xZsR1_222IgHaZExC8l1sX1P/view?usp=sharing) file to obtain a set of trained neural network models that produce similar results as described in the paper.
 
 # MPNet Pipeline
 
