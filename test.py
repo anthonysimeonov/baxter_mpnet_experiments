@@ -52,10 +52,10 @@ def main(args):
     encoder = Encoder_End2End(args.enc_input_size, args.enc_output_size)
     mlp = MLP(args.mlp_input_size, args.mlp_output_size)
 
-    device = torch.device('cpu')
+    # device = torch.device('cpu')
     model_path = args.model_path
-    mlp.load_state_dict(torch.load(model_path+args.mlp_model_name, map_location=device))
-    encoder.load_state_dict(torch.load(model_path+args.enc_model_name, map_location=device))
+    mlp.load_state_dict(torch.load(model_path+args.mlp_model_name)) #, map_location=device))
+    encoder.load_state_dict(torch.load(model_path+args.enc_model_name)) #, map_location=device))
 
     if torch.cuda.is_available():
         encoder.cuda()
