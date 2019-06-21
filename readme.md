@@ -3,39 +3,48 @@
 MPNet algorithm implemented and tested for use with the Baxter Research Robot in a set of set of realistic obstacle scenes for motion planning experiments.  
 
 
-# Depends On
+# ROS, Baxter, and MoveIt! System Dependencies
+Install ROS and the necessary ROS packages below in a catkin workspace.
+
 [ROS Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu)
 
 [Baxter SDK](http://sdk.rethinkrobotics.com/wiki/Workstation_Setup)
 
 [Baxter Simulator](http://sdk.rethinkrobotics.com/wiki/Simulator_Installation)
 
-[MoveIt!](https://moveit.ros.org/install/source/)
+[MoveIt!](https://moveit.ros.org/install/)
 
 [Baxter MoveIt! Configuration](http://sdk.rethinkrobotics.com/wiki/MoveIt_Tutorial)
 
-[PyTorch]()
+### Virtual Environment Setup
+Navigate to wherever you keep your Python virtual environments, and create a new one for PyTorch with Python 2.7, and the other Python packages required to run (replace $PYTHON2_PATH with the absolute path to your system's python 2.7 -- for example, ```/usr/bin/python```).
 
-# Install and Virtual Environment Setup
+```
+virtualenv pytorch-python2 -p $PYTHON2_PATH
+```
+and then install the dependencies from the requirements.txt file found in the root of this repository, after activating the virtual environment
+```
+source /path/to/pytorch-python2/bin/activate
+pip install -r requirements.txt
+```
+
+# Install and Download Sample Data
 In a catkin workspace, clone repo within the source folder and build the workspace 
 ```
-git clone https://github.com/anthonysimeonov/baxter-mpnet-experiments.git
+cd /path/to/catkin_workspace/src/
+git clone https://github.com/anthonysimeonov/baxter_mpnet_experiments.git
 catkin build
 ```
 
-Virtual Environment for PyTorch
-
-```
-virtualenv -v pytorch-python2 -r requirements.txt?
-```
+Navigate to ```data``` folder, download and unzip [this]() file to obtain a sample dataset for paths, collision free targets, and point clouds. Navigate to ```models``` folder, and download and unzip [this]() file to obtain a set of trained neural network models that produce similar results as described in the paper.
 
 # MPNet Pipeline
 
 ### Dataset Generation
-Configure whatever expert planner you want to use by modifying the ```ompl_planning.yaml``` file in the ```baxter_moveit_config``` package (found under the ```config``` directory). Rebuild workspace if any changes here have been made, then launch environment.
+Configure whatever expert planner you want to use by modifying the ```ompl_planning.yaml``` file in the ```baxter_moveit_config``` package (found under the ```config``` directory, ```RRTStarkConfig``` works well). Rebuild workspace if any changes here have been made, then launch environment.
 
 ```
-roslaunch baxter-mpnet-experiments baxter-mpnet.launch
+roslaunch baxter_mpnet_experiments baxter-mpnet.launch
 ```
 
 and then run training data generation python
@@ -49,16 +58,16 @@ Make sure virtual environment is sourced
 ```
 source /path/to/environments/pytorch-python2/bin/activate
 ```
-and then run training (can play with arguments)
+and then run training (make sure ```run_training.sh``` has been made executable)
 
 ```
-python train.py
+./run_training.sh
 ```
 
 ### Model Testing
 Make sure that both the Baxter planning scene are launched and PyTorch Python2 virtual environment are sourced, and then run the test script
 ```
-python test.py
+./run_testing.sh
 ```
 
 ### Data Analysis and Path Playback
