@@ -78,7 +78,7 @@ python path_playback_smooth.py
 ```
 
 # Docker container with system dependencies
-The experiments can alternatively be run in a container which has all the system dependencies set up, if the local system is incompatible with any of the supporting packages/libraries. The docker requires the local system to have a GPU and Nvidida drivers compatible with CUDA 9.0 (it can be easily adapted to work with CPU-only systems). To build the container, navigate to the ```docker``` folder, and execute the command
+The experiments can alternatively be run in a container which has all the system dependencies set up, if the local system is incompatible with any of the supporting packages/libraries. The docker requires the local system to have a GPU and Nvidida drivers compatible with CUDA 9.0 (it can be easily adapted to work with CPU-only systems). To build the container, first download and unzip [this](https://drive.google.com/file/d/1gSWmqudfR9_tL6QGkVxBu8yuyjzt0w46/view?usp=sharing) folder in the ```docker``` directory, which contains some of the resources necessary to use CUDA in the container, then navigate to the ```docker``` folder, and execute the command
 ```
 docker build -t baxter-moveit-docker .
 ```
