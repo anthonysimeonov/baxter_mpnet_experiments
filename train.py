@@ -12,7 +12,9 @@ import time
 import sys
 
 ###
-from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
+from architectures.mlp import MLP, MLP_Path
+from architectures.AE.pointnetAE import Encoder
+#from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
 
 
 def to_var(x, volatile=False):
@@ -44,7 +46,7 @@ def get_input(i, data, targets, pc_inds, obstacles, bs):
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"    
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
     importer = fileImport()
     env_data_path = args.env_data_path
@@ -160,6 +162,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainPaths.pkl')
-    
+
     args = parser.parse_args()
     main(args)

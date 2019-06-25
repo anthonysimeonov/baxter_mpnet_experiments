@@ -13,7 +13,10 @@ import rospy
 import sys
 
 from neuralplanner_functions import *
-from architectures import *
+#from architectures import *
+from architectures.mlp import MLP
+from architectures.AE.pointnetAE import Encoder
+
 from tools.planning_scene_editor import *
 from tools.get_state_validity import StateValidity
 
@@ -69,7 +72,7 @@ def main(args):
                                         PlanningScene,
                                         queue_size=0)
 
-    global sv 
+    global sv
     global filler_robot_state
     global rs_man
 
@@ -360,6 +363,6 @@ if __name__ == "__main__":
     parser.add_argument('--enc_output_size', type=int, default=60)
     parser.add_argument('--mlp_input_size', type=int, default=74)
     parser.add_argument('--mlp_output_size', type=int, default=7)
-    
+
     args = parser.parse_args()
     main(args)
