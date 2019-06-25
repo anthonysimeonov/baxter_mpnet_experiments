@@ -84,7 +84,7 @@ def main(args):
     total_loss = []
     epoch = 1
 
-    sm = 90  # start saving models after 100 epochs
+    sm = 1  # start saving models after 100 epochs
 
     print("Starting epochs...\n")
     # epoch=1
@@ -136,8 +136,8 @@ def main(args):
             model_path = 'mlp_PReLU_ae_dd'+str(epoch)+'.pkl'
             torch.save(mlp.state_dict(), os.path.join(
                 args.trained_model_path, model_path))
-            if (epoch != 1):
-                sm = sm+10  # save model after every 50 epochs from 100 epoch ownwards
+            #if (epoch != 1):
+            sm = sm+1  # save model after every 50 epochs from 100 epoch ownwards
 
     torch.save(total_loss, 'total_loss.dat')
     model_path = 'mlp_PReLU_ae_dd_final.pkl'
