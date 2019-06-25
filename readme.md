@@ -86,8 +86,8 @@ Once the container has been built, navigate the root directory, and run the ```r
 
 In the terminal opened after launching the image, follow the below steps to set up the MoveIt! planning environment.
 ```
-source devel/setup.bash
 catkin build
+source devel/setup.bash
 roslaunch baxter_mpnet_experiments baxter_mpnet.launch
 ```
 
