@@ -18,7 +18,7 @@ import torch.nn.functional as F
 from architectures.AE.pointnet import *
 
 class Encoder(nn.Module):
-    def __init__(self, feature_transform=False):
+    def __init__(self, input_size, output_size, feature_transform=False):
         super(Encoder, self).__init__()
         self.feature_transform=feature_transform
         # concatenate golbal features to local features
@@ -30,7 +30,7 @@ class Encoder(nn.Module):
         # concatenate local features into global features
         # then use fully connected layer to obtain global features
         self.fc1 = nn.Linear(64, 64)
-        self.fc2 = nn.Linear(64, 60)
+        self.fc2 = nn.Linear(64, output_size)
         self.dropout = nn.Dropout(p=0.3)
         self.fc_bn1 = nn.BatchNorm1d(64)
         self.fc_bn2 = nn.BatchNorm1d(2)
