@@ -10,7 +10,7 @@ import torch.nn as nn
 import math
 from import_tool import fileImport
 import fnmatch
-from obs_data_loader import load_normalized_dataset
+from obs_data_loader import load_normalized_dataset, load_dataset
 
 # Environment Encoder
 # class Encoder(nn.Module):
@@ -36,14 +36,15 @@ def load_dataset_end2end(env_names, data_path, pcd_path, path_data_file, importe
 			importer (fileImport) - object from lib to help with import functions
 			NP=940 (int) - number of paths to import from each file (should by 1000, but some files ended up with less during data generation)
 			min_length (int) - known number of points in point cloud with minimum number of points (None if not known)
-	
+
 	Return: dataset_shuffle (numpy array) - shuffled dataset with start, goal, obstacle encoding
 			targets_shuffle (numpy array) - shuffled array of targets for next state to compare to NN prediction and compute loss
 			pointcloud_inds_shuffle (numpy array) - shuffled array of indices corresponding to the environments, so that obstacles can be properly loaded and passed through encoder
 			obstacles (numpy array) - array of pointcloud data for each environment
-	"""	
+	"""
 	N = len(env_names)
-	obstacles = load_normalized_dataset(env_names, pcd_path, importer)
+	#obstacles = load_normalized_dataset(env_names, pcd_path, importer)
+	obstacles = load_dataset(env_names, pcd_path, importer)
 
 	### obtain path length data ###
 	paths_file = path_data_file
@@ -129,7 +130,9 @@ def load_test_dataset_end2end(env_names, data_path, pcd_path, path_data_file, im
 			path_lenghts_new (numpy array) - numpy array with lengths of each path, to know where goal index is (the rest are padded with zeros)
 	"""
 	N = len(env_names)
-	obstacles = load_normalized_dataset(env_names, pcd_path, importer)
+	#obstacles = load_normalized_dataset(env_names, pcd_path, importer)
+	# Edit: load unnormalized dataset of pointclouds
+	obstacles = load_dataset(env_names, pcd_path, importer)
 
 	### obtain path length data ###
 	# paths_file = 'trainEnvironments_testPaths_GoalsCorrect_RRTSTAR_trainEnv_4.pkl'
