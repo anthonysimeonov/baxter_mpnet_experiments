@@ -147,10 +147,10 @@ def main(args):
             p_ind=0
 
             obs=obstacles[i]
-            obs=torch.from_numpy(obs)
+            obs=torch.from_numpy(obs).unsqueeze(0)
 
             en_inp=to_var(obs)
-            h=encoder(en_inp)
+            h=encoder(en_inp)[0]
 
             if path_lengths[i][j]>0:
                 global counter
