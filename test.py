@@ -52,7 +52,8 @@ def main(args):
 
     obstacles, paths, path_lengths = load_test_dataset_end2end(envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=100)
 
-    encoder = Encoder_End2End(args.enc_input_size, args.enc_output_size)
+    #encoder = Encoder_End2End(args.enc_input_size, args.enc_output_size)
+    encoder = Encoder(args.enc_input_size, args.enc_output_size)
     mlp = MLP(args.mlp_input_size, args.mlp_output_size)
 
     # device = torch.device('cpu')
