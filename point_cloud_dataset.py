@@ -47,6 +47,10 @@ class GazeboSceneModifier():
         #todo
 
     def spawn_service_call(self, model, file, pose, z_offset):
+        print('spawning model:')
+        print(model)
+        print('spawning file:')
+        print(file)
         orientation = list(tf.transformations.quaternion_from_euler(0, 0, 0))
         orient_fixed = Quaternion(
             orientation[0], orientation[1], orientation[2], orientation[3])
