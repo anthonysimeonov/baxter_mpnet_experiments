@@ -53,12 +53,16 @@ def main(args):
     env_data_path = args.env_data_path
     path_data_path = args.path_data_path
     pcd_data_path = args.pointcloud_data_path
+    # append all envs and obstacles
+    envs_files = os.listdir(env_data_path)
+    obstacles = []
+    for envs_file in envs_files:
+        envs = importer.environments_import(env_data_path + envs_file)
 
-    envs = importer.environments_import(env_data_path + args.envs_file)
-
-    print("Loading obstacle data...\n")
-    obstacles = load_dataset(envs, pcd_data_path, importer)
-
+        print("Loading obstacle data...\n")
+        obs = load_dataset(envs, pcd_data_path, importer)
+        obstacles.append(obs)
+    obstacles = np.stack(obstacles)
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
     print("\n")
 
