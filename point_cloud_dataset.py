@@ -55,8 +55,6 @@ class GazeboSceneModifier():
         print(pose)
         print('z_offset:')
         print(z_offset)
-        if model == 'mpnet_box1' or model == 'mpnet_coffee':
-            return
         orientation = list(tf.transformations.quaternion_from_euler(0, 0, 0))
         orient_fixed = Quaternion(
             orientation[0], orientation[1], orientation[2], orientation[3])
