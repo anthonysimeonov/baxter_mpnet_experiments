@@ -4,7 +4,8 @@ import torch
 from torch.utils.cpp_extension import load
 cd = load(name="cd",
           sources=["chamfer_distance/chamfer_distance.cpp",
-                   "chamfer_distance/chamfer_distance.cu"])
+                   "chamfer_distance/chamfer_distance.cu"],
+          extra_include_paths=['/usr/include/python2.7/'])
 
 class ChamferDistanceFunction(torch.autograd.Function):
     @staticmethod

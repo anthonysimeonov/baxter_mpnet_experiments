@@ -1,5 +1,4 @@
 #include <torch/torch.h>
-#include <python2.7/Python.h>
 
 // CUDA forward declarations
 int ChamferDistanceKernelLauncher(
