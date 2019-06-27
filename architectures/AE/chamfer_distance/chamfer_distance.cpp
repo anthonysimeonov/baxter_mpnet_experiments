@@ -1,4 +1,5 @@
 #include <torch/torch.h>
+#include <python2.7/Python.h>
 
 // CUDA forward declarations
 int ChamferDistanceKernelLauncher(
@@ -25,12 +26,12 @@ int ChamferDistanceGradKernelLauncher(
 
 
 void chamfer_distance_forward_cuda(
-    const at::Tensor xyz1, 
-    const at::Tensor xyz2, 
-    const at::Tensor dist1, 
-    const at::Tensor dist2, 
-    const at::Tensor idx1, 
-    const at::Tensor idx2) 
+    const at::Tensor xyz1,
+    const at::Tensor xyz2,
+    const at::Tensor dist1,
+    const at::Tensor dist2,
+    const at::Tensor idx1,
+    const at::Tensor idx2)
 {
     ChamferDistanceKernelLauncher(xyz1.size(0), xyz1.size(1), xyz1.data<float>(),
                                             xyz2.size(1), xyz2.data<float>(),
@@ -40,12 +41,12 @@ void chamfer_distance_forward_cuda(
 
 void chamfer_distance_backward_cuda(
     const at::Tensor xyz1,
-    const at::Tensor xyz2, 
-    at::Tensor gradxyz1, 
-    at::Tensor gradxyz2, 
-    at::Tensor graddist1, 
-    at::Tensor graddist2, 
-    at::Tensor idx1, 
+    const at::Tensor xyz2,
+    at::Tensor gradxyz1,
+    at::Tensor gradxyz2,
+    at::Tensor graddist1,
+    at::Tensor graddist2,
+    at::Tensor idx1,
     at::Tensor idx2)
 {
     ChamferDistanceGradKernelLauncher(xyz1.size(0), xyz1.size(1), xyz1.data<float>(),
@@ -88,12 +89,12 @@ void nnsearch(
 
 
 void chamfer_distance_forward(
-    const at::Tensor xyz1, 
-    const at::Tensor xyz2, 
-    const at::Tensor dist1, 
-    const at::Tensor dist2, 
-    const at::Tensor idx1, 
-    const at::Tensor idx2) 
+    const at::Tensor xyz1,
+    const at::Tensor xyz2,
+    const at::Tensor dist1,
+    const at::Tensor dist2,
+    const at::Tensor idx1,
+    const at::Tensor idx2)
 {
     const int batchsize = xyz1.size(0);
     const int n = xyz1.size(1);
@@ -112,14 +113,14 @@ void chamfer_distance_forward(
 
 
 void chamfer_distance_backward(
-    const at::Tensor xyz1, 
-    const at::Tensor xyz2, 
-    at::Tensor gradxyz1, 
-    at::Tensor gradxyz2, 
-    at::Tensor graddist1, 
-    at::Tensor graddist2, 
-    at::Tensor idx1, 
-    at::Tensor idx2) 
+    const at::Tensor xyz1,
+    const at::Tensor xyz2,
+    at::Tensor gradxyz1,
+    at::Tensor gradxyz2,
+    at::Tensor graddist1,
+    at::Tensor graddist2,
+    at::Tensor idx1,
+    at::Tensor idx2)
 {
     const int b = xyz1.size(0);
     const int n = xyz1.size(1);
