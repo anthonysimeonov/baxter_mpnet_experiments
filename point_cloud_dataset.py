@@ -120,7 +120,7 @@ def main():
     # load data from environment files for obstacle locations and collision free goal poses
     envs = os.listdir('env/environment_data')
     for env in envs:
-        with open(env, "rb") as env_f:
+        with open('env/environment_data/'+env, "rb") as env_f:
             masterPoseDict = pickle.load(env_f)
 
         gazeboMod = GazeboSceneModifier(masterPoseDict['obsData'])
