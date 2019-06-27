@@ -26,6 +26,7 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 	fnames = []
 
 	print("Searing for file names...")
+	print(len(env_names))
 	for i, env in enumerate(env_names):
 		# hacky reordering so that we don't load the last .pcd file which is always corrupt
 		# sort by the time step on the back, hopefully that helps it obtain the earliest possible
