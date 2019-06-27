@@ -25,7 +25,7 @@ class fileImport():
 		and normalize using the joint ranges
 
 		Input: paths (list) - list of numpy arrays, each array is a (Nx7) array of waypoints
-		
+
 		Return: new_paths (list) - list of numpy arrays, same dimension as input
 		"""
 		new_paths = []
@@ -83,11 +83,11 @@ class fileImport():
 				paths_list = pickle.load(paths_f)
 
 			env_paths = self.moveit_unscramble(paths_list)
-			return env_paths 
+			return env_paths
 
 	def pointcloud_import_array(self, pcd_fname, min_length_array):
 		"""
-		Import the pointcloud data from a file, and leave it in a (3xN) array 
+		Import the pointcloud data from a file, and leave it in a (3xN) array
 
 		Input: 	pcd_fname (string) - filepath of file with pcd data
 				min_length_array (int) - index to chop all rows of the pointcloud data to, based on environment with minimum number of points
@@ -109,7 +109,7 @@ class fileImport():
 		"""Import the pointcloud data from a file, and flatten it into a vector
 
 		Input: 	pcd_fname (string) - filepath of file with pcd data
-		
+
 		Return: obs_pc (numpy array) - array of pointcloud data (1X(3N))
 		"""
 		pc = pypcd.PointCloud.from_path(pcd_fname)
@@ -133,7 +133,7 @@ class fileImport():
 
 	def environments_import(self, envs_fname):
 		"""
-		Import environments from files with description of where obstacles reside, dictionary keyed by 'poses' and 'obsData'. 
+		Import environments from files with description of where obstacles reside, dictionary keyed by 'poses' and 'obsData'.
 		This function uses the poses key, which has the positions of all the environment obstacles
 
 		Input: envs_fname (string) - filepath of file with environment data
@@ -141,6 +141,6 @@ class fileImport():
 		"""
 		with open (envs_fname, "rb") as env_f:
 			envs = pickle.load(env_f)
-
+		print(envs)
 		env_names = envs['poses'].keys() # also has obstacle meta data
 		return env_names
