@@ -118,7 +118,7 @@ def main():
     rootPath = 'data/train/pcd/'
 
     # load data from environment files for obstacle locations and collision free goal poses
-    envs = os.listdir(env/environment_data)
+    envs = os.listdir('env/environment_data')
     for env in envs:
         with open(env, "rb") as env_f:
             masterPoseDict = pickle.load(env_f)
