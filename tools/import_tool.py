@@ -141,7 +141,7 @@ class fileImport():
 		"""
 		with open (envs_fname, "rb") as env_f:
 			envs = pickle.load(env_f)
-		if 'poses' not in envs:
-			print(envs)
+		if len(envs['poses']) == 0:
+			print(envs['poses'])
 		env_names = envs['poses'].keys() # also has obstacle meta data
 		return env_names
