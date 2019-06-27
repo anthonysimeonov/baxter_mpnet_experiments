@@ -13,7 +13,7 @@ import sys
 
 ###
 from architectures.mlp import MLP, MLP_Path
-from architectures.AE.pointnetAE import Encoder
+from architectures.AE.pointnetAE_linear import Encoder, Decoder
 from architectures.AE.chamfer_distance import ChamferDistance
 #from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
 from tools.obs_data_loader import load_dataset
