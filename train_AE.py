@@ -60,8 +60,6 @@ def main(args):
     obstacles = load_dataset(envs, pcd_data_path, importer)
 
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
-    print(str(len(dataset_train)) + " " +
-        str(len(targets_train)) + " " + str(len(pc_inds_train)))
     print("\n")
 
     if not os.path.exists(args.trained_model_path):
