@@ -102,6 +102,7 @@ def main(args):
             bobs = to_var(bobs)
 
             # forward pass through encoder
+            print(bobs.size())
             h = encoder(bobs)
 
             # decoder
