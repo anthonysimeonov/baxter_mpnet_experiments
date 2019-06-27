@@ -30,7 +30,7 @@ class GazeboSceneModifier():
         # super(ShelfSceneModifier, self).__init__(files)
 
         # self._root_path = '/home/anthony/.gazebo/models/'
-        self._root_path = './models/'
+        self._root_path = './env/gazebo_models/'
         self._obstacle_files = {}
         self._obstacles = obstacles
 
