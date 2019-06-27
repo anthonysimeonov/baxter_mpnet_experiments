@@ -99,10 +99,9 @@ def main(args):
             decoder.zero_grad()
             # convert to pytorch tensors and Varialbes
             bobs = torch.from_numpy(obstacles[i:i+args.batch_size])
-            bobs = to_var(bobs)
+            bobs = to_var(bobs).view(len(bobs), 3, -1)
 
             # forward pass through encoder
-            print(bobs.size())
             h = encoder(bobs)
 
             # decoder
