@@ -15,7 +15,7 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 	Load point cloud dataset into array of obstacle pointclouds, which will be entered as input to the encoder NN
 
 	Input: 	env_names (list) - list of strings with names of environments to import
-			pcd_data_path (string) - path to folder with pointcloud files 
+			pcd_data_path (string) - path to folder with pointcloud files
 			importer (fileImport) - object from utility library to help with importing different data
 			min_length (int) - if known in advance, number of flattened points in the shortest obstacle point cloud vector
 
@@ -26,6 +26,7 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 	fnames = []
 
 	print("Searing for file names...")
+	print(env_names)
 	for i, env in enumerate(env_names):
 		# hacky reordering so that we don't load the last .pcd file which is always corrupt
 		# sort by the time step on the back, hopefully that helps it obtain the earliest possible
