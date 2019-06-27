@@ -6,7 +6,7 @@
     <arg name="recording" value="false"/>
     <arg name="debug" value="false"/>
   </include>
-  <node name="spawn_kinect" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_mpnet)/gazebo_models/kinect_ros/model.sdf -sdf -x -1.244454 -y 0.0 -z 2.148085 -P 0.189397 -Y -0.22 -model kinect_ros"/>
-  <node name="spawn_right_table" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_mpnet)/gazebo_models/MPNet_TableRight/model.sdf -sdf -model MPNet_TableRight"/>
-  <node name="spawn_center_table" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_mpnet)/gazebo_models/MPNet_TableCenter/model.sdf -sdf -model MPNet_TableCenter"/>
+  <node name="spawn_kinect" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_mpnet_experiments)/gazebo_models/kinect_ros/model.sdf -sdf -x -1.244454 -y 0.0 -z 2.148085 -P 0.189397 -Y -0.22 -model kinect_ros"/>
+  <node name="spawn_right_table" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_mpnet_experiments)/gazebo_models/MPNet_TableRight/model.sdf -sdf -model MPNet_TableRight"/>
+  <node name="spawn_center_table" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_mpnet_experiments)/gazebo_models/MPNet_TableCenter/model.sdf -sdf -model MPNet_TableCenter"/>
 </launch>
