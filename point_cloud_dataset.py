@@ -137,10 +137,11 @@ def main():
         if len(raw_keys) == 0:
             continue
         sorted_keys = sorted(raw_keys, key=lambda x: int(x[9:])) # 9 because 'trainEnv_' is 9 characters
-
+        print('sorted keys:')
+        print(len(sorted_keys))
         for i, pose_name in enumerate(sorted_keys):
             print("iter number: " + str(i) + " \n\n\n")
-            gazeboMod.delete_obstacles()
+            #gazeboMod.delete_obstacles()
             print("POSE: " + str(pose_name))
             new_pose = masterPoseDict['poses'][pose_name]
             gazeboMod.permute_obstacles(new_pose)
