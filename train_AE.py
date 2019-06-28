@@ -108,13 +108,15 @@ def main(args):
             # convert to pytorch tensors and Varialbes
             bobs = torch.from_numpy(obstacles[i:i+args.batch_size])
             bobs = to_var(bobs).view(len(bobs), -1, 3).permute(0,2,1)
-
+            print('data:')
+            print(bobs)
             # forward pass through encoder
             h = encoder(bobs)
 
             # decoder
             bt = decoder(h)
-
+            print('decoded:')
+            print(bt)
             # compute overall loss and backprop all the way
             loss1, loss2 = criterion(bobs, bt)
             loss = torch.mean(loss1) + torch.mean(loss2)
