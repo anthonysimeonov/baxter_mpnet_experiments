@@ -86,11 +86,13 @@ def main(args):
     total_loss = []
     epoch = 1
 
-    sm = 1  # start saving models after 100 epochs
+    sm = 100  # start saving models after 100 epochs
 
     print("Starting epochs...\n")
     # epoch=1
     done = False
+    print('obstacles:')
+    print(len(obstacles))
     for epoch in range(args.num_epochs):
         # while (not done)
         start = time.time()
@@ -131,7 +133,7 @@ def main(args):
                 args.trained_model_path, 'pointnet_decoder_'+str(epoch)+'.pkl'))
             torch.save(total_loss, 'total_loss_'+str(epoch)+'.dat')
             #if (epoch != 1):
-            sm = sm+1  # save model after every 50 epochs from 100 epoch ownwards
+            sm = sm+100  # save model after every 50 epochs from 100 epoch ownwards
 
     torch.save(total_loss, 'total_loss.dat')
 
