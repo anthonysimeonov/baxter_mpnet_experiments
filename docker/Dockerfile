@@ -13,10 +13,32 @@ RUN apt-get update && apt-get install -q -y \
   && rm -rf /var/lib/apt/lists/*
 
 # install PCL
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key 19274DEF \
-&& echo "deb http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu oneiric main" >> /etc/apt/sources.list \
-&& apt-get update \
-&& apt-get install libpcl-all
+# (https://github.com/innerspacehq/docker-pcl/blob/master/Dockerfile)
+RUN apt-get update && apt-get install -y \
+		git build-essential linux-libc-dev \
+		cmake cmake-gui \
+		libusb-1.0-0-dev libusb-dev libudev-dev \
+		mpi-default-dev openmpi-bin openmpi-common \
+		libflann1.8 libflann-dev \
+		libeigen3-dev \
+		libboost-all-dev \
+		libvtk5.10-qt4 libvtk5.10 libvtk5-dev \
+		libqhull* libgtest-dev \
+		freeglut3-dev pkg-config \
+		libxmu-dev libxi-dev \
+		qt-sdk openjdk-8-jdk openjdk-8-jre \
+		openssh-client
+
+RUN git clone https://github.com/PointCloudLibrary/pcl.git ~/pcl
+
+# install pcl
+RUN mkdir ~/pcl/release
+RUN cd ~/pcl/release && cmake -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr \
+           -DBUILD_GPU=ON -DBUILD_apps=ON -DBUILD_examples=ON \
+           -DCMAKE_INSTALL_PREFIX=/usr ~/pcl
+RUN cd ~/pcl/release && make
+RUN cd ~/pcl/release && make install
+
 
 # setup keys
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
