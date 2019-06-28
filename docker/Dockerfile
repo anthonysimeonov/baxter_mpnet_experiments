@@ -54,7 +54,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key 19274DEF \
 && echo "deb http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu maverick main" >> /etc/apt/sources.list \
 && apt-get update \
-&& apt-get install libpcl-all
+&& apt-get install openni-dev ps-engine libpcl-all
 
 
 # setup environment
