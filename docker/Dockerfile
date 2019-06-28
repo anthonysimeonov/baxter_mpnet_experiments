@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y \
 		openssh-client
 
 RUN git clone https://github.com/PointCloudLibrary/pcl.git ~/pcl
-
+RUN cd ~/pcl && git checkout pcl-1.7.2
 # install pcl
 RUN mkdir ~/pcl/release
 RUN cd ~/pcl/release && cmake -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr \
