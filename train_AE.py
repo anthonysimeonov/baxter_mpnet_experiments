@@ -124,6 +124,8 @@ def main(args):
             print('loss2')
             print(loss2)
             loss = torch.mean(loss1) + torch.mean(loss2)
+            print('loss:')
+            print(loss)
             avg_loss = avg_loss+loss.data
             loss.backward()
             optimizer.step()
