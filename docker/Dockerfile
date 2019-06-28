@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
   ros-kinetic-ros-core=1.3.2-0* \
   && rm -rf /var/lib/apt/lists/*
 
-# Install packages for Baxter base  
+# Install packages for Baxter base
 RUN apt-get update && apt-get install -y \
   git-core \
   python-argparse \
@@ -49,6 +49,11 @@ RUN apt-get update && apt-get install -y \
   ros-kinetic-tf-conversions \
   ros-kinetic-kdl-parser \
   && rm -rf /var/lib/apt/lists/*
+
+# Install packages for Pointcloud generator (PCL)
+RUN add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl \
+&& apt-get update \
+&& apt-get install libpcl-all
 
 # setup environment
 ENV LANG C.UTF-8
@@ -84,9 +89,9 @@ RUN mv /bin/sh /bin/sh-old && \
 ENV CATKIN_WS=/root/catkin_ws
 RUN source /opt/ros/kinetic/setup.bash
 RUN mkdir -p $CATKIN_WS/src
-WORKDIR ${CATKIN_WS} 
+WORKDIR ${CATKIN_WS}
 RUN catkin init
-RUN catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release 
+RUN catkin config --extend /opt/ros/$ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release
 WORKDIR $CATKIN_WS/src
 
 # Download the baxter core files
@@ -129,7 +134,7 @@ RUN apt-get -qq update && apt-get -qq install -y ros-kinetic-moveit && \
 
 # Build repo
 WORKDIR $CATKIN_WS
-RUN catkin build  
+RUN catkin build
 RUN source devel/setup.bash
 
 WORKDIR ${CATKIN_WS}/src
