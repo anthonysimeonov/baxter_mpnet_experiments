@@ -156,14 +156,14 @@ def main():
             ### Uncomment below to call pointcloud_to_pcd executable which takes snapshot of the streaming pointcloud data
             ### and saves it to a .pcd file in a desired file location (as specified by prefix in the command call)
 
-            # print("Calling executable... \n\n\n")
-            # t = time.time()
-            # p = subprocess.Popen(call)
-            # rospy.sleep(0.8)
-            # p.terminate()
-            # p.wait()
+            print("Calling executable... \n\n\n")
+            t = time.time()
+            p = subprocess.Popen(call)
+            rospy.sleep(0.8)
+            p.terminate()
+            p.wait()
 
-            rospy.sleep(0.1)
+            #rospy.sleep(0.1)
             gazeboMod.delete_obstacles()
             print("Deleted obstacles \n\n\n")
 
