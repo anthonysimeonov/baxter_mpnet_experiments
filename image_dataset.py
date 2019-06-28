@@ -3,12 +3,10 @@
 import numpy as np
 from numpy import matlib
 import rospy
-import baxter_interface
-from moveit_msgs.msg import RobotState, DisplayRobotState, PlanningScene, RobotTrajectory, ObjectColor
-from moveit_commander import PlanningSceneInterface, RobotCommander, MoveGroupCommander, MoveItCommanderException
-from sensor_msgs.msg import JointState
+from sensor_msgs.msg import JointState, Image
 from geometry_msgs.msg import Quaternion, Pose, PoseStamped, Point
 from std_msgs.msg import Header
+from std_srvs.srv import Empty
 import random
 import sys
 import tf
@@ -30,7 +28,7 @@ class GazeboSceneModifier():
         # super(ShelfSceneModifier, self).__init__(files)
 
         # self._root_path = '/home/anthony/.gazebo/models/'
-        self._root_path = './env/gazebo_models/'
+        self._root_path = './models/'
         self._obstacle_files = {}
         self._obstacles = obstacles
 
@@ -47,14 +45,6 @@ class GazeboSceneModifier():
         #todo
 
     def spawn_service_call(self, model, file, pose, z_offset):
-        #print('spawning model:')
-        #print(model)
-        #print('spawning file:')
-        #print(file)
-        #print('pose:')
-        #print(pose)
-        #print('z_offset:')
-        #print(z_offset)
         orientation = list(tf.transformations.quaternion_from_euler(0, 0, 0))
         orient_fixed = Quaternion(
             orientation[0], orientation[1], orientation[2], orientation[3])
@@ -65,7 +55,6 @@ class GazeboSceneModifier():
 
         f = open(file)
         sdf_f = f.read()
-        #print(sdf_f)
 
         rospy.wait_for_service('/gazebo/spawn_sdf_model')
         spawn_model = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
@@ -94,9 +83,7 @@ class GazeboSceneModifier():
 
 
 def create_call(ex, root, name):
-    input = '/voxel_grid/output'
-    # input = '/camera/depth/points'
-    call = [str(ex), "input:="+input, "_prefix:=" + str(root) + "/" + str(name) + "_", "_compressed:=true"]
+    call = ["rosrun",  "image_view", "image_saver", "image:=/camera/depth/image_raw"]
     return call
 
 def main():
@@ -124,48 +111,42 @@ def main():
 
     # executable = '/home/anthony/catkin_workspaces/baxter_ws/point_cloud_data/pointcloud_to_pcd'
     executable = './pointcloud_to_pcd'
-    rootPath = 'data/train/pcd/'
+    rootPath = 'data/test_pcd/'
 
     # load data from environment files for obstacle locations and collision free goal poses
-    envs = os.listdir('env/environment_data')
-    for env in envs:
-        with open('env/environment_data/'+env, "rb") as env_f:
-            masterPoseDict = pickle.load(env_f)
+    with open("env/trainEnvironments.pkl", "rb") as env_f:
+        masterPoseDict = pickle.load(env_f)
 
-        gazeboMod = GazeboSceneModifier(masterPoseDict['obsData'])
-        raw_keys = masterPoseDict['poses'].keys()
-        if len(raw_keys) == 0:
-            continue
-        sorted_keys = sorted(raw_keys, key=lambda x: int(x[9:])) # 9 because 'trainEnv_' is 9 characters
-        print('sorted keys:')
-        print(len(sorted_keys))
-        for i, pose_name in enumerate(sorted_keys):
-            print("iter number: " + str(i) + " \n\n\n")
-            gazeboMod.delete_obstacles()
-            print("POSE: " + str(pose_name))
-            new_pose = masterPoseDict['poses'][pose_name]
-            gazeboMod.permute_obstacles(new_pose)
-            print("Loaded new pose and permuted obstacles")
+    gazeboMod = GazeboSceneModifier(masterPoseDict['obsData'])
 
-            call = create_call(executable, rootPath, pose_name)
+    raw_keys = masterPoseDict['poses'].keys()
+    sorted_keys = sorted(raw_keys, key=lambda x: int(x[9:])) # 9 because 'trainEnv_' is 9 characters
 
-            ### Printing the executable call and allowing user to manually cycle through environments for demonstration
-            print(call)
-            raw_input("press enter to continue\n")
+    for i, pose_name in enumerate(sorted_keys[start:end]):
+        print("iter number: " + str(i) + " \n\n\n")
+        new_pose = masterPoseDict['poses'][pose_name]
+        gazeboMod.permute_obstacles(new_pose)
+        print("Loaded new pose and permuted obstacles")
 
-            ### Uncomment below to call pointcloud_to_pcd executable which takes snapshot of the streaming pointcloud data
-            ### and saves it to a .pcd file in a desired file location (as specified by prefix in the command call)
+        call = create_call(executable, rootPath, pose_name)
 
-            # print("Calling executable... \n\n\n")
-            # t = time.time()
-            # p = subprocess.Popen(call)
-            # rospy.sleep(0.8)
-            # p.terminate()
-            # p.wait()
+        ### Printing the executable call and allowing user to manually cycle through environments for demonstration
+        print(call)
+        raw_input("press enter to continue\n")
 
-            rospy.sleep(0.1)
-            gazeboMod.delete_obstacles()
-            print("Deleted obstacles \n\n\n")
+        ### Uncomment below to call pointcloud_to_pcd executable which takes snapshot of the streaming pointcloud data
+        ### and saves it to a .pcd file in a desired file location (as specified by prefix in the command call)
+  
+        # print("Calling executable... \n\n\n")
+        # t = time.time()
+        # p = subprocess.Popen(call)
+        # rospy.sleep(0.8)
+        # p.terminate()
+        # p.wait()
+
+        rospy.sleep(0.1)
+        gazeboMod.delete_obstacles()
+        print("Deleted obstacles \n\n\n")
 
 if __name__ == '__main__':
     main()
