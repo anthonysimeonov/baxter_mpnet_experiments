@@ -94,8 +94,8 @@ class GazeboSceneModifier():
 
 
 def create_call(ex, root, name):
-    input = '/voxel_grid/output'
-    # input = '/camera/depth/points'
+    #input = '/voxel_grid/output'
+    input = '/camera/depth/points'
     call = [str(ex), "input:="+input, "_prefix:=" + str(root) + "/" + str(name) + "_", "_compressed:=true"]
     return call
 
