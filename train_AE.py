@@ -93,7 +93,7 @@ def main(args):
     # epoch=1
     done = False
     print('obstacles:')
-    print(len(obstacles))
+    print(obstacles.shape)
     for epoch in range(args.num_epochs):
         # while (not done)
         start = time.time()
