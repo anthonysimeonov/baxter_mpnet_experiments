@@ -131,8 +131,8 @@ def main(args):
             optimizer.step()
 
         print("--average loss:")
-        print(avg_loss/(int(args.train_ratio*len(obstacles))/args.batch_size))
-        total_loss.append(avg_loss/(int(args.train_ratio*len(obstacles))/args.batch_size))
+        print(avg_loss/int(args.train_ratio*len(obstacles)) * args.batch_size)
+        total_loss.append(avg_loss/int(args.train_ratio*len(obstacles))*args.batch_size)
         # Save the models
         if epoch == sm:
             print("\nSaving model\n")
