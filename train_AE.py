@@ -94,6 +94,7 @@ def main(args):
     done = False
     print('obstacles:')
     print(obstacles.shape)
+    obstacles = obstacles[0]
     for epoch in range(args.num_epochs):
         # while (not done)
         start = time.time()
