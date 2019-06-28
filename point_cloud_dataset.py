@@ -124,7 +124,7 @@ def main():
 
     # executable = '/home/anthony/catkin_workspaces/baxter_ws/point_cloud_data/pointcloud_to_pcd'
     executable = './pointcloud_to_pcd'
-    rootPath = 'data/train/pcd/'
+    rootPath = 'data/train/pcd'
 
     # load data from environment files for obstacle locations and collision free goal poses
     envs = os.listdir('env/environment_data')

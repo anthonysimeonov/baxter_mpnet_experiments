@@ -141,7 +141,6 @@ def main(args):
                 args.trained_model_path, 'pointnet_encoder_'+str(epoch)+'.pkl'))
             torch.save(decoder.state_dict(), os.path.join(
                 args.trained_model_path, 'pointnet_decoder_'+str(epoch)+'.pkl'))
-            torch.save(total_loss, 'total_loss_'+str(epoch)+'.dat')
             #if (epoch != 1):
             sm = sm+100  # save model after every 50 epochs from 100 epoch ownwards
 
