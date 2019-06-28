@@ -119,6 +119,10 @@ def main(args):
             print(bt)
             # compute overall loss and backprop all the way
             loss1, loss2 = criterion(bobs, bt)
+            print('loss1')
+            print(loss1)
+            print('loss2')
+            print(loss2)
             loss = torch.mean(loss1) + torch.mean(loss2)
             avg_loss = avg_loss+loss.data
             loss.backward()
