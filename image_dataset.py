@@ -28,7 +28,7 @@ class GazeboSceneModifier():
         # super(ShelfSceneModifier, self).__init__(files)
 
         # self._root_path = '/home/anthony/.gazebo/models/'
-        self._root_path = './models/'
+        self._root_path = './env/gazebo_models/'
         self._obstacle_files = {}
         self._obstacles = obstacles
 
@@ -114,7 +114,7 @@ def main():
     rootPath = 'data/test_pcd/'
 
     # load data from environment files for obstacle locations and collision free goal poses
-    with open("env/trainEnvironments.pkl", "rb") as env_f:
+    with open("env/environment_data/trainEnvironments.pkl", "rb") as env_f:
         masterPoseDict = pickle.load(env_f)
 
     gazeboMod = GazeboSceneModifier(masterPoseDict['obsData'])
@@ -136,7 +136,7 @@ def main():
 
         ### Uncomment below to call pointcloud_to_pcd executable which takes snapshot of the streaming pointcloud data
         ### and saves it to a .pcd file in a desired file location (as specified by prefix in the command call)
-  
+
         # print("Calling executable... \n\n\n")
         # t = time.time()
         # p = subprocess.Popen(call)
