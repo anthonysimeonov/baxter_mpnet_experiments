@@ -13,7 +13,10 @@ RUN apt-get update && apt-get install -q -y \
   && rm -rf /var/lib/apt/lists/*
 
 # install PCL
-RUN apt-get install libpcl-dev
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key 19274DEF \
+&& echo "deb http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu oneiric main" >> /etc/apt/sources.list \
+&& apt-get update \
+&& apt-get install libpcl-all
 
 # setup keys
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
