@@ -51,10 +51,11 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # Install packages for Pointcloud generator (PCL)
-RUN sudo apt-get -y install software-properties-common && apt-get update
-RUN add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl \
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key 19274DEF \
+&& echo "deb http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu maverick main" >> /etc/apt/sources.list \
 && apt-get update \
 && apt-get install libpcl-all
+
 
 # setup environment
 ENV LANG C.UTF-8
