@@ -65,7 +65,7 @@ class GazeboSceneModifier():
 
         f = open(file)
         sdf_f = f.read()
-        print(sdf_f)
+        #print(sdf_f)
 
         rospy.wait_for_service('/gazebo/spawn_sdf_model')
         spawn_model = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
