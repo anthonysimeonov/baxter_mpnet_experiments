@@ -51,6 +51,7 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # Install packages for Pointcloud generator (PCL)
+RUN apt-get install software-properties-common && apt-get update
 RUN add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl \
 && apt-get update \
 && apt-get install libpcl-all
