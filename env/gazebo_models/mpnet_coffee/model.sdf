@@ -11,7 +11,7 @@
         <geometry>
           <mesh>
             <uri>model://mpnet_coffee/meshes/coffee.stl</uri>
-            <scale>0.035 0.035 0.035</scale>
+            <scale>1 1 1</scale>
           </mesh>
         </geometry>
       </visual>
