@@ -162,7 +162,7 @@ def main():
             rospy.sleep(0.8)
             p.terminate()  # original version
             p.wait()
-            p.terminate()
+            #p.terminate()
 
             #rospy.sleep(0.1)
             gazeboMod.delete_obstacles()

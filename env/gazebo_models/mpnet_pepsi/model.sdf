@@ -10,7 +10,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>file://mpnet_pepsi/meshes/pepsi.STL</uri>
+            <uri>file://~/catkin_ws/src/baxter_mpnet_experiments/env/gazebo_models/mpnet_pepsi/meshes/pepsi.STL</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
