@@ -11,7 +11,7 @@
         <geometry>
           <mesh>
             <uri>file://mpnet_pepsi/meshes/pepsi.STL</uri>
-            <scale>0.001 0.001 0.001</scale>
+            <scale>1 1 1</scale>
           </mesh>
         </geometry>
       </visual>
