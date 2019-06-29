@@ -10,7 +10,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://mpnet_pepsi/meshes/pepsi.STL</uri>
+            <uri>file://mpnet_pepsi/meshes/pepsi.STL</uri>
             <scale>0.001 0.001 0.001</scale>
           </mesh>
         </geometry>
