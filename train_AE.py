@@ -62,11 +62,13 @@ def main(args):
     #envs_files = ['trainEnvironmentsLarge.pkl']
     #envs_files = ['trainEnvironments.pkl']
     obstacles = []
-    for envs_file in envs_files:
-        envs = importer.environments_import(env_data_path + envs_file)
+    #for envs_file in envs_files:
+    for i in range(10):
+        #envs = importer.environments_import(env_data_path + envs_file)
 
         print("Loading obstacle data...\n")
-        obs = load_dataset(envs, pcd_data_path, importer)
+        #obs = load_dataset(envs, pcd_data_path, importer)
+        obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i))
         obstacles.append(obs)
     obstacles = np.stack(obstacles)
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
