@@ -60,10 +60,10 @@ class Decoder(nn.Module):
     def __init__(self, input_size, output_size):
         super(Decoder, self).__init__()
         self.output_size = output_size
-        self.fc1 = nn.Linear(input_size, 1024)
-        self.fc2 = nn.Linear(1024, 512)
-        self.fc3 = nn.Linear(512, 256)
-        self.fc4 = nn.Linear(256, output_size)
+        self.fc1 = nn.Linear(input_size, 256)
+        self.fc2 = nn.Linear(256, 512)
+        self.fc3 = nn.Linear(512,1024)
+        self.fc4 = nn.Linear(1024, output_size)
 
 
     def forward(self, x):
