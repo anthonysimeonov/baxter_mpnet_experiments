@@ -10,7 +10,7 @@ import math
 from tools.import_tool import fileImport
 import time
 import sys
-
+from pyntcloud import PyntCloud
 ###
 from architectures.mlp import MLP, MLP_Path
 #from architectures.AE.pointnetAE_linear import Encoder, Decoder
@@ -63,12 +63,15 @@ def main(args):
     #envs_files = ['trainEnvironments.pkl']
     obstacles = []
     #for envs_file in envs_files:
-    for i in range(10):
-        #envs = importer.environments_import(env_data_path + envs_file)
+    #    #envs = importer.environments_import(env_data_path + envs_file)
 
-        print("Loading obstacle data...\n")
-        #obs = load_dataset(envs, pcd_data_path, importer)
-        obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i)).astype(float)
+    #    print("Loading obstacle data...\n")
+    #    #obs = load_dataset(envs, pcd_data_path, importer)
+    #    obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i)).astype(float)
+    #    obstacles.append(obs)
+    for env in ['dragon', 'happy', 'horse', 'bunny']:
+        cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
+        obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
         obstacles.append(obs)
     obstacles = np.stack(obstacles).astype(float)
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
