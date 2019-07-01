@@ -37,17 +37,17 @@ class STN3d(nn.Module):
         return x
 
 class PointNetfeat(nn.Module):
-    def __init__(self):
+    def __init__(self, output_size):
         super(PointNetfeat, self).__init__()
         #self.stn = STN3d(args, num_points=num_points)
         self.conv1 = torch.nn.Conv1d(3, 64, 1)
         self.conv2 = torch.nn.Conv1d(64, 128, 1)
-        self.conv3 = torch.nn.Conv1d(128, 1024, 1)
+        self.conv3 = torch.nn.Conv1d(128, output_size, 1)
 
         self.bn1 = torch.nn.BatchNorm1d(64)
         self.bn2 = torch.nn.BatchNorm1d(128)
-        self.bn3 = torch.nn.BatchNorm1d(1024)
-
+        self.bn3 = torch.nn.BatchNorm1d(output_size)
+        self.output_size = output_size
     def forward(self, x):
         self.num_points = x.size()[2]
         x = F.relu(self.bn1(self.conv1(x)))
@@ -55,7 +55,7 @@ class PointNetfeat(nn.Module):
         x = F.relu(self.bn2(self.conv2(x)))
         x = self.bn3(self.conv3(x))
         x,_ = torch.max(x, 2)
-        x = x.view(-1, 1024)
+        x = x.view(-1, self.output_size)
         return x
 
 

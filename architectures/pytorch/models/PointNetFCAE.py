@@ -86,7 +86,7 @@ class Encoder(nn.Module):
     def __init__(self, input_size, output_size):
         super(Encoder, self).__init__()
         self.encoder = nn.Sequential(
-            PointNetfeat(),
+            PointNetfeat(1024),
             nn.Linear(1024, output_size),
             nn.BatchNorm1d(output_size),
             nn.ReLU()
