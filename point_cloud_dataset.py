@@ -113,7 +113,7 @@ def main():
     print("start ind: " + str(start))
     print("end ind: " + str(end))
 
-    rospy.init_node("testing_gazebo")
+    rospy.init_node("testing_gazebo", log_level=rospy.DEBUG)
 
     rospy.wait_for_service('/gazebo/delete_model')
     delete_model = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
