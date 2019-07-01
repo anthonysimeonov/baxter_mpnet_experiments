@@ -68,7 +68,7 @@ def main(args):
 
         print("Loading obstacle data...\n")
         #obs = load_dataset(envs, pcd_data_path, importer)
-        obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i))
+        obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i)).astype(float)
         obstacles.append(obs)
     obstacles = np.stack(obstacles)
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
