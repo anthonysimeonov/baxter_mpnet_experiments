@@ -1,8 +1,8 @@
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
-from common import PointNetfeat
-from dist_chamfer import chamferDist as chamfer
+from architectures.pytorch.models.common import PointNetfeat
+from architectures.pytorch.utils.chamfer.dist_chamfer import chamferDist as chamfer
 import numpy as np
 
 def PointNetFCAE_setup(args):
