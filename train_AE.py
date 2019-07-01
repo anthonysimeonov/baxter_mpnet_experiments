@@ -115,7 +115,7 @@ def main(args):
         start = time.time()
         print("epoch" + str(epoch))
         avg_loss = 0
-        for i in range(0, int(args.train_ratio*len(obstacles)), args.batch_size):
+        for i in range(0, len(obstacles), args.batch_size):
             # Forward, Backward and Optimize
             # zero gradients
             encoder.zero_grad()
