@@ -88,7 +88,7 @@ def main(args):
     # Build the models
     #mlp = MLP(args.mlp_input_size, args.mlp_output_size)
     encoder = Encoder(args.enc_input_size, args.enc_output_size)
-    decoder = Decoder(args.enc_output_size, len(obstacles[0,0]))
+    decoder = Decoder(args.enc_output_size, 3*len(obstacles[0,0]))
     if torch.cuda.is_available():
         encoder.cuda()
         decoder.cuda()
