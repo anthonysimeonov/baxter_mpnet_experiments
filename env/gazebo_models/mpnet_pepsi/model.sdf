@@ -10,7 +10,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>file://duck.stl</uri>
+            <uri>file://env/gazebo_models/mpnet_pepsi/meshes/duck.stl</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>

@@ -151,7 +151,6 @@ def main():
 
             ### Printing the executable call and allowing user to manually cycle through environments for demonstration
             print(call)
-            raw_input("press enter to continue\n")
 
             ### Uncomment below to call pointcloud_to_pcd executable which takes snapshot of the streaming pointcloud data
             ### and saves it to a .pcd file in a desired file location (as specified by prefix in the command call)
@@ -163,7 +162,7 @@ def main():
             p.terminate()  # original version
             p.wait()
             #p.terminate()
-
+            raw_input("press enter to continue\n")
             #rospy.sleep(0.1)
             gazeboMod.delete_obstacles()
             print("Deleted obstacles \n\n\n")
