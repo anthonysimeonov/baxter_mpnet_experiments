@@ -72,8 +72,13 @@ def main(args):
     for geo in ['dragon', 'happy', 'horse', 'bunny']:
         cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
         obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
+        obs_to_sample = np.array([cloud.points['x'], cloud.points['y'], cloud.points['z']], dtype='d')
+        choices = np.random.choice(len(cloud.points['x']), 2800)
+        obs = obs_to_sample[..., choices]
         obstacles.append(obs)
+
     obstacles = np.stack(obstacles).astype(float)
+    print(obstacles.shape)
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
     print("\n")
 
