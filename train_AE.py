@@ -69,7 +69,7 @@ def main(args):
     #    #obs = load_dataset(envs, pcd_data_path, importer)
     #    obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i)).astype(float)
     #    obstacles.append(obs)
-    for geo in ['dragon', 'happy', 'horse', 'bunny']:
+    for geo in ['dragon']:#, 'happy', 'horse', 'bunny']:
         cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
         obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
         obs_to_sample = np.array([cloud.points['x'], cloud.points['y'], cloud.points['z']], dtype='d')
