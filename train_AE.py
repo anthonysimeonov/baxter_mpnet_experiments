@@ -123,6 +123,7 @@ def main(args):
             # convert to pytorch tensors and Varialbes
             bobs = torch.from_numpy(obstacles[i:i+args.batch_size]).type(torch.FloatTensor)
             #bobs = to_var(bobs).view(len(bobs), -1, 3).permute(0,2,1)
+            bobs = to_var(bobs)
             print('data:')
             print(bobs)
             # forward pass through encoder
