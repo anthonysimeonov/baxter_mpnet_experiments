@@ -56,7 +56,8 @@ def main(args):
     # append all envs and obstacles
     #envs_files = os.listdir(env_data_path)
     #envs_files = ['trainEnvironments.pkl']
-    envs_files = ['trainEnvironmentsLarge.pkl']
+    #envs_files = ['trainEnvironmentsLarge.pkl']
+    envs_files = ['trainEnvironments.pkl']
     obstacles = []
     for envs_file in envs_files:
         envs = importer.environments_import(env_data_path + envs_file)
@@ -64,7 +65,6 @@ def main(args):
         print("Loading obstacle data...\n")
         obs = load_dataset(envs, pcd_data_path, importer)
         obstacles.append(obs)
-        break
     obstacles = np.stack(obstacles)
     print('obstacles:')
     print(obstacles)
