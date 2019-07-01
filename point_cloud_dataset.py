@@ -161,7 +161,7 @@ def main():
             p.terminate()  # original version
             p.wait()
             #p.terminate()
-            raw_input("press enter to continue\n")
+            #raw_input("press enter to continue\n")
             #rospy.sleep(0.1)
             gazeboMod.delete_obstacles()
             print("Deleted obstacles \n\n\n")
