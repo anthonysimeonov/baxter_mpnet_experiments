@@ -6,7 +6,7 @@ import numpy as np
 import os.path
 import random
 import sys
-from import_tool import fileImport
+from tools.import_tool import fileImport
 
 import fnmatch
 
@@ -36,7 +36,7 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 				print('failed')
 				fnames.append(file)
 				break
-				
+
 	if min_length is None: # compute minimum length for dataset will take twice as long if necessary
 		min_length = 1e6 # large to start
 		for i, fname in enumerate(fnames):
