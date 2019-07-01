@@ -64,7 +64,7 @@ class GazeboSceneModifier():
             z=pose[2] + z_offset), orient_fixed)  # hacky fix for x value to be correct... TODO
         f = open(file)
         sdf_f = f.read()
-        print(sdf_f)
+        #print(sdf_f)
 
         rospy.wait_for_service('/gazebo/spawn_sdf_model')
         spawn_model = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
@@ -112,7 +112,7 @@ def main():
     print("start ind: " + str(start))
     print("end ind: " + str(end))
 
-    rospy.init_node("testing_gazebo", log_level=rospy.DEBUG)
+    rospy.init_node("testing_gazebo")
 
     rospy.wait_for_service('/gazebo/delete_model')
     delete_model = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
