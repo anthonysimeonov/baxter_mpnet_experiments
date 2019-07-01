@@ -163,7 +163,7 @@ def main(args):
             sm = sm+100  # save model after every 50 epochs from 100 epoch ownwards
 
     torch.save(total_loss, 'total_loss.dat')
-
+    print(encoder.state_dict())
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
