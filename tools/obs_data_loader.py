@@ -53,8 +53,11 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 	print(N)
 	obstacles=np.zeros((N,min_length),dtype=np.float32)
 	for i, fname in enumerate(fnames):
-		data = importer.pointcloud_import(pcd_fname=pcd_data_path + fname)
-		obstacles[i] = data[:min_length]
+		try:
+			data = importer.pointcloud_import(pcd_fname=pcd_data_path + fname)
+			obstacles[i] = data[:min_length]
+		except:
+			continue
 
 	return obstacles
 
