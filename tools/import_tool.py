@@ -118,10 +118,9 @@ class fileImport():
 
 		# flatten into vector
 		temp = np.zeros((3, pc.pc_data['x'].shape[0]))
-		temp[0] = pc.pc_data['x']
-		temp[1] = pc.pc_data['y']
-		temp[2] = pc.pc_data['z']
-
+		temp[0] = pc.pc_data['x'][~np.isnan(pc.pc_data['x'])]
+		temp[1] = pc.pc_data['y'][~np.isnan(pc.pc_data['x'])]
+		temp[2] = pc.pc_data['z'][~np.isnan(pc.pc_data['x'])]
 		obs_pc = temp.flatten('F') #flattened column wise, [x0, y0, z0, x1, y1, z1, x2, y2, ...]
 
 		return obs_pc
