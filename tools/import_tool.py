@@ -112,6 +112,8 @@ class fileImport():
 
 		Return: obs_pc (numpy array) - array of pointcloud data (1X(3N))
 		"""
+		print('pointcloud filename:')
+		print(pcd_fname)
 		pc = pypcd.PointCloud.from_path(pcd_fname)
 
 		# flatten into vector
