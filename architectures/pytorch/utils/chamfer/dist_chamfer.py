@@ -5,7 +5,7 @@ import torch
 import sys
 from numbers import Number
 from collections import Set, Mapping, deque
-import chamfer
+import architectures.pytorch.utils.chamfer.chamfer
 
 
 # Chamfer's distance module @thibaultgroueix
@@ -51,4 +51,3 @@ class chamferDist(nn.Module):
 
     def forward(self, input1, input2):
         return chamferFunction.apply(input1, input2)
-
