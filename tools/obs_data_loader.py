@@ -35,10 +35,10 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 			if (fnmatch.fnmatch(file, env+"*")):
 				print('failed')
 				fnames.append(file)
-				if len(fnames) >= 50:
+				if len(fnames) >= 10:
 					break
 				break
-		if len(fnames) >= 50:
+		if len(fnames) >= 10:
 			break
 
 	if min_length is None: # compute minimum length for dataset will take twice as long if necessary
