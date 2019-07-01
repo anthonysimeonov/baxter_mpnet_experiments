@@ -48,9 +48,6 @@ class PointNetfeat(nn.Module):
         self.bn2 = torch.nn.BatchNorm1d(128)
         self.bn3 = torch.nn.BatchNorm1d(1024)
 
-        #self.num_points = num_points
-        self.global_feat = global_feat
-
     def forward(self, x):
         self.num_points = x.size()[2]
         x = F.relu(self.bn1(self.conv1(x)))
