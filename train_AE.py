@@ -117,7 +117,8 @@ def main(args):
             print(bobs)
             # forward pass through encoder
             h = encoder(bobs)
-
+            print('code:')
+            print(h)
             # decoder
             bt = decoder(h)
             print('decoded:')
