@@ -4,14 +4,10 @@
     <pose frame="world">1 0 0.0 1.57079632679 0 0</pose>
     <static>true</static>
     <link name="link">
-      <inertial>
-        <mass>0.1</mass>
-      </inertial>
       <visual name="visual">
         <geometry>
           <mesh>
             <uri>file://env/gazebo_models/mpnet_pepsi/meshes/duck.stl</uri>
-            <scale>1 1 1</scale>
           </mesh>
         </geometry>
       </visual>
