@@ -85,8 +85,6 @@ class PointNetFCAE(nn.Module):
 class Encoder(nn.Module):
     def __init__(self, input_size, output_size):
         super(Encoder, self).__init__()
-        self.num_points = num_points
-        self.output_channels = 3
         self.encoder = nn.Sequential(
             PointNetfeat(),
             nn.Linear(1024, output_size),
