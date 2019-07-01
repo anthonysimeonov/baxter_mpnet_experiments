@@ -16,7 +16,8 @@ from architectures.mlp import MLP, MLP_Path
 #from architectures.AE.pointnetAE_linear import Encoder, Decoder
 #from architectures.AE.pointnetAE_linear import Encoder, Decoder
 from architectures.pytorch.models.PointNetFCAE import Encoder, Decoder
-from architectures.AE.chamfer_distance import ChamferDistance
+#from architectures.AE.chamfer_distance import ChamferDistance
+from architectures.pytorch.utils.chamfer import chamferDist as chamfer
 #from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
 from tools.obs_data_loader import load_dataset
 
@@ -84,7 +85,7 @@ def main(args):
 
 
     # Loss and Optimizer
-    criterion = ChamferDistance()
+    #criterion = ChamferDistance()
     params = list(encoder.parameters())+list(decoder.parameters())
     optimizer = torch.optim.Adagrad(params, lr=args.learning_rate)
 
@@ -122,7 +123,8 @@ def main(args):
             print('decoded:')
             print(bt)
             # compute overall loss and backprop all the way
-            loss1, loss2 = criterion(bobs, bt)
+            loss1, loss2 = chamfer()(bobs, bt)
+            #loss1, loss2 = criterion(bobs, bt)
             print('loss1')
             print(loss1)
             print('loss2')
