@@ -93,7 +93,7 @@ class Encoder(nn.Module):
         )
     def forward(self, x):
         code = self.encoder(x)
-        return x
+        return code
 
 class Decoder(nn.Module):
     def __init__(self, input_size, output_size):
