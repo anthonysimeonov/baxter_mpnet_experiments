@@ -32,7 +32,6 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 		# hacky reordering so that we don't load the last .pcd file which is always corrupt
 		# sort by the time step on the back, hopefully that helps it obtain the earliest possible
 		for file in sorted(os.listdir(pcd_data_path), key=lambda x: int(x.split('Env_')[1].split('_')[1][:-4])):
-			print(len(fnames))
 			if (fnmatch.fnmatch(file, env+"*")):
 				print('failed')
 				fnames.append(file)
