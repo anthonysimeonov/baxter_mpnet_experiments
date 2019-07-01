@@ -64,7 +64,10 @@ def main(args):
         print("Loading obstacle data...\n")
         obs = load_dataset(envs, pcd_data_path, importer)
         obstacles.append(obs)
+        break
     obstacles = np.stack(obstacles)
+    print('obstacles:')
+    print(obstacles)
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
     print("\n")
 
