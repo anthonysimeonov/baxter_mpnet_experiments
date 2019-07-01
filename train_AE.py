@@ -54,8 +54,9 @@ def main(args):
     path_data_path = args.path_data_path
     pcd_data_path = args.pointcloud_data_path
     # append all envs and obstacles
-    #envs_files = os.listdir(env_data_path)
-    envs_files = ['trainEnvironments.pkl']
+    envs_files = os.listdir(env_data_path)
+    #envs_files = ['trainEnvironments.pkl']
+    #envs_files = ['trainEnvironments.pkl']
     obstacles = []
     for envs_file in envs_files:
         envs = importer.environments_import(env_data_path + envs_file)
