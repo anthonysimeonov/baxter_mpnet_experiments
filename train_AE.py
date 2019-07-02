@@ -112,6 +112,18 @@ def main(args):
     #obstacles = obstacles[0]
     for epoch in range(args.num_epochs):
         # while (not done)
+        # every time use a new obstacle
+        obstacles = []
+        for geo in ['dragon', 'dragon']:#, 'happy', 'horse', 'bunny']:
+            cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
+            obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
+            obs_to_sample = np.array([cloud.points['x'], cloud.points['y'], cloud.points['z']], dtype='d')
+            choices = np.random.choice(len(cloud.points['x']), 2800)
+            obs = obs_to_sample[..., choices]
+            obstacles.append(obs)
+
+        obstacles = np.stack(obstacles).astype(float)
+
         start = time.time()
         print("epoch" + str(epoch))
         avg_loss = 0
