@@ -20,11 +20,20 @@ from architectures.pytorch.models.PointNetFCAE import Encoder, Decoder
 from architectures.pytorch.utils.chamfer.dist_chamfer import chamferDist as chamfer
 #from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
 from tools.obs_data_loader import load_dataset
-
+import h5py
 def to_var(x, volatile=False):
     if torch.cuda.is_available():
         x = x.cuda()
     return Variable(x, volatile=volatile)
+
+def load_h5(path, verbose=False):
+    if verbose:
+        print("Loading %s \n" % (path))
+    f = h5py.File(path, 'r')
+    cloud_data = np.array(f['data'])
+    f.close()
+
+    return cloud_data.astype(np.float64)
 
 
 def get_input(i, data, targets, pc_inds, obstacles, bs):
@@ -69,13 +78,19 @@ def main(args):
     #    #obs = load_dataset(envs, pcd_data_path, importer)
     #    obs = np.load('/media/arclabdl1/HD1/YLmiao/CDPCNet/geometry/P1_%d.npy' % (i)).astype(float)
     #    obstacles.append(obs)
-    for geo in ['dragon', 'dragon']:#, 'happy', 'horse', 'bunny']:
-        cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
-        obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
-        obs_to_sample = np.array([cloud.points['x'], cloud.points['y'], cloud.points['z']], dtype='d')
-        choices = np.random.choice(len(cloud.points['x']), 2800)
-        obs = obs_to_sample[..., choices]
+
+    env_data_path = '/media/arclabdl1/HD1/YLmiao/completion3D/shapenet/test/gt/02691156/'
+    envs_files = os.listdir(env_data_path)
+    for envs_file in envs_files:
+        obs = load_h5(env_data_path+envs_file).permute(0,2,1)
         obstacles.append(obs)
+    #for geo in ['dragon', 'dragon']:#, 'happy', 'horse', 'bunny']:
+    #    cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
+    #    obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
+    #    obs_to_sample = np.array([cloud.points['x'], cloud.points['y'], cloud.points['z']], dtype='d')
+    #    choices = np.random.choice(len(cloud.points['x']), 2800)
+    #    obs = obs_to_sample[..., choices]
+    #    obstacles.append(obs)
 
     obstacles = np.stack(obstacles).astype(float)
     print(obstacles.shape)
@@ -113,17 +128,6 @@ def main(args):
     for epoch in range(args.num_epochs):
         # while (not done)
         # every time use a new obstacle
-        obstacles = []
-        for geo in ['dragon', 'dragon']:#, 'happy', 'horse', 'bunny']:
-            cloud = PyntCloud.from_file('/media/arclabdl1/HD1/YLmiao/CDPCNet/complex/'+geo+'_compressed.ply')
-            obs = np.array([cloud.points['x'],cloud.points['y'],cloud.points['z']])
-            obs_to_sample = np.array([cloud.points['x'], cloud.points['y'], cloud.points['z']], dtype='d')
-            choices = np.random.choice(len(cloud.points['x']), 2800)
-            obs = obs_to_sample[..., choices]
-            obstacles.append(obs)
-
-        obstacles = np.stack(obstacles).astype(float)
-
         start = time.time()
         print("epoch" + str(epoch))
         avg_loss = 0
