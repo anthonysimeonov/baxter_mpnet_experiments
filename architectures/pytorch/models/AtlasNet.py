@@ -113,3 +113,31 @@ class AtlasNet(nn.Module):
             y = torch.cat( (rand_grid, y), 1).contiguous()
             outs.append(self.decoder[i](y))
         return torch.cat(outs,2).contiguous().transpose(2,1).contiguous()
+
+class Encoder(nn.Module):
+    def __init__(self, input_size, output_size):
+        super(Encoder, self).__init__()
+        self.encoder = nn.Sequential(
+            PointNetfeat(1024),
+            nn.Linear(1024, output_size),
+            nn.BatchNorm1d(output_size),
+            nn.ReLU()
+        )
+    def forward(self, x):
+        code = self.encoder(x)
+        return code
+
+class Decoder(nn.Module):
+    def __init__(self, input_size, output_size):
+        self.decoder = nn.ModuleList([PointGenCon(bottleneck_size=2 + self.input_size) for i in range(0,1)])
+    def forward(self, x, grid):
+        x = self.encoder(x)
+        outs = []
+        for i in range(0,self.nb_primitives):
+            rand_grid = Variable(torch.cuda.FloatTensor(grid[i]))
+            rand_grid = rand_grid.transpose(0,1).contiguous().unsqueeze(0)
+            rand_grid = rand_grid.expand(x.size(0),rand_grid.size(1), rand_grid.size(2)).contiguous()
+            y = x.unsqueeze(2).expand(x.size(0),x.size(1), rand_grid.size(2)).contiguous()
+            y = torch.cat( (rand_grid, y), 1).contiguous()
+            outs.append(self.decoder[i](y))
+        return torch.cat(outs,2).contiguous().transpose(2,1).contiguous()

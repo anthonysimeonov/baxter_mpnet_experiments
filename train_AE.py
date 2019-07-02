@@ -136,6 +136,8 @@ def main(args):
             bobs = torch.from_numpy(obstacles[i:i+args.batch_size]).type(torch.FloatTensor)
             #bobs = to_var(bobs).view(len(bobs), -1, 3).permute(0,2,1)
             bobs = to_var(bobs)
+            print('requires grad:')
+            print(bobs.requires_grad)
             print('data:')
             print(bobs)
             # forward pass through encoder
