@@ -122,6 +122,7 @@ class fileImport():
 		temp.append(pc.pc_data['y'][~np.isnan(pc.pc_data['x'])])
 		temp.append(pc.pc_data['z'][~np.isnan(pc.pc_data['x'])])
 		temp = np.array(temp)
+		print(temp.shape)
 		obs_pc = temp.flatten('F') #flattened column wise, [x0, y0, z0, x1, y1, z1, x2, y2, ...]
 
 		return obs_pc
