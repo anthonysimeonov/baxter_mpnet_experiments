@@ -19,7 +19,6 @@ from architectures.AE.pointnetAE_linear import Encoder, Decoder
 from architectures.pytorch.utils.chamfer.dist_chamfer import chamferDist as chamfer
 #from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
 from tools.obs_data_loader import load_dataset
-import h5py
 def to_var(x, volatile=False):
     if torch.cuda.is_available():
         x = x.cuda()
