@@ -10,7 +10,6 @@ import math
 from tools.import_tool import fileImport
 import time
 import sys
-from pyntcloud import PyntCloud
 ###
 from architectures.mlp import MLP, MLP_Path
 #from architectures.AE.pointnetAE_linear import Encoder, Decoder
