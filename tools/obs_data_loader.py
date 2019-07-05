@@ -7,59 +7,80 @@ import os.path
 import random
 import sys
 from tools.import_tool import fileImport
+from multiprocessing import Pool
 
 import fnmatch
+def pool_pc_length_check(args):
+    fname, importer, pcd_data_path = args
+    return importer.pointcloud_length_check(pcd_fname=pcd_data_path + fname)
 
+def pool_pc_load(args):
+    try:
+        fname, min_length, importer, pcd_data_path = args
+        data = importer.pointcloud_import(pcd_fname=pcd_data_path + fname)[:min_length]
+        return data
+    except:
+        return None
+		
 def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
-	"""
-	Load point cloud dataset into array of obstacle pointclouds, which will be entered as input to the encoder NN
+    """
+    Load point cloud dataset into array of obstacle pointclouds, which will be entered as input to the encoder NN
 
-	Input: 	env_names (list) - list of strings with names of environments to import
-			pcd_data_path (string) - path to folder with pointcloud files
-			importer (fileImport) - object from utility library to help with importing different data
-			min_length (int) - if known in advance, number of flattened points in the shortest obstacle point cloud vector
+    Input:     env_names (list) - list of strings with names of environments to import
+            pcd_data_path (string) - path to folder with pointcloud files
+            importer (fileImport) - object from utility library to help with importing different data
+            min_length (int) - if known in advance, number of flattened points in the shortest obstacle point cloud vector
 
-	Return: obstacles (numpy array) - array of obstacle point clouds, with different rows for different environments
-										and different columns for points
-	"""
-	# get file names based on environment names, just grabbing first one available (sometimes there's multiple)
-	fnames = []
+    Return: obstacles (numpy array) - array of obstacle point clouds, with different rows for different environments
+                                        and different columns for points
+    """
+    # get file names based on environment names, just grabbing first one available (sometimes there's multiple)
+    fnames = []
 
-	print("Searing for file names...")
-	for i, env in enumerate(env_names):
-		print('env:')
-		print(env)
-		# hacky reordering so that we don't load the last .pcd file which is always corrupt
-		# sort by the time step on the back, hopefully that helps it obtain the earliest possible
-		for file in sorted(os.listdir(pcd_data_path), key=lambda x: int(x.split('Env_')[1].split('_')[1][:-4])):
-			if (fnmatch.fnmatch(file, env+"*")):
-				print('failed')
-				fnames.append(file)
-				break
+    print("Searing for file names...")
+    for i, env in enumerate(env_names):
+        # hacky reordering so that we don't load the last .pcd file which is always corrupt
+        # sort by the time step on the back, hopefully that helps it obtain the earliest possible
+        for file in sorted(os.listdir(pcd_data_path), key=lambda x: int(x.split('Env_')[1].split('_')[1][:-4])):
+            if (fnmatch.fnmatch(file, env+"*")):
+                #print('failed')
+                fnames.append(file)
+                break
+        print('loaded %d envs:' % (len(fnames)))
+        if len(fnames) >= 100:  # break  the loop when there are at least 100 pcs
+            break
+    if min_length is None: # compute minimum length for dataset will take twice as long if necessary
+        lengths = []
+        min_length = 1e6 # large to start
+        # multiprocessing loading
+        pool = Pool(8)
+        args = [(fnames[i], importer, pcd_data_path) for i in range(len(fnames))]
+        for i, length in enumerate(pool.imap(pool_pc_length_check, args)):
+            if (length < min_length):
+                min_length = length
+        pool.close()
+        pool.join()
+    print("Loading files, minimum point cloud obstacle length: ")
+    print(min_length)
+    N = len(fnames)
+    print('env_names:')
+    print(len(env_names))
+    print("N")
+    print(N)
+    obstacles=np.zeros((N,min_length),dtype=np.float32)
+    # multiprocessing loading
+    pool = Pool(8)
 
-	if min_length is None: # compute minimum length for dataset will take twice as long if necessary
-		min_length = 1e6 # large to start
-		for i, fname in enumerate(fnames):
-			length = importer.pointcloud_length_check(pcd_fname=pcd_data_path + fname)
-			if (length < min_length):
-				min_length = length
+    obstacles = []
+    args = [(fnames[i], min_length, importer, pcd_data_path) for i in range(len(fnames))]
+    for i, data in enumerate(pool.imap(pool_pc_load, args)):
+        if data is not None:
+            obstacles.append(data)
+    pool.close()
+    pool.join()
+    obstacles = np.stack(obstacles)
 
-	print("Loading files, minimum point cloud obstacle length: ")
-	print(min_length)
-	N = len(fnames)
-	print('env_names:')
-	print(len(env_names))
-	print("N")
-	print(N)
-	obstacles=np.zeros((N,min_length),dtype=np.float32)
-	for i, fname in enumerate(fnames):
-		try:
-			data = importer.pointcloud_import(pcd_fname=pcd_data_path + fname)
-			obstacles[i] = data[:min_length]
-		except:
-			continue
-
-	return obstacles
+    return obstacles
 
 def load_normalized_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
 	"""
