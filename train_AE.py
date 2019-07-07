@@ -49,7 +49,7 @@ def main(args):
     all_pc_data = PointCloudDataSet(all_pc_data, init_shuffle=False)
 
     encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
-    train_dir = create_dir(osp.join(top_out_dir, experiment_name))
+    train_dir = create_dir(osp.join(top_out_dir, args.experiment_name))
 
     conf = Conf(n_input = [n_pc_points, 3],
             loss = ae_loss,
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     parser.add_argument('--z_rotate', type=int, default=0)
     parser.add_argument('--saver_step', type=int, default=10)
     parser.add_argument('--loss_display_step', type=int, default=1)
-    parser.add_argument('--environment_name', type=str, default='pointcloud_linear_ae')
+    parser.add_argument('--experiment_name', type=str, default='pointcloud_linear_ae')
 
     args = parser.parse_args()
     main(args)
