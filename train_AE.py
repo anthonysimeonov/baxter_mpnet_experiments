@@ -38,7 +38,7 @@ def main(args):
     envs_files = ['trainEnvironmentsLarge.pkl']
     obstacles = []
     env_data_path = args.env_data_path
-    pcd_data_path = args.pcd_data_path
+    pcd_data_path = args.pointcloud_data_path
     for envs_file in envs_files:
         envs = importer.environments_import(env_data_path + envs_file)
         #print(envs)
