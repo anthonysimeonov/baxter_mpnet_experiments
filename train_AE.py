@@ -97,7 +97,7 @@ def main(args):
     # Loss and Optimizer
     #criterion = ChamferDistance()
     params = list(encoder.parameters())+list(decoder.parameters())
-    optimizer = torch.optim.Adagrad(params, lr=args.learning_rate)
+    optimizer = torch.optim.Adam(params, lr=args.learning_rate)
 
     total_loss = []
     epoch = 1
