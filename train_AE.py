@@ -1,172 +1,99 @@
-import argparse
-import torch
-import torch.nn as nn
-import numpy as np
+import os.path as osp
 import os
-import pickle
-#from tools.path_data_loader import load_dataset_end2end
-from torch.autograd import Variable
-import math
-from tools.import_tool import fileImport
-import time
 import sys
-###
-from architectures.mlp import MLP, MLP_Path
-#from architectures.AE.pointnetAE_linear import Encoder, Decoder
-from architectures.AE.pointnetAE_linear import Encoder, Decoder
-#from architectures.pytorch.models.PointNetFCAE import Encoder, Decoder
-#from architectures.AE.chamfer_distance import ChamferDistance
-from architectures.pytorch.utils.chamfer.dist_chamfer import chamferDist as chamfer
-#from architectures import MLP, MLP_Path, Encoder, Encoder_End2End
+sys.path.append('../../')
+
+from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params
+from architectures.AE.autoencoder import Configuration as Conf
+from architectures.AE.point_net_ae import PointNetAutoEncoder
+
+from architectures.AE.in_out import snc_category_to_synth_id, create_dir, PointCloudDataSet, \
+                                        load_all_point_clouds_under_folder
+
+from architectures.AE.tf_utils import reset_tf_graph
+from architectures.AE.general_utils import plot_3d_point_cloud
+
 from tools.obs_data_loader import load_dataset
-def to_var(x, volatile=False):
-    if torch.cuda.is_available():
-        x = x.cuda()
-    return Variable(x, volatile=volatile)
-
-def load_h5(path, verbose=False):
-    if verbose:
-        print("Loading %s \n" % (path))
-    f = h5py.File(path, 'r')
-    cloud_data = np.array(f['data'])
-    f.close()
-
-    return cloud_data.astype(np.float64)
-
-
-def get_input(i, data, targets, pc_inds, obstacles, bs):
-    """
-    Input:  i (int) - starting index for the batch
-            data/targets/pc_inds (numpy array) - data vectors to obtain batch from
-            obstacles (numpy array) - point cloud array
-            bs (int) - batch size
-    """
-    if i+bs < len(data):
-        bi = data[i:i+bs]
-        bt = targets[i:i+bs]
-        bpc = pc_inds[i:i+bs]
-        bobs = obstacles[bpc]
-    else:
-        bi = data[i:]
-        bt = targets[i:]
-        bpc = pc_inds[i:]
-        bobs = obstacles[bpc]
-
-    return torch.from_numpy(bi), torch.from_numpy(bt), torch.from_numpy(bobs)
+from tools.import_tool import fileImport
+import numpy as np
+%load_ext autoreload
+%autoreload 2
 
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
+
+    # define basic parameters
+    top_out_dir = args.trained_model_path  # Use to save Neural-Net check-points etc.
+    n_pc_points = args.enc_input_size // 3 # Number of points per model.
+    bneck_size = args.enc_output_size      # Bottleneck-AE size
+    ae_loss = 'chamfer'                   # Loss to optimize: 'emd' or 'chamfer'
+
+
+    # load point cloud data
     importer = fileImport()
-    env_data_path = args.env_data_path
-    path_data_path = args.path_data_path
-    pcd_data_path = args.pointcloud_data_path
-    # append all envs and obstacles
-    #envs_files = os.listdir(env_data_path)
-    #envs_files = ['trainEnvironments.pkl']
     envs_files = ['trainEnvironmentsLarge.pkl']
-    #envs_files = ['trainEnvironments.pkl']
     obstacles = []
+    env_data_path = args.env_data_path
+    pcd_data_path = args.pcd_data_path
     for envs_file in envs_files:
         envs = importer.environments_import(env_data_path + envs_file)
-
+        #print(envs)
+        print('loaded env: %d' % (obs_count))
         print("Loading obstacle data...\n")
         obs = load_dataset(envs, pcd_data_path, importer)
         obstacles.append(obs)
 
+    all_pc_data = np.stack(obstacles).astype(float)[0].reshape(len(obs),-1,3)
+    print(all_pc_data.shape)
+    i = 0
+    plot_3d_point_cloud(all_pc_data[i][:, 0],
+                        all_pc_data[i][:, 1],
+                        all_pc_data[i][:, 2], in_u_sphere=False);
+    all_pc_data = PointCloudDataSet(all_pc_data, init_shuffle=False)
 
-    obstacles = np.stack(obstacles).astype(float)[0].reshape(len(obs),-1,3).transpose(0,2,1)
-    print(obstacles.shape)
-    print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
-    print("\n")
+    encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
+    train_dir = create_dir(osp.join(top_out_dir, experiment_name))
 
-    if not os.path.exists(args.trained_model_path):
-        os.makedirs(args.trained_model_path)
+    conf = Conf(n_input = [n_pc_points, 3],
+            loss = ae_loss,
+            training_epochs = args.training_epochs,
+            batch_size = args.batch_size,
+            denoising = args.denoising,
+            learning_rate = args.learning_rate,
+            train_dir = train_dir,
+            loss_display_step = args.loss_display_step,
+            saver_step = args.saver_step,
+            z_rotate =args.z_rotate,
+            encoder = encoder,
+            decoder = decoder,
+            encoder_args = enc_args,
+            decoder_args = dec_args
+           )
+    conf.experiment_name = args.experiment_name
+    conf.held_out_step = 5   # How often to evaluate/print out loss on
+                             # held_out data (if they are provided in ae.train() ).
+    conf.save(osp.join(train_dir, 'configuration'))
+    # reload
+    if args.start_epoch > 0:
+        conf = Conf.load(train_dir + '/configuration')
+        reset_tf_graph()
+        ae = PointNetAutoEncoder(conf.experiment_name, conf)
+        ae.restore_model(conf.train_dir, epoch=args.start_epoch)
 
-    # Build the models
-    #mlp = MLP(args.mlp_input_size, args.mlp_output_size)
-    encoder = Encoder(args.enc_input_size, args.enc_output_size)
-    decoder = Decoder(args.enc_output_size, 3*len(obstacles[0,0]))
-    if torch.cuda.is_available():
-        encoder.cuda()
-        decoder.cuda()
+    # build AE model
+    reset_tf_graph()
+    ae = PointNetAutoEncoder(conf.experiment_name, conf)
+
+    # training AE
+    buf_size = 1 # Make 'training_stats' file to flush each output line regarding training.
+    fout = open(osp.join(conf.train_dir, 'train_stats.txt'), 'a', buf_size)
+    train_stats = ae.train(all_pc_data, conf, log_file=fout)
+    fout.close()
 
 
-    # Loss and Optimizer
-    #criterion = ChamferDistance()
-    params = list(encoder.parameters())+list(decoder.parameters())
-    optimizer = torch.optim.Adagrad(params, lr=args.learning_rate)
-
-    total_loss = []
-    epoch = 1
-
-    sm = 100  # start saving models after 100 epochs
-
-    print("Starting epochs...\n")
-    # epoch=1
-    done = False
-    print('obstacles:')
-    print(obstacles.shape)
-    #obstacles = obstacles[0]
-    for epoch in range(args.num_epochs):
-        # while (not done)
-        # every time use a new obstacle
-        start = time.time()
-        print("epoch" + str(epoch))
-        avg_loss = 0
-        for i in range(0, len(obstacles), args.batch_size):
-            # Forward, Backward and Optimize
-            # zero gradients
-            encoder.zero_grad()
-            decoder.zero_grad()
-            # convert to pytorch tensors and Varialbes
-            bobs = torch.from_numpy(obstacles[i:i+args.batch_size]).type(torch.FloatTensor)
-            #bobs = to_var(bobs).view(len(bobs), -1, 3).permute(0,2,1)
-            bobs = to_var(bobs)
-            print('requires grad:')
-            print(bobs.requires_grad)
-            print('data:')
-            print(bobs)
-            # forward pass through encoder
-            h = encoder(bobs)
-            print('code:')
-            print(h)
-            # decoder
-            bt = decoder(h)
-            print('decoded:')
-            print(bt)
-            # compute overall loss and backprop all the way
-            loss1, loss2 = chamfer()(bobs, bt)
-            #loss1, loss2 = criterion(bobs, bt)
-            print('loss1')
-            print(loss1)
-            print('loss2')
-            print(loss2)
-            loss = torch.mean(loss1) + torch.mean(loss2)
-            print('loss:')
-            print(loss)
-            avg_loss = avg_loss+loss.data
-            loss.backward()
-            optimizer.step()
-
-        print("--average loss:")
-        #print(avg_loss/int(args.train_ratio*len(obstacles)) * args.batch_size)
-        #total_loss.append(avg_loss/int(args.train_ratio*len(obstacles))*args.batch_size)
-        # Save the models
-        if epoch == sm:
-            print("\nSaving model\n")
-            print("time: " + str(time.time() - start))
-            torch.save(encoder.state_dict(), os.path.join(
-                args.trained_model_path, 'pointnet_encoder_'+str(epoch)+'.pkl'))
-            torch.save(decoder.state_dict(), os.path.join(
-                args.trained_model_path, 'pointnet_decoder_'+str(epoch)+'.pkl'))
-            #if (epoch != 1):
-            sm = sm+100  # save model after every 50 epochs from 100 epoch ownwards
-
-    torch.save(total_loss, 'total_loss.dat')
-    print(encoder.state_dict())
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -175,18 +102,24 @@ if __name__ == "__main__":
     parser.add_argument('--pointcloud_data_path', type=str, default='./data/train/pcd/')
     parser.add_argument('--trained_model_path', type=str, default='./models/sample_train/', help='path for saving trained models')
 
-    parser.add_argument('--batch_size', type=int, default=100)
-    parser.add_argument('--learning_rate', type=float, default=0.001)
-    parser.add_argument('--num_epochs', type=int, default=200)
+    parser.add_argument('--batch_size', type=int, default=50)
+    parser.add_argument('--learning_rate', type=float, default=0.0005)
+    parser.add_argument('--num_epochs', type=int, default=1000)
 
     parser.add_argument('--enc_input_size', type=int, default=16053)
     parser.add_argument('--enc_output_size', type=int, default=60)
     parser.add_argument('--mlp_input_size', type=int, default=74)
     parser.add_argument('--mlp_output_size', type=int, default=7)
+    parser.add_argument('--start_epoch', type=int, default=0)
 
-    parser.add_argument('--train_ratio', type=float, default=0.8)
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainPaths.pkl')
+
+    parser.add_argument('--denoising', type=int, default=0)
+    parser.add_argument('--z_rotate', type=int, default=0)
+    parser.add_argument('--saver_step', type=int, default=10)
+    parser.add_argument('--loss_display_step', type=int, default=1)
+    parser.add_argument('--environment_name', type=str, default='pointcloud_linear_ae')
 
     args = parser.parse_args()
     main(args)
