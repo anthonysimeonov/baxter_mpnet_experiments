@@ -41,8 +41,6 @@ def main(args):
     pcd_data_path = args.pointcloud_data_path
     for envs_file in envs_files:
         envs = importer.environments_import(env_data_path + envs_file)
-        #print(envs)
-        print('loaded env: %d' % (obs_count))
         print("Loading obstacle data...\n")
         obs = load_dataset(envs, pcd_data_path, importer)
         obstacles.append(obs)
