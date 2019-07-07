@@ -53,7 +53,7 @@ def main(args):
 
     conf = Conf(n_input = [n_pc_points, 3],
             loss = ae_loss,
-            training_epochs = args.training_epochs,
+            training_epochs = args.num_epochs,
             batch_size = args.batch_size,
             denoising = args.denoising,
             learning_rate = args.learning_rate,
