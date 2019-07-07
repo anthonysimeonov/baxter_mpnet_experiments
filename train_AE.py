@@ -46,11 +46,6 @@ def main(args):
         obstacles.append(obs)
 
     all_pc_data = np.stack(obstacles).astype(float)[0].reshape(len(obs),-1,3)
-    print(all_pc_data.shape)
-    i = 0
-    plot_3d_point_cloud(all_pc_data[i][:, 0],
-                        all_pc_data[i][:, 1],
-                        all_pc_data[i][:, 2], in_u_sphere=False);
     all_pc_data = PointCloudDataSet(all_pc_data, init_shuffle=False)
 
     encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
