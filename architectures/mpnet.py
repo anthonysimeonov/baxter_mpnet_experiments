@@ -25,7 +25,6 @@ class Configuration():
                  latent_vs_recon=1.0, consistent_io=None):
 
         # Parameters for any AE
-        self.n_input = n_input
         self.is_denoising = denoising
         self.loss = loss.lower()
         self.decoder = decoder
