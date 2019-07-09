@@ -238,7 +238,7 @@ class MPNet(Neural_Net):
         # Loop over all batches
         for i in range(0, n_examples, batch_size):
             pc_i = train_pc[i:i+batch_size]
-            _, loss = ae_fit(pc_i)
+            _, loss = self.ae_fit(pc_i)
             # Compute average loss
             epoch_loss += loss
         epoch_loss /= n_batches
@@ -261,7 +261,7 @@ class MPNet(Neural_Net):
             pc_i = train_pc[pc_inds]
             batch_i = train_input[i:i+batch_size]
             target_i = train_targets[i:i+batch_size]
-            _, loss = mlp_fit(pc_i, batch_i, target_i)
+            _, loss = self.mlp_fit(pc_i, batch_i, target_i)
 
             # Compute average loss
             epoch_loss += loss
@@ -343,6 +343,11 @@ class MPNet(Neural_Net):
                 if log_file is not None:
                     log_file.write('On Held_Out: %04d\t%.9f\t%.4f\n' % (epoch, loss, duration / 60.0))
         return stats
+
+    def plan(self, pc, x):
+        is_training(False, session=self.sess)
+        output = self.sess.run((self.output), feed_dict={self.o: pc, self.x: x})
+        return output
 
     def get_latent_codes(self, pc):
         '''Transform data by mapping it into the latent space.'''
