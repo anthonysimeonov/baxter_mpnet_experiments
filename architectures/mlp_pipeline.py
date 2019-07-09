@@ -20,10 +20,6 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
     for i in xrange(0, n_layers - 2):
         name = 'mlp_fc_' + str(i)
         scope_i = expand_scope_by_name(scope, name)
-
-        if i == 0:
-            layer = latent_signal
-
         layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
         if verbose:
