@@ -15,6 +15,7 @@ from . AE.in_out import create_dir
 from . neural_net import Neural_Net
 from . general_utils import apply_augmentations
 
+import numpy as np
 
 class Configuration():
     def __init__(self, n_o_input, n_x_input, n_output, encoder, decoder, mlp, pretrain,
