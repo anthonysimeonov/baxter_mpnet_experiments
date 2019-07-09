@@ -1,19 +1,22 @@
 '''
 Created on January 26, 2017
 
-@author: optas
-'''
+@author: Yinglong Miao
+@reference: optas
 
+'''
+import warnings
+import os.path as osp
 import time
 import tensorflow as tf
 import os.path as osp
 
+from tflearn import is_training
 from tflearn.layers.conv import conv_1d
 from tflearn.layers.core import fully_connected
 
-from . AE.in_out import create_dir
+from . AE.in_out import create_dir, pickle_data, unpickle_data
 from . neural_net import Neural_Net
-from . general_utils import apply_augmentations
 
 import numpy as np
 
@@ -158,13 +161,17 @@ class MPNet(Neural_Net):
         return self.sess.run((self.x_reconstr), feed_dict={self.o: pc})
 
     def ae_fit(self, pc):
+        is_training(True, session=self.sess)
         _, output, loss = self.sess.run((self.ae_train_step, self.x_reconstr, loss), \
                             feed_dict={self.o: pc})
+        is_training(False, session=self.sess)
         return output, loss
 
     def mlp_fit(self, pc, x, target):
+        is_training(True, session=self.sess)
         _, output, loss = self.sess.run((self.mlp_train_step, self.output, loss), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
+        is_training(False, session=self.sess)
         return output, loss
 
 
