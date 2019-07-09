@@ -20,6 +20,9 @@ from . neural_net import Neural_Net
 
 import numpy as np
 
+from . AE.external.structural_losses.tf_nndistance import nn_distance
+from . AE.external.structural_losses.tf_approxmatch import approx_match, match_cost
+
 class Configuration():
     def __init__(self, experiment_name, n_o_input, n_x_input, n_output, encoder, decoder, mlp, pretrain,
                  pretrain_epoch, pretrain_batch_size, fixAE, encoder_args={}, decoder_args={}, mlp_args={},
