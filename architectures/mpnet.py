@@ -17,11 +17,12 @@ from . general_utils import apply_augmentations
 
 
 class Configuration():
-    def __init__(self, n_o_input, n_x_input, n_output, encoder, decoder, mlp, encoder_args={}, decoder_args={}, mlp_args={},
+    def __init__(self, n_o_input, n_x_input, n_output, encoder, decoder, mlp, pretrain,
+                 pretrain_epoch, pretrain_batch_size, fixAE, encoder_args={}, decoder_args={}, mlp_args={},
                  training_epochs=200, batch_size=10, learning_rate=0.001, denoising=False,
                  saver_step=None, train_dir=None, z_rotate=False, loss='chamfer', gauss_augment=None,
                  saver_max_to_keep=None, loss_display_step=1, debug=False,
-                 n_output=None, latent_vs_recon=1.0, consistent_io=None, pretrain, pretrain_epoch, pretrain_batch_size, fixAE):
+                 n_output=None, latent_vs_recon=1.0, consistent_io=None):
 
         # Parameters for any AE
         self.n_input = n_input
