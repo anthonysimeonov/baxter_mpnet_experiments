@@ -7,6 +7,8 @@ from tflearn.layers.conv import conv_1d, avg_pool_1d
 from tflearn.layers.normalization import batch_normalization
 from tflearn.layers.core import fully_connected, dropout
 
+from . tf_utils import expand_scope_by_name, replicate_parameter_for_all_layers
+
 # tensorflow code for MLP
 def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularizer=None,
                         weight_decay=0.001, reuse=False, scope=None, dropout_prob=None,
