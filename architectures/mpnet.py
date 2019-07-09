@@ -43,6 +43,7 @@ class Configuration():
         self.mlp_args = mlp_args
         # Training related parameters
         self.batch_size = batch_size
+        self.pretrain_batch_size = pretrain_batch_size
         self.ae_learning_rate = ae_learning_rate
         self.mlp_learning_rate = mlp_learning_rate
         self.loss_display_step = loss_display_step
