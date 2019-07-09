@@ -31,6 +31,11 @@ import argparse
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    # define basic parameters
+    top_out_dir = args.trained_model_path  # Use to save Neural-Net check-points etc.
+    n_pc_points = args.enc_input_size // 3 # Number of points per model.
+    bneck_size = args.enc_output_size      # Bottleneck-AE size
+    ae_loss = 'chamfer'                   # Loss to optimize: 'emd' or 'chamfer'
 
     importer = fileImport()
     env_data_path = args.env_data_path
