@@ -63,6 +63,7 @@ def main(args):
     train_dir = create_dir(osp.join(top_out_dir, args.experiment_name))
 
     conf = Conf(loss = ae_loss,
+            experiment_name = args.experiment_name,
             training_epochs = args.num_epochs,
             batch_size = args.batch_size,
             denoising = False,

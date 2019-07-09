@@ -21,7 +21,7 @@ from . neural_net import Neural_Net
 import numpy as np
 
 class Configuration():
-    def __init__(self, n_o_input, n_x_input, n_output, encoder, decoder, mlp, pretrain,
+    def __init__(self, experiment_name, n_o_input, n_x_input, n_output, encoder, decoder, mlp, pretrain,
                  pretrain_epoch, pretrain_batch_size, fixAE, encoder_args={}, decoder_args={}, mlp_args={},
                  training_epochs=200, batch_size=10, ae_learning_rate=0.001, mlp_learning_rate=0.001, denoising=False,
                  saver_step=None, train_dir=None, z_rotate=False, loss='chamfer', gauss_augment=None,
@@ -29,6 +29,7 @@ class Configuration():
                  latent_vs_recon=1.0, consistent_io=None):
 
         # Parameters for any AE
+        self.experiment_name = experiment_name
         self.is_denoising = denoising
         self.loss = loss.lower()
         self.decoder = decoder
