@@ -90,11 +90,11 @@ def main(args):
     if args.AE_start_epoch > 0:
         if args.AE_restore_pretrain:
             # filename is pretrain_ae
-            mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, 'pretrain_ae')
+            mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, filename='pretrain_ae')
         else:
-            mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, 'ae')
+            mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, filename='ae')
     if args.start_epoch > 0:
-        mpnet.restore_model(mpnet.mlp_saver, conf.train_dir, epoch=args.start_epoch, 'mlp')
+        mpnet.restore_model(mpnet.mlp_saver, conf.train_dir, epoch=args.start_epoch, filename='mlp')
 
     # training AE
     if args.pretrain:
