@@ -16,11 +16,6 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
     n_layers = len(layer_sizes)
     dropout_prob = replicate_parameter_for_all_layers([dropout_prob], n_layers)
     layer = in_signal
-    for i in xrange(n_layers):
-        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
-
-        if verbose:
-            print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
 
     for i in xrange(0, n_layers - 2):
         name = 'mlp_fc_' + str(i)
