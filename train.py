@@ -21,6 +21,7 @@ from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_
 
 from tools.obs_data_loader import load_dataset
 from tools.import_tool import fileImport
+from tools.path_data_loader import load_dataset_end2end
 import numpy as np
 import argparse
 #%load_ext autoreload
