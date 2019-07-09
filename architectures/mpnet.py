@@ -136,9 +136,9 @@ class MPNet(Neural_Net):
 
             self._create_loss()
             self._setup_optimizer()
-            self.AE_saver = tf.train.Saver(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'),\
+            self.AE_saver = tf.train.Saver(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'),\
                                             max_to_keep=c.saver_max_to_keep)
-            self.mlp_saver = tf.train.Saver(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'mlp'),\
+            self.mlp_saver = tf.train.Saver(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp'),\
                                             max_to_keep=c.saver_max_to_keep)
 
             # GPU configuration
@@ -212,15 +212,15 @@ class MPNet(Neural_Net):
             tf.summary.scalar('ae_learning_rate', self.mlp_lr)
 
         self.ae_optimizer = tf.train.AdamOptimizer(learning_rate=self.ae_lr)
-        print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'))
-        self.ae_train_step = self.ae_optimizer.minimize(self.ae_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'))
+        print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'))
+        self.ae_train_step = self.ae_optimizer.minimize(self.ae_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'))
         # depending on if we are fixing autoencoder or not, set the learnable parameters
 
         self.mlp_optimizer = tf.train.AdamgradOptimizer(learning_rate=self.mlp_lr)
 
         if c.fixAE:
             # only update mlp parameters
-            self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'mlp'))
+            self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp'))
         else:
             self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss)
 
