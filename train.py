@@ -80,8 +80,6 @@ def main(args):
             pretrain_batch_size = args.pretrain_batch_size,
             fixAE = args.fixAE
            )
-    conf.
-    conf.mlp_model_name = args.mlp_model_name
     conf.held_out_step = 5   # How often to evaluate/print out loss on
                              # held_out data (if they are provided in ae.train() ).
     conf.save(osp.join(train_dir, 'configuration'))
