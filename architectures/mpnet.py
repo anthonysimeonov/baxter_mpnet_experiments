@@ -212,6 +212,7 @@ class MPNet(Neural_Net):
             tf.summary.scalar('ae_learning_rate', self.mlp_lr)
 
         self.ae_optimizer = tf.train.AdamOptimizer(learning_rate=self.ae_lr)
+        print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'))
         self.ae_train_step = self.ae_optimizer.minimize(self.ae_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'))
         # depending on if we are fixing autoencoder or not, set the learnable parameters
 
