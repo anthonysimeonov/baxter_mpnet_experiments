@@ -257,6 +257,7 @@ class MPNet(Neural_Net):
 
         # Loop over all batches
         for i in range(0, n_examples, batch_size):
+            print('batch: %d' % (i))
             pc_inds = train_pc_inds[i:i+batch_size]
             pc_i = train_pc[pc_inds]
             batch_i = train_input[i:i+batch_size]

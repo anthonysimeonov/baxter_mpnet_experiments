@@ -404,7 +404,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--good_path_sample_path', type=str, default='./path_samples/good_path_samples')
     parser.add_argument('--bad_path_sample_path', type=str, default='./path_samples/bad_path_samples')
-    parser.add_argument('--experiment_name', type=str, default='test_experiment')
 
     parser.add_argument('--env_data_path', type=str, default='./env/environment_data/')
     parser.add_argument('--path_data_path', type=str, default='./data/test/paths/')
@@ -416,6 +415,23 @@ if __name__ == "__main__":
     parser.add_argument('--enc_output_size', type=int, default=60)
     parser.add_argument('--mlp_input_size', type=int, default=74)
     parser.add_argument('--mlp_output_size', type=int, default=7)
+
+    parser.add_argument('--ae_learning_rate', type=float, default=0.001)
+    parser.add_argument('--mlp_learning_rate', type=float, default=0.001)
+    parser.add_argument('--experiment_name', type=str, default='test_experiment')
+    parser.add_argument('--trained_model_path', type=str, default='./models/sample_train/', help='path for saving trained models')
+    parser.add_argument('--start_epoch', type=int, default=0)
+    parser.add_argument('--AE_start_epoch', type=int, default=0)
+    parser.add_argument('--AE_restore_pretrain', type=int, default=0, help='indicate if AutoEncoder is going to restore the pretrained model or the end2end model')
+
+    parser.add_argument('--pretrain', type=int, default=0, help='indicate if pretraining AutoEncoder or not')
+    parser.add_argument('--pretrain_epoch', type=int, default=100)
+    parser.add_argument('--pretrain_batch_size', type=int, default=100)
+    parser.add_argument('--fixAE', type=int, default=0, help='fix AutoEncoder or not when training with MLP')
+
+    parser.add_argument('--loss_display_step', type=int, default=1)
+    parser.add_argument('--saver_step', type=int, default=10)
+    parser.add_argument('--z_rotate', type=int, default=0)
 
     args = parser.parse_args()
     main(args)
