@@ -4,7 +4,7 @@ import sys
 sys.path.append('../../')
 
 from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params
-from architectures.AE.autoencoder import Configuration as Conf
+from architectures.mpnet import Configuration as Conf
 from architectures.AE.point_net_ae import PointNetAutoEncoder
 
 from architectures.AE.in_out import snc_category_to_synth_id, create_dir, PointCloudDataSet, \

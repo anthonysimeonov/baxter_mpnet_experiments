@@ -29,11 +29,11 @@ class Neural_Net(object):
     def is_training(self):
         is_training_op = self.graph.get_collection('is_training')
         return self.sess.run(is_training_op)[0]
-    
-    def restore_model(self, model_path, epoch, verbose=False):
+
+    def restore_model(self, saver, model_path, epoch, verbose=False, filename=MODEL_SAVER_ID):
         '''Restore all the variables of a saved model.
         '''
-        self.saver.restore(self.sess, osp.join(model_path, MODEL_SAVER_ID + '-' + str(int(epoch))))
+        saver.restore(self.sess, osp.join(model_path, filename + '-' + str(int(epoch))))
 
         if self.epoch.eval(session=self.sess) != epoch:
             warnings.warn('Loaded model\'s epoch doesn\'t match the requested one.')

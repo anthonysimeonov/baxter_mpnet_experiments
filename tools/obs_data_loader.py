@@ -47,7 +47,7 @@ def load_dataset(env_names,pcd_data_path,importer,min_length=(5351*3)):
                 fnames.append(file)
                 break
         print('loaded %d envs:' % (len(fnames)))
-        if len(fnames) >= 100:  # break  the loop when there are at least 100 pcs
+        if len(fnames) >= 2000:  # break  the loop when there are at least 2000 pcs
             break
     if min_length is None: # compute minimum length for dataset will take twice as long if necessary
         lengths = []

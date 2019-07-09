@@ -13,7 +13,7 @@ from tflearn.layers.core import fully_connected
 
 from . in_out import create_dir
 from . autoencoder import AutoEncoder
-from . general_utils import apply_augmentations
+from .. general_utils import apply_augmentations
 
 
 from . external.structural_losses.tf_nndistance import nn_distance
