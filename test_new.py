@@ -9,10 +9,23 @@ import time
 import rospy
 import sys
 
+from architectures.mlp_pipeline import mlp_pipeline
+
+from architectures.AE.point_net_ae import PointNetAutoEncoder
+
+from architectures.AE.in_out import snc_category_to_synth_id, create_dir, PointCloudDataSet, \
+                                        load_all_point_clouds_under_folder
+
+from architectures.AE.tf_utils import reset_tf_graph
+from architectures.AE.general_utils import plot_3d_point_cloud
+
+from architectures.mpnet import Configuration as Conf
+from architectures.mpnet import MPNet
+
+from architectures.mlp_models import baxter_mpnet_mlp
+from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params
+
 from neuralplanner_functions import *
-#from architectures import *
-from architectures.mlp import MLP
-from architectures.AE.pointnetAE import Encoder
 
 from tools.planning_scene_editor import *
 from tools.get_state_validity import StateValidity

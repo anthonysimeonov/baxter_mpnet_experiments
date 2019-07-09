@@ -1,11 +1,8 @@
 import argparse
-import torch
-import torch.nn as nn
 import numpy as np
 import os
 import pickle
 # load_test_dataset_single_paths_only
-from torch.autograd import Variable
 import math
 
 DEFAULT_STEP = 0.05
@@ -67,22 +64,6 @@ def collision_check(path, collHandle):
     return 1
 
 
-def to_var(x, volatile=False):
-    if torch.cuda.is_available():
-        x = x.cuda()
-    return Variable(x, volatile=volatile)
-
-
-def get_input(i, dataset, targets, seq, bs):
-    bi = np.zeros((bs, 18), dtype=np.float32)
-    bt = np.zeros((bs, 2), dtype=np.float32)
-    k = 0
-    for b in range(i, i+bs):
-        bi[k] = dataset[seq[i]].flatten()
-        bt[k] = targets[seq[i]].flatten()
-        k = k+1
-    return torch.from_numpy(bi), torch.from_numpy(bt)
-
 
 def is_reaching_target(start1, start2, dof=7):
 
@@ -119,8 +100,7 @@ def lvc(path, collHandle, step_sz=DEFAULT_STEP):
 
     return path
 
-
-def re_iterate_path2(p, g, collHandle):
+def replan_path(p, g, mpnet, collHandle, obs, step_sz=DEFAULT_STEP):
     step = 0
     path = []
     path.append(p[0])
@@ -131,140 +111,43 @@ def re_iterate_path2(p, g, collHandle):
     new_path = []
     for i in range(0, len(path)-1):
         target_reached = False
-
         st = path[i]
         gl = path[i+1]
-        steer = steerTo(st, gl, collHandle)
+        steer = steerTo(st, gl, collHandle, step_sz=step_sz)
         if steer == 1:
             new_path.append(st)
             new_path.append(gl)
         else:
             itr = 0
-            target_reached = False
-            while (not target_reached) and itr < 50:
-                new_path.append(st)
+            pA = []
+            pA.append(st)
+            pB = []
+            pB.append(gl)
+            target_reached = 0
+            tree = 0
+            while target_reached == 0 and itr < 3000:
                 itr = itr+1
-                ip = torch.cat((st, gl))
-                ip = to_var(ip)
-                st = mlp(ip)
-                st = st.data.cpu()
-                target_reached = is_reaching_target(st, gl)
-            if target_reached == False:
+                if tree == 0:
+                    ip1 = np.concatenate((st, gl))
+                    st = mpnet.plan(obs, ip1)
+                    pA.append(st)
+                    tree = 1
+                else:
+                    ip2 = np.concatenate((gl, st))
+                    gl = mpnet.plan(obs, ip2)
+                    pB.append(gl)
+                    tree = 0
+                target_reached = steerTo(st, gl, collHandle, step_sz=step_sz)
+            if target_reached == 0:
+                print("failed to replan")
                 return 0
+            else:
+                for p1 in range(0, len(pA)):
+                    new_path.append(pA[p1])
+                for p2 in range(len(pB)-1, -1, -1):
+                    new_path.append(pB[p2])
 
-    #new_path.append(g)
     return new_path
-
-
-def replan_path(p, g, mlp, collHandle, obs=None, step_sz=DEFAULT_STEP):
-    if obs is None:
-
-        step = 0
-        path = []
-        path.append(p[0])
-        for i in range(1, len(p)-1):
-            if not collHandle(p[i]):
-                path.append(p[i])
-        path.append(g)
-        new_path = []
-        for i in range(0, len(path)-1):
-            target_reached = False
-
-            st = path[i]
-            gl = path[i+1]
-            steer = steerTo(st, gl, collHandle)
-            if steer == 1:
-                new_path.append(st)
-                new_path.append(gl)
-            else:
-                itr = 0
-                pA = []
-                pA.append(st)
-                pB = []
-                pB.append(gl)
-                target_reached = 0
-                tree = 0
-                while target_reached == 0 and itr < 3000:
-                    itr = itr+1
-                    if tree == 0:
-                        ip1 = torch.cat((st, gl))
-                        ip1 = to_var(ip1)
-                        st = mlp(ip1)
-                        st = st.data.cpu()
-                        pA.append(st)
-                        tree = 1
-                    else:
-                        ip2 = torch.cat((gl, st))
-                        ip2 = to_var(ip2)
-                        gl = mlp(ip2)
-                        gl = gl.data.cpu()
-                        pB.append(gl)
-                        tree = 0
-                    target_reached = steerTo(st, gl, collHandle)
-                if target_reached == 0:
-                    print("failed to replan")
-                    return 0
-                else:
-                    for p1 in range(0, len(pA)):
-                        new_path.append(pA[p1])
-                    for p2 in range(len(pB)-1, -1, -1):
-                        new_path.append(pB[p2])
-
-        return new_path
-
-    else:
-        step = 0
-        path = []
-        path.append(p[0])
-        for i in range(1, len(p)-1):
-            if not collHandle(p[i]):
-                path.append(p[i])
-        path.append(g)
-        new_path = []
-        for i in range(0, len(path)-1):
-            target_reached = False
-
-            st = path[i]
-            gl = path[i+1]
-            steer = steerTo(st, gl, collHandle, step_sz=step_sz)
-            if steer == 1:
-                new_path.append(st)
-                new_path.append(gl)
-            else:
-                itr = 0
-                pA = []
-                pA.append(st)
-                pB = []
-                pB.append(gl)
-                target_reached = 0
-                tree = 0
-                while target_reached == 0 and itr < 3000:
-                    itr = itr+1
-                    if tree == 0:
-                        ip1 = torch.cat((st, gl, obs.data.cpu()))
-                        ip1 = to_var(ip1)
-                        st = mlp(ip1)
-                        st = st.data.cpu()
-                        pA.append(st)
-                        tree = 1
-                    else:
-                        ip2 = torch.cat((gl, st, obs.data.cpu()))
-                        ip2 = to_var(ip2)
-                        gl = mlp(ip2)
-                        gl = gl.data.cpu()
-                        pB.append(gl)
-                        tree = 0
-                    target_reached = steerTo(st, gl, collHandle, step_sz=step_sz)
-                if target_reached == 0:
-                    print("failed to replan")
-                    return 0
-                else:
-                    for p1 in range(0, len(pA)):
-                        new_path.append(pA[p1])
-                    for p2 in range(len(pB)-1, -1, -1):
-                        new_path.append(pB[p2])
-
-        return new_path
 
 
 def save_feasible_path(path, filename):
