@@ -107,7 +107,7 @@ def main(args):
     # training AE
     if args.pretrain:
         # load point cloud data for pretraining
-        envs_files = args.pretrain_envs_file
+        envs_files = [args.pretrain_envs_file]
         pretrain_obstacles = []
         env_data_path = args.env_data_path
         pcd_data_path = args.pointcloud_data_path
