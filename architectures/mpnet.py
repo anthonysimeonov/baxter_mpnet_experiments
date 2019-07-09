@@ -130,13 +130,13 @@ class MPNet(Neural_Net):
                 # may also look at decoder if it is defined
                 layer = c.mlp(self.input, **c.mlp_args)
                 self.output = layer
-            self.AE_saver = tf.train.Saver(tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'),\
-                                            max_to_keep=c.saver_max_to_keep)
-            self.mlp_saver = tf.train.Saver(tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'mlp'),\
-                                            max_to_keep=c.saver_max_to_keep)
 
             self._create_loss()
             self._setup_optimizer()
+            self.AE_saver = tf.train.Saver(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'AE'),\
+                                            max_to_keep=c.saver_max_to_keep)
+            self.mlp_saver = tf.train.Saver(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'mlp'),\
+                                            max_to_keep=c.saver_max_to_keep)
 
             # GPU configuration
             if hasattr(c, 'allow_gpu_growth'):
