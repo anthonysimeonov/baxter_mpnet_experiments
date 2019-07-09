@@ -126,7 +126,7 @@ class MPNet(Neural_Net):
                 self.x = tf.placeholder(tf.float32, x_shape)
                 # concatenate state and obstacle representation
                 self.input = tf.concat([self.z, self.x], axis=1)
-                self.target = tf.concat(tf.float32, out_shape)
+                self.target = tf.placeholder(tf.float32, out_shape)
                 # may also look at decoder if it is defined
                 layer = c.mlp(self.input, **c.mlp_args)
                 self.output = layer
