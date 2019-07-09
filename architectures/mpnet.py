@@ -197,7 +197,7 @@ class MPNet(Neural_Net):
 
         for rl in reg_losses:
             self.ae_loss += (w_reg_alpha * rl)
-        self.mlp_loss = tf.reduce_mean(tf.square_difference(self.output, self.target))
+        self.mlp_loss = tf.losses.mean_squared_error(self.target, self.output)
 
     def _setup_optimizer(self):
         c = self.configuration
