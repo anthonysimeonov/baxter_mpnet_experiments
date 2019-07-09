@@ -4,5 +4,5 @@ python train.py \
 --trained_model_path ./models/sample/ \
 --batch_size 100 --ae_learning_rate 0.0005 --mlp_learning_rate 0.0005 --num_epochs 200 \
 --enc_input_size 16053 --enc_output_size 60 --mlp_input_size 74 --mlp_output_size 7 \
---AE_start_epoch 0 --AE_restore_pretrain 0 --pretrain 1 --pretrain_epoch 500 --pretrain_batch_size 50 \
+--AE_start_epoch 0 --AE_restore_pretrain 0 --pretrain 1 --pretrain_epoch 500 --pretrain_batch_size 10 \
 --fixAE 0 --experiment_name pretrain_no_fix_AE

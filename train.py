@@ -125,7 +125,7 @@ def main(args):
 
     buf_size = 1 # Make 'training_stats' file to flush each output line regarding training.
     fout = open(osp.join(conf.train_dir, 'train_stats.txt'), 'a', buf_size)
-    obstacles = obstacles.astype(float)[0].reshape(len(obstacles[0]),-1,3)
+    obstacles = obstacles.astype(float).reshape(len(obstacles[0]),-1,3)
     train_stats = mpnet.train(obstacles, pc_inds_train, dataset_train, targets_train, conf, log_file=fout)
     fout.close()
 

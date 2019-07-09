@@ -1,11 +1,8 @@
 import argparse
-import torch
-import torch.nn as nn
 import numpy as np
 import os
 import pickle
 from tools.path_data_loader import load_test_dataset_end2end
-from torch.autograd import Variable
 import math
 from tools.import_tool import fileImport
 import time
@@ -305,7 +302,7 @@ def main(args):
                             g=np.zeros(dof,dtype=np.float32)
                             g=np.array(paths[i][j][path_lengths[i][j]-1])
                             tic = time.clock()
-                            path=replan_path(path, g, mlp, IsInCollision, obs=h, step_sz=step_sz) #replanning at coarse level
+                            path=replan_path(path, g, mpnet, IsInCollision, obs=h, step_sz=step_sz) #replanning at coarse level
                             toc = time.clock()
 
                             if path !=0:
