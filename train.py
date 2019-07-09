@@ -65,7 +65,7 @@ def main(args):
     conf = Conf(loss = ae_loss,
             training_epochs = args.num_epochs,
             batch_size = args.batch_size,
-            denoising = args.denoising,
+            denoising = False,
             ae_learning_rate = args.ae_learning_rate,
             mlp_learning_rate = args.mlp_learning_rate,
             train_dir = train_dir,
