@@ -331,7 +331,7 @@ class MPNet(Neural_Net):
                     self.AE_saver.save(self.sess, ae_checkpoint_path, global_step=self.epoch)
 
                 mlp_checkpoint_path = osp.join(c.train_dir, 'mlp.ckpt')
-                self.mlp_saver.save(self.sess, checkpoint_path, global_step=self.epoch)
+                self.mlp_saver.save(self.sess, mlp_checkpoint_path, global_step=self.epoch)
 
             if c.exists_and_is_not_none('summary_step') and (epoch % c.summary_step == 0 or epoch - 1 == 0):
                 summary = self.sess.run(self.merged_summaries)
