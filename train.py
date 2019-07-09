@@ -30,7 +30,7 @@ import argparse
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "%d" % (args.device)
     # define basic parameters
     top_out_dir = args.trained_model_path  # Use to save Neural-Net check-points etc.
     n_pc_points = args.enc_input_size // 3 # Number of points per model.
@@ -165,5 +165,6 @@ if __name__ == "__main__":
     parser.add_argument('--loss_display_step', type=int, default=1)
     parser.add_argument('--saver_step', type=int, default=10)
     parser.add_argument('--z_rotate', type=int, default=0)
+    parser.add_argument('--device', type=int, default=0)
     args = parser.parse_args()
     main(args)
