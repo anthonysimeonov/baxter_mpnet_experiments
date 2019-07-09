@@ -1,21 +1,31 @@
 import argparse
-import torch
-import torch.nn as nn
 import numpy as np
 import os
 import pickle
 from tools.path_data_loader import load_test_dataset_end2end
-from torch.autograd import Variable
 import math
 from tools.import_tool import fileImport
 import time
 import rospy
 import sys
 
+from architectures.mlp_pipeline import mlp_pipeline
+
+from architectures.AE.point_net_ae import PointNetAutoEncoder
+
+from architectures.AE.in_out import snc_category_to_synth_id, create_dir, PointCloudDataSet, \
+                                        load_all_point_clouds_under_folder
+
+from architectures.AE.tf_utils import reset_tf_graph
+from architectures.AE.general_utils import plot_3d_point_cloud
+
+from architectures.mpnet import Configuration as Conf
+from architectures.mpnet import MPNet
+
+from architectures.mlp_models import baxter_mpnet_mlp
+from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params
+
 from neuralplanner_functions import *
-#from architectures import *
-from architectures.mlp import MLP
-from architectures.AE.pointnetAE import Encoder
 
 from tools.planning_scene_editor import *
 from tools.get_state_validity import StateValidity
@@ -41,10 +51,18 @@ def IsInCollision(state, print_depth=False):
     return (not collision_free)
 
 def main(args):
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     importer = fileImport()
     env_data_path = args.env_data_path
     path_data_path = args.path_data_path
     pcd_data_path = args.pointcloud_data_path
+
+    # define basic parameters
+    top_out_dir = args.trained_model_path  # Use to save Neural-Net check-points etc.
+    n_pc_points = args.enc_input_size // 3 # Number of points per model.
+    bneck_size = args.enc_output_size      # Bottleneck-AE size
+    ae_loss = 'chamfer'                   # Loss to optimize: 'emd' or 'chamfer'
 
     envs = importer.environments_import(env_data_path + args.envs_file)
     with open (env_data_path+args.envs_file, 'rb') as env_f:
@@ -52,18 +70,60 @@ def main(args):
 
     obstacles, paths, path_lengths = load_test_dataset_end2end(envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=100)
 
-    #encoder = Encoder_End2End(args.enc_input_size, args.enc_output_size)
-    encoder = Encoder(args.enc_input_size, args.enc_output_size)
-    mlp = MLP(args.mlp_input_size, args.mlp_output_size)
+    print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
+    print(str(len(dataset_train)) + " " +
+        str(len(targets_train)) + " " + str(len(pc_inds_train)))
+    print("\n")
 
-    # device = torch.device('cpu')
-    model_path = args.model_path
-    mlp.load_state_dict(torch.load(model_path+args.mlp_model_name)) #, map_location=device))
-    encoder.load_state_dict(torch.load(model_path+args.enc_model_name)) #, map_location=device))
+    if not os.path.exists(args.trained_model_path):
+        os.makedirs(args.trained_model_path)
 
-    if torch.cuda.is_available():
-        encoder.cuda()
-        mlp.cuda()
+    # write encoder and decoder pipeline
+    encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
+    # write mpnet pipeline
+    mlp, mlp_args = baxter_mpnet_mlp(args.mlp_input_size, args.mlp_output_size)
+
+    train_dir = create_dir(osp.join(top_out_dir, args.experiment_name))
+
+    conf = Conf(loss = ae_loss,
+            experiment_name = args.experiment_name,
+            training_epochs = args.num_epochs,
+            batch_size = args.batch_size,
+            denoising = False,
+            ae_learning_rate = args.ae_learning_rate,
+            mlp_learning_rate = args.mlp_learning_rate,
+            train_dir = train_dir,
+            loss_display_step = args.loss_display_step,
+            saver_step = args.saver_step,
+            z_rotate =args.z_rotate,
+            encoder = encoder,
+            decoder = decoder,
+            mlp = mlp,
+            encoder_args = enc_args,
+            decoder_args = dec_args,
+            mlp_args = mlp_args,
+            n_o_input = [n_pc_points, 3],
+            n_x_input = [args.mlp_input_size-args.enc_output_size],
+            n_output = [args.mlp_output_size],
+            pretrain = args.pretrain,
+            pretrain_epoch = args.pretrain_epoch,
+            pretrain_batch_size = args.pretrain_batch_size,
+            fixAE = args.fixAE
+           )
+    conf.held_out_step = 5   # How often to evaluate/print out loss on
+                             # held_out data (if they are provided in ae.train() ).
+    #conf.save(osp.join(train_dir, 'configuration'))
+    # reload
+    conf = Conf.load(train_dir + '/configuration')
+    reset_tf_graph()
+    mpnet = MPNet(conf.experiment_name, conf)
+    if args.AE_restore_pretrain:
+        # filename is pretrain_ae
+        mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, filename='pretrain_ae')
+    else:
+        mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, filename='ae')
+    if args.start_epoch > 0:
+        mpnet.restore_model(mpnet.mlp_saver, conf.train_dir, epoch=args.start_epoch, filename='mlp')
 
     rospy.init_node("environment_monitor")
     scene = PlanningSceneInterface()
@@ -147,10 +207,7 @@ def main(args):
             p_ind=0
 
             obs=obstacles[i]
-            obs=torch.from_numpy(obs).unsqueeze(0)
-
-            en_inp=to_var(obs)
-            h=encoder(en_inp)[0]
+            obs=obs.reshape(-1, 3)
 
             if path_lengths[i][j]>0:
                 global counter
@@ -175,10 +232,10 @@ def main(args):
                     goal_collision.append(j)
                     continue
 
-                start1=torch.from_numpy(start)
-                goal2=torch.from_numpy(start)
-                goal1=torch.from_numpy(goal)
-                start2=torch.from_numpy(goal)
+                start1=start
+                goal2=start
+                goal1=goal
+                start2=goal
 
                 ##generated paths
                 path1=[]
@@ -198,17 +255,13 @@ def main(args):
                     step=step+1
 
                     if tree==0:
-                        inp1=torch.cat((start1,start2,h.data.cpu()))
-                        inp1=to_var(inp1)
-                        start1=mlp(inp1)
-                        start1=start1.data.cpu()
+                        inp1=np.concatenate((start1,start2))
+                        start1=mpnet.plan(obs,inp1)
                         path1.append(start1)
                         tree=1
                     else:
-                        inp2=torch.cat((start2,start1,h.data.cpu()))
-                        inp2=to_var(inp2)
-                        start2=mlp(inp2)
-                        start2=start2.data.cpu()
+                        inp2=np.concatenate((start2,start1))
+                        start2=mpnet.plan(obs,inp2)
                         path2.append(start2)
                         tree=0
                     target_reached=steerTo(start1,start2, IsInCollision)
@@ -260,10 +313,9 @@ def main(args):
 
                             sp=sp+1
                             g=np.zeros(dof,dtype=np.float32)
-                            g=torch.from_numpy(paths[i][j][path_lengths[i][j]-1])
-
+                            g=np.array(paths[i][j][path_lengths[i][j]-1])
                             tic = time.clock()
-                            path=replan_path(path, g, mlp, IsInCollision, obs=h, step_sz=step_sz) #replanning at coarse level
+                            path=replan_path(path, g, mpnet, IsInCollision, obs=h, step_sz=step_sz) #replanning at coarse level
                             toc = time.clock()
 
                             if path !=0:

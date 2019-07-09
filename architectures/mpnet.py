@@ -308,12 +308,11 @@ class MPNet(Neural_Net):
     def train(self, train_pc, train_pc_inds, train_input, train_targets, configuration, log_file=None, held_out_data=None):
         c = configuration
         stats = []
-
         if c.saver_step is not None:
             create_dir(c.train_dir)
 
         for _ in xrange(c.training_epochs):
-            loss, duration = self._single_epoch_train(train_data, c)
+            loss, duration = self._single_epoch_train(train_pc, train_pc_inds, train_input, train_targets, c)
             epoch = int(self.sess.run(self.increment_epoch))
             stats.append((epoch, loss, duration))
 
