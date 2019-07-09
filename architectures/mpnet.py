@@ -120,7 +120,7 @@ class MPNet(Neural_Net):
                 self.gt = self.o
                 if hasattr(c, 'decoder'):
                     self.x_reconstr = c.decoder(self.z, **c.decoder_args)
-                    self.x_reconstr = tf.reshape(self.x_reconstr, [-1, o_shape[0], o_shape[1]])
+                    self.x_reconstr = tf.reshape(self.x_reconstr, [-1, o_shape[1], o_shape[2]])
 
             with tf.variable_scope('mlp'):
                 self.x = tf.placeholder(tf.float32, x_shape)

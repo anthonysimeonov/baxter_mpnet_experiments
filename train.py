@@ -116,7 +116,7 @@ def main(args):
             obs = load_dataset(envs, pcd_data_path, importer)
             pretrain_obstacles.append(obs)
 
-        pretrain_obstacles = np.stack(pretrain_obstacles).astype(float)[0].reshape(len(obs),-1,3)
+        pretrain_obstacles = np.stack(pretrain_obstacles).astype(float)[0].reshape(len(pretrain_obstacles[0]),-1,3)
         buf_size = 1 # Make 'training_stats' file to flush each output line regarding training.
         fout = open(osp.join(conf.train_dir, 'pretrain_stats.txt'), 'a', buf_size)
         train_stats = mpnet.pretrain(pretrain_obstacles, conf, log_file=fout)
@@ -124,6 +124,7 @@ def main(args):
 
     buf_size = 1 # Make 'training_stats' file to flush each output line regarding training.
     fout = open(osp.join(conf.train_dir, 'train_stats.txt'), 'a', buf_size)
+    obstacles = obstacles.astype(float)[0].reshape(len(obstacles[0]),-1,3)
     train_stats = mpnet.train(obstacles, pc_inds_train, dataset_train, targets_train, conf, log_file=fout)
     fout.close()
 
