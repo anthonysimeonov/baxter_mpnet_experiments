@@ -247,8 +247,9 @@ def main(args):
                 tic_start = time.clock()
                 step_sz = DEFAULT_STEP
 
-
+                step_time = time.clock()
                 while target_reached==0 and step<3000:
+                    print('step: %d' % (step))
                     step=step+1
 
                     if tree==0:
@@ -262,7 +263,7 @@ def main(args):
                         path2.append(start2)
                         tree=0
                     target_reached=steerTo(start1,start2, IsInCollision)
-
+                print('initial plan time: %f' % (time.clock()-step_time))
                 tp=tp+1
                 tp_env=tp_env+1
 
@@ -299,7 +300,8 @@ def main(args):
                         indicator=0
                         step_sz = DEFAULT_STEP
                         while indicator==0 and sp<10 and path !=0:
-
+                            print('replanning step: %d' % (sp))
+                            step_time = time.clock()
                             # adaptive step size on replanning attempts
                             if (sp == 1):
                                 step_sz = 0.04
@@ -336,7 +338,7 @@ def main(args):
                                     print("length: " + str(len(path)))
                                     print("time: " + str(t))
                                     print("count: " + str(counter))
-
+                            print('replanning time: %f' % (time.clock() - step_time))
                         if (sp == 10):
                             save_feasible_path(path, bad_paths_path + '/' + env_name + '/bp_' + str(j))
 
