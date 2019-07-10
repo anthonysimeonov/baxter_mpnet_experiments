@@ -30,7 +30,7 @@ def steerTo(start, end, collHandle, step_sz=DEFAULT_STEP, print_depth=False, dof
         for i in range(0, dof):
             stateCurr[i] = start[i]
         for i in range(0, numSegments):
-            print('inside steerTo, segment %d, total segment: %d' % (i, numSegments))
+            #print('inside steerTo, segment %d, total segment: %d' % (i, numSegments))
             if collHandle(stateCurr, print_depth=print_depth):
                 return 0
 
@@ -84,11 +84,12 @@ def is_reaching_target(start1, start2, dof=7):
 
 
 def lvc(path, collHandle, step_sz=DEFAULT_STEP):
-
     for i in range(0, len(path)-1):
         for j in range(len(path)-1, i+1, -1):
             ind = 0
+            print('start steerTo, path length: %d' % (len(path)))
             ind = steerTo(path[i], path[j], collHandle, step_sz=step_sz)
+            print('end steerTo, path length: %d' % (len(path)))
             if ind == 1:
                 pc = []
                 for k in range(0, i+1):
