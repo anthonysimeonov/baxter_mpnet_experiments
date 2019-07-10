@@ -106,7 +106,7 @@ def main(args):
             n_x_input = [args.mlp_input_size-args.enc_output_size],
             n_output = [args.mlp_output_size],
             pretrain = args.pretrain,
-            pretrain_epoch = args.pretrain_epoch,
+            pretrain_epochs = args.pretrain_epochs,
             pretrain_batch_size = args.pretrain_batch_size,
             fixAE = args.fixAE
            )
@@ -421,7 +421,7 @@ if __name__ == "__main__":
     parser.add_argument('--AE_restore_pretrain', type=int, default=0, help='indicate if AutoEncoder is going to restore the pretrained model or the end2end model')
 
     parser.add_argument('--pretrain', type=int, default=0, help='indicate if pretraining AutoEncoder or not')
-    parser.add_argument('--pretrain_epoch', type=int, default=100)
+    parser.add_argument('--pretrain_epochs', type=int, default=100)
     parser.add_argument('--pretrain_batch_size', type=int, default=100)
     parser.add_argument('--fixAE', type=int, default=0, help='fix AutoEncoder or not when training with MLP')
 
