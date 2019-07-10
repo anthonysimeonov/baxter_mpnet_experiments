@@ -6,6 +6,8 @@ Created on November 26, 2017
 
 import numpy as np
 from numpy.linalg import norm
+import matplotlib
+matplotlib.use("agg")
 import matplotlib.pylab  as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -59,7 +61,7 @@ def iterate_in_chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i + n]
 
-        
+
 def add_gaussian_noise_to_pcloud(pcloud, mu=0, sigma=1):
     gnoise = np.random.normal(mu, sigma, pcloud.shape[0])
     gnoise = np.tile(gnoise, (3, 1)).T
@@ -111,7 +113,7 @@ def plot_3d_point_cloud(x, y, z, show=True, show_axis=True, in_u_sphere=False, m
 
     if axis is None:
         fig = plt.figure(figsize=figsize)
-        ax = fig.add_subplot(111, projection='3d')        
+        ax = fig.add_subplot(111, projection='3d')
     else:
         ax = axis
         fig = axis
