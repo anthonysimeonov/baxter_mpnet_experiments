@@ -30,7 +30,7 @@ def steerTo(start, end, collHandle, step_sz=DEFAULT_STEP, print_depth=False, dof
         for i in range(0, dof):
             stateCurr[i] = start[i]
         for i in range(0, numSegments):
-
+            print('inside steerTo, segment')
             if collHandle(stateCurr, print_depth=print_depth):
                 return 0
 
