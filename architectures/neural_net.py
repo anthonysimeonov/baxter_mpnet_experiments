@@ -7,7 +7,7 @@ Created on August 28, 2017
 import os.path as osp
 import tensorflow as tf
 
-MODEL_SAVER_ID = 'models.ckpt'
+MODEL_SAVER_ID = 'models'
 
 
 class Neural_Net(object):
@@ -33,7 +33,7 @@ class Neural_Net(object):
     def restore_model(self, saver, model_path, epoch, verbose=False, filename=MODEL_SAVER_ID):
         '''Restore all the variables of a saved model.
         '''
-        saver.restore(self.sess, osp.join(model_path, filename + '-' + str(int(epoch))))
+        saver.restore(self.sess, osp.join(model_path, filename + '.ckpt-' + str(int(epoch))))
 
         if self.epoch.eval(session=self.sess) != epoch:
             warnings.warn('Loaded model\'s epoch doesn\'t match the requested one.')
