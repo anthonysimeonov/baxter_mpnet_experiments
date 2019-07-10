@@ -70,11 +70,6 @@ def main(args):
 
     obstacles, paths, path_lengths = load_test_dataset_end2end(envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=100)
 
-    print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
-    print(str(len(dataset_train)) + " " +
-        str(len(targets_train)) + " " + str(len(pc_inds_train)))
-    print("\n")
-
     if not os.path.exists(args.trained_model_path):
         os.makedirs(args.trained_model_path)
 
