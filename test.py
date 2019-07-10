@@ -1,13 +1,15 @@
+import os.path as osp
+import os
+import sys
+sys.path.append('../../')
 import argparse
 import numpy as np
-import os
 import pickle
 from tools.path_data_loader import load_test_dataset_end2end
 import math
 from tools.import_tool import fileImport
 import time
 import rospy
-import sys
 
 from architectures.mlp_pipeline import mlp_pipeline
 
