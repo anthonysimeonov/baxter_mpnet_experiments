@@ -279,6 +279,7 @@ def main(args):
                     path = lvc(path, IsInCollision, step_sz=step_sz)
 
                     # full dense collision check
+                    print('target reached, feasibility check')
                     indicator=feasibility_check(path, IsInCollision, step_sz=0.01, print_depth=True)
 
                     if indicator==1:
