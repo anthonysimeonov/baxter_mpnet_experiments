@@ -52,7 +52,7 @@ def IsInCollision(state, print_depth=False):
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "%d" % (args.device)
     importer = fileImport()
     env_data_path = args.env_data_path
     path_data_path = args.path_data_path
@@ -398,10 +398,6 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, default='./models/sample/')
-    parser.add_argument('--mlp_model_name', type=str, default='mlp_PReLU_ae_dd140.pkl')
-    parser.add_argument('--enc_model_name', type=str, default='cae_encoder_140.pkl')
-
     parser.add_argument('--good_path_sample_path', type=str, default='./path_samples/good_path_samples')
     parser.add_argument('--bad_path_sample_path', type=str, default='./path_samples/bad_path_samples')
 
@@ -432,6 +428,6 @@ if __name__ == "__main__":
     parser.add_argument('--loss_display_step', type=int, default=1)
     parser.add_argument('--saver_step', type=int, default=10)
     parser.add_argument('--z_rotate', type=int, default=0)
-
+    parser.add_argument('--device', type=int, default=0)
     args = parser.parse_args()
     main(args)

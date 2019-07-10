@@ -25,7 +25,7 @@ from . AE.external.structural_losses.tf_approxmatch import approx_match, match_c
 
 class Configuration():
     def __init__(self, experiment_name, n_o_input, n_x_input, n_output, encoder, decoder, mlp, pretrain,
-                 pretrain_epoch, pretrain_batch_size, fixAE, encoder_args={}, decoder_args={}, mlp_args={},
+                 pretrain_epochs, pretrain_batch_size, fixAE, encoder_args={}, decoder_args={}, mlp_args={},
                  training_epochs=200, batch_size=10, ae_learning_rate=0.001, mlp_learning_rate=0.001, denoising=False,
                  saver_step=None, train_dir=None, z_rotate=False, loss='chamfer', gauss_augment=None,
                  saver_max_to_keep=None, loss_display_step=1, debug=False,
@@ -53,6 +53,7 @@ class Configuration():
         self.z_rotate = z_rotate
         self.saver_max_to_keep = saver_max_to_keep
         self.training_epochs = training_epochs
+        self.pretrain_epochs = pretrain_epochs
         self.debug = debug
         self.n_o_input = n_o_input
         self.n_x_input = n_x_input
@@ -115,7 +116,10 @@ class MPNet(Neural_Net):
         x_shape = [None] + self.n_x_input
         #z_shape = [None] + self.n_z_input
         out_shape = [None] + self.n_output
-
+        with tf.variable_scope(name):
+            with tf.device('/cpu:0'):
+                self.pretrain_epoch = tf.get_variable('pretrain_epoch', [], initializer=tf.constant_initializer(0), trainable=False)
+            self.pretrain_increment_epoch = self.pretrain_epoch.assign_add(tf.constant(1.0))
 
         with tf.variable_scope(name):
             with tf.variable_scope('AE'):
@@ -205,7 +209,7 @@ class MPNet(Neural_Net):
         self.ae_lr = c.ae_learning_rate
         self.mlp_lr = c.mlp_learning_rate
         if hasattr(c, 'exponential_decay'):
-            self.ae_lr = tf.train.exponential_decay(c.ae_learning_rate, self.epoch, c.decay_steps, decay_rate=0.5, staircase=True, name="learning_rate_decay")
+            self.ae_lr = tf.train.exponential_decay(c.ae_learning_rate, self.pretrain_epoch, c.decay_steps, decay_rate=0.5, staircase=True, name="pretrain_learning_rate_decay")
             self.ae_lr = tf.maximum(self.ae_lr, 1e-5)
             tf.summary.scalar('ae_learning_rate', self.ae_lr)
             self.mlp_lr = tf.train.exponential_decay(c.mlp_learning_rate, self.epoch, c.decay_steps, decay_rate=0.5, staircase=True, name="learning_rate_decay")
@@ -278,9 +282,9 @@ class MPNet(Neural_Net):
         if c.saver_step is not None:
             create_dir(c.train_dir)
 
-        for _ in xrange(c.training_epochs):
+        for _ in xrange(c.pretrain_epochs):
             loss, duration = self._single_epoch_pretrain(train_pc, c)
-            epoch = int(self.sess.run(self.increment_epoch))
+            epoch = int(self.sess.run(self.pretrain_increment_epoch))
             stats.append((epoch, loss, duration))
 
             if epoch % c.loss_display_step == 0:
@@ -291,8 +295,8 @@ class MPNet(Neural_Net):
             # Save the models checkpoint periodically.
             # save AutoEncoder and MLP separately
             if c.saver_step is not None and (epoch % c.saver_step == 0 or epoch - 1 == 0):
-                ae_checkpoint_path = osp.join(c.train_dir, 'ae.ckpt')
-                self.AE_saver.save(self.sess, ae_checkpoint_path, global_step=self.epoch)
+                ae_checkpoint_path = osp.join(c.train_dir, 'pretrain_ae.ckpt')
+                self.AE_saver.save(self.sess, ae_checkpoint_path, global_step=self.pretrain_epoch)
 
             if c.exists_and_is_not_none('summary_step') and (epoch % c.summary_step == 0 or epoch - 1 == 0):
                 summary = self.sess.run(self.merged_summaries)
