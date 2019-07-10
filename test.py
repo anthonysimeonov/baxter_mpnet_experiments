@@ -204,7 +204,7 @@ def main(args):
             p_ind=0
 
             obs=obstacles[i]
-            obs=obs.reshape(-1, 3)
+            obs=obs.reshape(1, -1, 3)
 
             if path_lengths[i][j]>0:
                 global counter
@@ -253,12 +253,12 @@ def main(args):
 
                     if tree==0:
                         inp1=np.concatenate((start1,start2))
-                        start1=mpnet.plan(obs,inp1)
+                        start1=mpnet.plan(obs,np.array([inp1]))
                         path1.append(start1)
                         tree=1
                     else:
                         inp2=np.concatenate((start2,start1))
-                        start2=mpnet.plan(obs,inp2)
+                        start2=mpnet.plan(obs,np.array([inp2]))
                         path2.append(start2)
                         tree=0
                     target_reached=steerTo(start1,start2, IsInCollision)

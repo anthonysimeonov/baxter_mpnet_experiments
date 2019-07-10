@@ -129,12 +129,12 @@ def replan_path(p, g, mpnet, collHandle, obs, step_sz=DEFAULT_STEP):
                 itr = itr+1
                 if tree == 0:
                     ip1 = np.concatenate((st, gl))
-                    st = mpnet.plan(obs, ip1)
+                    st = mpnet.plan(obs, np.array([ip1]))
                     pA.append(st)
                     tree = 1
                 else:
                     ip2 = np.concatenate((gl, st))
-                    gl = mpnet.plan(obs, ip2)
+                    gl = mpnet.plan(obs, np.array([ip2]))
                     pB.append(gl)
                     tree = 0
                 target_reached = steerTo(st, gl, collHandle, step_sz=step_sz)
