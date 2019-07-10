@@ -1,5 +1,5 @@
 python test.py \
---env_data_path ./env/environment_data/ --path_data_path ./data/test/paths/ --pointcloud_data_path ./data/test/pcd/ \
+--env_data_path ./env/environment_data/ --path_data_path ./test_data/test/paths/ --pointcloud_data_path ./test_data/test/pcd/ \
 --envs_file trainEnvironments.pkl --path_data_file trainEnvironments_testPaths.pkl \
 --experiment_name pretrain_fix_AE --trained_model_path ./models/sample/ \
 --batch_size 100 --ae_learning_rate 0.0005 --mlp_learning_rate 0.0005 --num_epochs 200 \
