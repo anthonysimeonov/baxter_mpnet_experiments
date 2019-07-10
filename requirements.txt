@@ -79,5 +79,5 @@ wcwidth==0.1.7
 webencodings==0.5.1
 widgetsnbextension==3.4.2
 wrapt==1.11.1
-tensorflow==1.12.2
+tensorflow-gpu==1.12.2
 tflearn
