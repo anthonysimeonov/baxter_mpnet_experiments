@@ -164,7 +164,7 @@ def main(args):
 
 
     # experiment_name = args.model_path.split('models/')[1] + "test_"
-    experiment_name = args.model_path.split('models/')[1] + args.experiment_name
+    experiment_name = args.trained_model_path.split('models/')[1] + args.experiment_name
     good_paths_path = args.good_path_sample_path + '/' + experiment_name
     bad_paths_path = args.bad_path_sample_path + '/' + experiment_name
 
