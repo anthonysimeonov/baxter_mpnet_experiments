@@ -134,7 +134,9 @@ def main(args):
     for i in range(len(obstacles)):
         print('obstacle %d:' % (i))
         for j in range(10):
-            print(mpnet.plan(obstacles[i].reshape(1,-1,3), np.random.rand(1,14)*2*joint_ranges-joint_ranges))
+            input = np.stack((np.random.rand(7) * 2*joint_ranges-joint_ranges, np.random.rand(7) * 2*joint_ranges-joint_ranges))
+
+            print(mpnet.plan(obstacles[i].reshape(1,-1,3), input))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
