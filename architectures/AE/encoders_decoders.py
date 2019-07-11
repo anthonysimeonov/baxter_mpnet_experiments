@@ -15,7 +15,12 @@ from tflearn.layers.normalization import batch_normalization
 from tflearn.layers.core import fully_connected, dropout
 
 from .. tf_utils import expand_scope_by_name, replicate_parameter_for_all_layers
-
+from tensorflow.python.keras.layers import PReLU
+def wrap_prelu(in_signal):
+    # first time call this will construct class
+    # tensorflow will use this constructed PReLU afterwards without constructing again
+    prelu = PReLU()
+    return prelu(in_signal)
 def encoder_with_convs_and_symmetry(in_signal, n_filters=[64, 128, 256, 1024], filter_sizes=[1], strides=[1],
                                         b_norm=True, non_linearity=tf.nn.relu, regularizer=None, weight_decay=0.001,
                                         symmetry=tf.reduce_max, dropout_prob=None, pool=avg_pool_1d, pool_sizes=None, scope=None,
@@ -188,5 +193,59 @@ def decoder_with_convs_only(in_signal, n_filters, filter_sizes, strides, padding
         if verbose:
             print layer
             print 'output size:', np.prod(layer.get_shape().as_list()[1:]), '\n'
+
+    return layer
+
+
+
+def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=prelu,
+                         regularizer=None, weight_decay=0.001, reuse=False, scope=None,
+                         verbose=False):
+    '''A decoding network which maps points from the latent space back onto the data space.
+    '''
+    if verbose:
+        print 'Building Encoder'
+
+    n_layers = len(layer_sizes)
+
+    if n_layers < 2:
+        raise ValueError('For an FC Encoder with single a layer use simpler code.')
+
+    for i in xrange(0, n_layers - 1):
+        name = 'encoder_fc_' + str(i)
+        scope_i = expand_scope_by_name(scope, name)
+
+        if i == 0:
+            layer = latent_signal
+
+        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+
+        if verbose:
+            print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
+
+        if b_norm:
+            name += '_bnorm'
+            scope_i = expand_scope_by_name(scope, name)
+            layer = batch_normalization(layer, name=name, reuse=reuse, scope=scope_i)
+            if verbose:
+                print 'bnorm params = ', np.prod(layer.beta.get_shape().as_list()) + np.prod(layer.gamma.get_shape().as_list())
+
+        if non_linearity is not None:
+            layer = non_linearity(layer)
+
+        if verbose:
+            print layer
+            print 'output size:', np.prod(layer.get_shape().as_list()[1:]), '\n'
+
+    # Last decoding layer never has a non-linearity.
+    name = 'encoder_fc_' + str(n_layers - 1)
+    scope_i = expand_scope_by_name(scope, name)
+    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+    if verbose:
+        print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
+
+    if verbose:
+        print layer
+        print 'output size:', np.prod(layer.get_shape().as_list()[1:]), '\n'
 
     return layer

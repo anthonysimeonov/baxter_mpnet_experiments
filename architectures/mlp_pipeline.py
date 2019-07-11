@@ -11,7 +11,7 @@ from . tf_utils import expand_scope_by_name, replicate_parameter_for_all_layers
 
 # tensorflow code for MLP
 def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularizer=None,
-                        weight_decay=0.001, reuse=False, scope=None, dropout_prob=None,
+                        weight_decay=0., reuse=False, scope=None, dropout_prob=None,
                         verbose=False):
     n_layers = len(layer_sizes)
     dropout_prob = replicate_parameter_for_all_layers([dropout_prob], n_layers)

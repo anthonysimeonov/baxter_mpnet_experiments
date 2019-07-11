@@ -5,7 +5,7 @@ Created on September 2, 2017
 '''
 import numpy as np
 
-from . encoders_decoders import encoder_with_convs_and_symmetry, decoder_with_fc_only
+from . encoders_decoders import encoder_with_convs_and_symmetry, decoder_with_fc_only, encoder_with_fc_only
 
 
 def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
@@ -37,6 +37,32 @@ def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
         decoder_args['layer_sizes'][0] = bneck_size
 
     return encoder, decoder, encoder_args, decoder_args
+
+def linear_ae(n_pc_points, bneck_size, bneck_post_mlp=False):
+    ''' Single class experiments.
+    '''
+    #if n_pc_points != 2048:
+    #    raise ValueError()
+
+    encoder = encoder_with_fc_only
+    decoder = decoder_with_fc_only
+
+    n_input = [n_pc_points, 3]
+
+    encoder_args = {'layer_sizes': [786, 512, 256, bneck_size],
+                    'verbose': True,
+                    'weight_decay': 0.
+                    }
+
+    decoder_args = {'layer_sizes': [256, 512, 786, np.prod(n_input)],
+                    'b_norm': False,
+                    'b_norm_finish': False,
+                    'verbose': True,
+                    'weight_decay': 0.
+                    }
+
+    return encoder, decoder, encoder_args, decoder_args
+
 
 
 def default_train_params(single_class=True):
