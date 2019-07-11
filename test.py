@@ -122,6 +122,14 @@ def main(args):
     if args.start_epoch > 0:
         mpnet.restore_model(mpnet.mlp_saver, conf.train_dir, epoch=args.start_epoch, filename='mlp')
 
+
+    # print out mpnet model structure
+    vars = tf.trainable_variables()
+    print(vars) #some infos about variables...
+    vars_vals = mpnet.sess.run(vars)
+    for var, val in zip(vars, vars_vals):
+        print("var: {}, value: {}".format(var.name, val))
+
     rospy.init_node("environment_monitor")
     scene = PlanningSceneInterface()
     robot = RobotCommander()
