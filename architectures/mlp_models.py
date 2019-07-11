@@ -5,6 +5,7 @@ from . mlp_pipeline import mlp_pipeline
 import tensorflow as tf
 def baxter_mpnet_mlp(input_size, output_size):
     mlp = mlp_pipeline
+    
     mlp_arguments = {'layer_sizes': [1280, 896, 512, 384, 256, 128, 64, 32, output_size],
                      'non_linearity': tf.nn.relu,
                      'regularizer': None,
