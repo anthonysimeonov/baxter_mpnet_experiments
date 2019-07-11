@@ -156,9 +156,9 @@ if __name__ == "__main__":
     parser.add_argument('--mlp_learning_rate', type=float, default=0.001)
     parser.add_argument('--experiment_name', type=str, default='pretrain_fix_AE')
     parser.add_argument('--trained_model_path', type=str, default='./models/train/', help='path for saving trained models')
-    parser.add_argument('--start_epoch', type=int, default=0)
-    parser.add_argument('--AE_start_epoch', type=int, default=0)
-    parser.add_argument('--AE_restore_pretrain', type=int, default=0, help='indicate if AutoEncoder is going to restore the pretrained model or the end2end model')
+    parser.add_argument('--start_epoch', type=int, default=10)
+    parser.add_argument('--AE_start_epoch', type=int, default=500)
+    parser.add_argument('--AE_restore_pretrain', type=int, default=1, help='indicate if AutoEncoder is going to restore the pretrained model or the end2end model')
 
     parser.add_argument('--num_epochs', type=int, default=10)
     parser.add_argument('--batch_size', type=int, default=10)
