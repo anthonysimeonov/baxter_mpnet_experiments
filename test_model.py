@@ -142,8 +142,8 @@ if __name__ == "__main__":
     parser.add_argument('--bad_path_sample_path', type=str, default='./path_samples/bad_path_samples')
 
     parser.add_argument('--env_data_path', type=str, default='./env/environment_data/')
-    parser.add_argument('--path_data_path', type=str, default='./data/test/paths/')
-    parser.add_argument('--pointcloud_data_path', type=str, default='./data/test/pcd/')
+    parser.add_argument('--path_data_path', type=str, default='./test_data/test/paths/')
+    parser.add_argument('--pointcloud_data_path', type=str, default='./test_data/test/pcd/')
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainEnvironments_testPaths.pkl')
 
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--ae_learning_rate', type=float, default=0.001)
     parser.add_argument('--mlp_learning_rate', type=float, default=0.001)
-    parser.add_argument('--experiment_name', type=str, default='test_experiment')
+    parser.add_argument('--experiment_name', type=str, default='pretrain_fix_AE')
     parser.add_argument('--trained_model_path', type=str, default='./models/sample_train/', help='path for saving trained models')
     parser.add_argument('--start_epoch', type=int, default=0)
     parser.add_argument('--AE_start_epoch', type=int, default=0)
