@@ -249,7 +249,7 @@ def main(args):
 
                 step_time = time.clock()
                 while target_reached==0 and step<3000:
-                    print('step: %d' % (step))
+                    #print('step: %d' % (step))
                     step=step+1
 
                     if tree==0:
