@@ -277,7 +277,10 @@ def main(args):
                         path.append(path2[p2])
 
                     path = lvc(path, IsInCollision, step_sz=step_sz)
-
+                    print('ground truth path:')
+                    print(paths[i][j])
+                    print('path:')
+                    print(path)
                     # full dense collision check
                     print('target reached, feasiblility check')
                     indicator=feasibility_check(path, IsInCollision, step_sz=0.01, print_depth=True)
