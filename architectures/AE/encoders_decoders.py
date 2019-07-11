@@ -198,7 +198,7 @@ def decoder_with_convs_only(in_signal, n_filters, filter_sizes, strides, padding
 
 
 
-def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=prelu,
+def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=wrap_prelu,
                          regularizer=None, weight_decay=0.001, reuse=False, scope=None,
                          verbose=False):
     '''A decoding network which maps points from the latent space back onto the data space.
