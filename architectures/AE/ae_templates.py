@@ -49,7 +49,7 @@ def linear_ae(n_pc_points, bneck_size, bneck_post_mlp=False):
     #if n_pc_points != 2048:
     #    raise ValueError()
 
-    encoder = encoder_with_fc_only
+    encoder = linear_encoder
     decoder = decoder_with_fc_only
 
     n_input = [n_pc_points, 3]
