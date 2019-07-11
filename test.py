@@ -32,6 +32,7 @@ from neuralplanner_functions import *
 from tools.planning_scene_editor import *
 from tools.get_state_validity import StateValidity
 
+import tensorflow as tf
 joint_ranges = np.array([3.4033, 3.194, 6.117, 3.6647, 6.117, 6.1083, 2.67])
 
 
