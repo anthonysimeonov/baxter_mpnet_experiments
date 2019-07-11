@@ -87,9 +87,9 @@ def lvc(path, collHandle, step_sz=DEFAULT_STEP):
     for i in range(0, len(path)-1):
         for j in range(len(path)-1, i+1, -1):
             ind = 0
-            print('start steerTo, path length: %d' % (len(path)))
+            #print('start steerTo, path length: %d' % (len(path)))
             ind = steerTo(path[i], path[j], collHandle, step_sz=step_sz)
-            print('end steerTo, path length: %d' % (len(path)))
+            #print('start steerTo, path length: %d' % (len(path)))
             if ind == 1:
                 pc = []
                 for k in range(0, i+1):
