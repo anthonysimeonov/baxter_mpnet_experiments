@@ -6,7 +6,12 @@ Created on September 2, 2017
 import numpy as np
 
 from . encoders_decoders import encoder_with_convs_and_symmetry, decoder_with_fc_only, encoder_with_fc_only
-
+from tensorflow.python.keras.layers import PReLU
+def wrap_prelu(in_signal):
+    # first time call this will construct class
+    # tensorflow will use this constructed PReLU afterwards without constructing again
+    prelu = PReLU()
+    return prelu(in_signal)
 
 def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
     ''' Single class experiments.
@@ -51,14 +56,16 @@ def linear_ae(n_pc_points, bneck_size, bneck_post_mlp=False):
 
     encoder_args = {'layer_sizes': [786, 512, 256, bneck_size],
                     'verbose': True,
-                    'weight_decay': 0.
+                    'weight_decay': 0.,
+                    'non_linearity': wrap_prelu
                     }
 
     decoder_args = {'layer_sizes': [256, 512, 786, np.prod(n_input)],
                     'b_norm': False,
                     'b_norm_finish': False,
                     'verbose': True,
-                    'weight_decay': 0.
+                    'weight_decay': 0.,
+                    'non_linearity': wrap_prelu
                     }
 
     return encoder, decoder, encoder_args, decoder_args
