@@ -134,7 +134,7 @@ def main(args):
     for i in range(len(obstacles)):
         print('obstacle %d:' % (i))
         for j in range(10):
-            input = np.stack((np.random.rand(7) * 2*joint_ranges-joint_ranges, np.random.rand(7) * 2*joint_ranges-joint_ranges))
+            input = np.stack((np.random.rand(7) * 2*joint_ranges-joint_ranges, np.random.rand(7) * 2*joint_ranges-joint_ranges)).reshape(1,14)
 
             print(mpnet.plan(obstacles[i].reshape(1,-1,3), input))
 
