@@ -15,7 +15,7 @@ def baxter_mpnet_mlp(input_size, output_size):
     mlp_arguments = {'layer_sizes': [1280, 896, 512, 384, 256, 128, 64, 32, output_size],
                      'non_linearity': wrap_prelu,
                      'regularizer': None,
-                     'weight_decay': 0.001,
+                     'weight_decay': 0.0,
                      'reuse': False, 'scope': None, 'dropout_prob': 0.5, 'verbose': True
                     }
     return mlp, mlp_arguments
