@@ -25,7 +25,7 @@ from architectures.mpnet import Configuration as Conf
 from architectures.mpnet import MPNet
 
 from architectures.mlp_models import baxter_mpnet_mlp
-from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params
+from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params, linear_ae
 
 from neuralplanner_functions import *
 
@@ -77,7 +77,11 @@ def main(args):
         os.makedirs(args.trained_model_path)
 
     # write encoder and decoder pipeline
-    encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
+    if args.AE_type == 'pointnet':
+        encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
+    elif args.AE_type == 'linear':
+        encoder, decoder, enc_args, dec_args = linear_ae(n_pc_points, bneck_size)
+
     # write mpnet pipeline
     mlp, mlp_args = baxter_mpnet_mlp(args.mlp_input_size, args.mlp_output_size)
 
@@ -443,5 +447,7 @@ if __name__ == "__main__":
     parser.add_argument('--saver_step', type=int, default=10)
     parser.add_argument('--z_rotate', type=int, default=0)
     parser.add_argument('--device', type=int, default=0)
+    parser.add_argument('--AE_type', type=str, default='pointnet')
+
     args = parser.parse_args()
     main(args)
