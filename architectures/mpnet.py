@@ -349,7 +349,7 @@ class MPNet(Neural_Net):
         return stats
 
     def plan(self, pc, x):
-        is_training(False, session=self.sess)
+        is_training(True, session=self.sess)
         output = self.sess.run((self.output), feed_dict={self.o: pc, self.x: x})
         return output
 
