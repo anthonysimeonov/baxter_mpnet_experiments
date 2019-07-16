@@ -289,8 +289,10 @@ def main(args):
                 tp_env=tp_env+1
                 print('ground truth path:')
                 print(paths[i][j])
-                print('path:')
-                print(path)
+                print('path1:')
+                print(path1)
+                print('path2:')
+                print(path2)
                 if (step > 3000 or not target_reached):
                     save_feasible_path(path, bad_paths_path + '/' + env_name + '/bp_' + str(j))
 
