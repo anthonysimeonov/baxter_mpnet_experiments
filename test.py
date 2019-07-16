@@ -267,19 +267,19 @@ def main(args):
 
                     if tree==0:
                         inp1=np.concatenate((start1,start2))
-                        print('start:')
-                        print(start1)
-                        print('goal:')
-                        print(start2)
+                        #print('start:')
+                        #print(start1)
+                        #print('goal:')
+                        #print(start2)
                         start1=mpnet.plan(obs,np.array([inp1]))[0]
                         path1.append(start1)
                         tree=1
                     else:
                         inp2=np.concatenate((start2,start1))
-                        print('start:')
-                        print(start2)
-                        print('goal:')
-                        print(start1)
+                        #print('start:')
+                        #print(start2)
+                        #print('goal:')
+                        #print(start1)
                         start2=mpnet.plan(obs,np.array([inp2]))[0]
                         path2.append(start2)
                         tree=0
