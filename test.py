@@ -287,7 +287,10 @@ def main(args):
                 print('initial plan time: %f' % (time.clock()-step_time))
                 tp=tp+1
                 tp_env=tp_env+1
-
+                print('ground truth path:')
+                print(paths[i][j])
+                print('path:')
+                print(path)
                 if (step > 3000 or not target_reached):
                     save_feasible_path(path, bad_paths_path + '/' + env_name + '/bp_' + str(j))
 
@@ -298,10 +301,10 @@ def main(args):
                         path.append(path2[p2])
 
                     path = lvc(path, IsInCollision, step_sz=step_sz)
-                    print('ground truth path:')
-                    print(paths[i][j])
-                    print('path:')
-                    print(path)
+                    #print('ground truth path:')
+                    #print(paths[i][j])
+                    #print('path:')
+                    #print(path)
                     # full dense collision check
                     print('target reached, feasiblility check')
                     indicator=feasibility_check(path, IsInCollision, step_sz=0.01, print_depth=True)
