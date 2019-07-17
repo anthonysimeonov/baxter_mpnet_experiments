@@ -112,10 +112,7 @@ class MPNet(Neural_Net):
         self.n_x_input = c.n_x_input
         #self.n_z_input = c.n_z_input
         self.n_output = c.n_output
-        if c.AE_type == 'linear':
-            o_shape = [None] + [self.n_o_input[0]*self.n_o_input[1]]
-        else:
-            o_shape = [None] + self.n_o_input
+        o_shape = [None] + self.n_o_input
 
         x_shape = [None] + self.n_x_input
         #z_shape = [None] + self.n_z_input
@@ -127,7 +124,10 @@ class MPNet(Neural_Net):
 
         with tf.variable_scope(name):
             with tf.variable_scope('AE'):
-                self.o = tf.placeholder(tf.float32, o_shape)
+                if c.AE_type == 'pointnet':
+                    self.o = tf.placeholder(tf.float32, o_shape)
+                elif c.AE_type == 'linear':
+                    self.o = tf.placeholder(tf.float32, [None] + [self.n_o_input[0]*self.n_o_input[1]])
                 self.z = c.encoder(self.o, **c.encoder_args)
                 self.gt = self.o
                 if hasattr(c, 'decoder'):
