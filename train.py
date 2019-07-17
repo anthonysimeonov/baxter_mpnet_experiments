@@ -94,6 +94,7 @@ def main(args):
            )
     conf.held_out_step = 5   # How often to evaluate/print out loss on
                              # held_out data (if they are provided in ae.train() ).
+    conf.AE_type = args.AE_type
     conf.save(osp.join(train_dir, 'configuration'))
     # reload
     conf = Conf.load(train_dir + '/configuration')
@@ -132,7 +133,10 @@ def main(args):
 
     buf_size = 1 # Make 'training_stats' file to flush each output line regarding training.
     fout = open(osp.join(conf.train_dir, 'train_stats.txt'), 'a', buf_size)
-    obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+    if args.AE_type == 'pointnet':
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+    elif args.AE_type == 'linear':
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1)
     train_stats = mpnet.train(obstacles, pc_inds_train, dataset_train, targets_train, conf, log_file=fout)
     fout.close()
 

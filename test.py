@@ -114,6 +114,7 @@ def main(args):
            )
     conf.held_out_step = 5   # How often to evaluate/print out loss on
                              # held_out data (if they are provided in ae.train() ).
+    conf.AE_type = args.AE_type
     #conf.save(osp.join(train_dir, 'configuration'))
     # reload
     conf = Conf.load(train_dir + '/configuration')
@@ -217,8 +218,10 @@ def main(args):
             p_ind=0
 
             obs=obstacles[i]
-            obs=obs.reshape(1, -1, 3)
-
+            if args.AE_type == 'pointnet':
+                obs=obs.reshape(1, -1, 3)
+            elif args.AE_type == 'linear':
+                obs = obs.reshape(1, -1)
             if path_lengths[i][j]>0:
                 global counter
                 global col_time
