@@ -113,7 +113,7 @@ class MPNet(Neural_Net):
         #self.n_z_input = c.n_z_input
         self.n_output = c.n_output
         if c.AE_type == 'linear':
-            o_shape = [None] + self.n_o_input[0]*self.n_o_input[1]
+            o_shape = [None] + [self.n_o_input[0]*self.n_o_input[1]]
         else:
             o_shape = [None] + self.n_o_input
 
