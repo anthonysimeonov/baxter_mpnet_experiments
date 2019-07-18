@@ -82,7 +82,7 @@ def main(args):
     total_loss = []
     epoch = 1
 
-    sm = 90  # start saving models after 100 epochs
+    sm = 0  # start saving models after 100 epochs
 
     print("Starting epochs...\n")
     # epoch=1
@@ -93,6 +93,7 @@ def main(args):
         print("epoch" + str(epoch))
         avg_loss = 0
         for i in range(0, len(dataset_train), args.batch_size):
+            print("number of batch: %d/%d" % (i/args.batch_size, len(dataset_train)/args.batch_size))
             # Forward, Backward and Optimize
             # zero gradients
             encoder.zero_grad()
