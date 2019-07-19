@@ -7,8 +7,8 @@ from tensorflow.python.keras.layers import PReLU
 def wrap_prelu(in_signal):
     # first time call this will construct class
     # tensorflow will use this constructed PReLU afterwards without constructing again
-    prelu = PReLU()
-    return prelu(in_signal, channel_shared=True)
+    prelu = PReLU(channel_shared=True)
+    return prelu(in_signal)
 def baxter_mpnet_mlp(input_size, output_size):
     mlp = mlp_pipeline
 
