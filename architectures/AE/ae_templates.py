@@ -11,7 +11,7 @@ def wrap_prelu(in_signal):
     # first time call this will construct class
     # tensorflow will use this constructed PReLU afterwards without constructing again
     prelu = PReLU()
-    return prelu(in_signal)
+    return prelu(in_signal, channel_shared=True)
 
 def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
     ''' Single class experiments.

@@ -20,7 +20,7 @@ def wrap_prelu(in_signal):
     # first time call this will construct class
     # tensorflow will use this constructed PReLU afterwards without constructing again
     prelu = PReLU()
-    return prelu(in_signal)
+    return prelu(in_signal, channel_shared=True)
 def encoder_with_convs_and_symmetry(in_signal, n_filters=[64, 128, 256, 1024], filter_sizes=[1], strides=[1],
                                         b_norm=True, non_linearity=tf.nn.relu, regularizer=None, weight_decay=0.001,
                                         symmetry=tf.reduce_max, dropout_prob=None, pool=avg_pool_1d, pool_sizes=None, scope=None,

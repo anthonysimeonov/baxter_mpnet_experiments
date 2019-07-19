@@ -8,7 +8,7 @@ def wrap_prelu(in_signal):
     # first time call this will construct class
     # tensorflow will use this constructed PReLU afterwards without constructing again
     prelu = PReLU()
-    return prelu(in_signal)
+    return prelu(in_signal, channel_shared=True)
 def baxter_mpnet_mlp(input_size, output_size):
     mlp = mlp_pipeline
 
