@@ -354,7 +354,18 @@ class MPNet(Neural_Net):
 
     def plan(self, pc, x):
         is_training(True, session=self.sess)
-        output = self.sess.run((self.output), feed_dict={self.o: pc, self.x: x})
+        #output = self.sess.run((self.output), feed_dict={self.o: pc, self.x: x})
+        o, z, x, input, output = self.sess.run((self.o, self.z, self.x, self.input, self.output), feed_dict={self.o: pc, self.x: x})
+        print("o shape:")
+        print(o.shape)
+        print('z shape:')
+        print(z.shape)
+        print('x shape:')
+        print(x.shape)
+        print('input shape:')
+        print(input.shape)
+        print('output shape:')
+        print(output.shape)
         return output
 
     def get_latent_codes(self, pc):

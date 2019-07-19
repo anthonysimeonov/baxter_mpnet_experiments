@@ -120,12 +120,6 @@ def main(args):
     conf = Conf.load(train_dir + '/configuration')
     reset_tf_graph()
     mpnet = MPNet(conf.experiment_name, conf)
-    # print out mpnet model structure
-    vars = tf.trainable_variables()
-    print(vars) #some infos about variables...
-    vars_vals = mpnet.sess.run(vars)
-    for var, val in zip(vars, vars_vals):
-        print("var: {}, value: {}".format(var.name, val))
 
     if args.AE_restore_pretrain:
         # filename is pretrain_ae
@@ -297,12 +291,12 @@ def main(args):
                 print('initial plan time: %f' % (time.clock()-step_time))
                 tp=tp+1
                 tp_env=tp_env+1
-                print('ground truth path:')
-                print(paths[i][j])
-                print('path1:')
-                print(path1)
-                print('path2:')
-                print(path2)
+                #print('ground truth path:')
+                #print(paths[i][j])
+                #print('path1:')
+                #print(path1)
+                #print('path2:')
+                #print(path2)
                 if (step > 3000 or not target_reached):
                     save_feasible_path(path, bad_paths_path + '/' + env_name + '/bp_' + str(j))
 
