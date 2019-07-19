@@ -167,7 +167,7 @@ def load_test_dataset_end2end(env_names, data_path, pcd_path, path_data_file, im
 	print("Path matrix shape: ")
 	print(paths.shape)
 	print("\n")
-
+	print(paths[0][0])
 	### create dataset and targets ###
 
 	# clean up paths
