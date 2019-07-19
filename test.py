@@ -246,10 +246,10 @@ def main(args):
                     goal_collision.append(j)
                     continue
 
-                start1=start
-                goal2=start
-                goal1=goal
-                start2=goal
+                start1=np.array(start)
+                goal2=np.array(start)
+                goal1=np.array(goal)
+                start2=np.array(goal)
 
                 ##generated paths
                 path1=[]
