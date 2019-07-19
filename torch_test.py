@@ -59,7 +59,10 @@ def main(args):
     model_path = args.model_path
     mlp.load_state_dict(torch.load(model_path+args.mlp_model_name)) #, map_location=device))
     encoder.load_state_dict(torch.load(model_path+args.enc_model_name)) #, map_location=device))
-
+    # print Parameters
+    for name, param in encoder.named_parameters():
+        print(name)
+        print(param)
     if torch.cuda.is_available():
         encoder.cuda()
         mlp.cuda()
