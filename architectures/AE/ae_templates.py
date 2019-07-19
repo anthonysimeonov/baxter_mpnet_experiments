@@ -6,13 +6,12 @@ Created on September 2, 2017
 import numpy as np
 
 from . encoders_decoders import encoder_with_convs_and_symmetry, decoder_with_fc_only, linear_encoder
-from tensorflow.python.keras.layers import PReLU
+from tflearn.activations import prelu
 def wrap_prelu(in_signal):
     # first time call this will construct class
     # tensorflow will use this constructed PReLU afterwards without constructing again
-    prelu = PReLU(channel_shared=True)
-    return prelu(in_signal)
-
+    return prelu(in_signal, channel_shared=True)
+    
 def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
     ''' Single class experiments.
     '''

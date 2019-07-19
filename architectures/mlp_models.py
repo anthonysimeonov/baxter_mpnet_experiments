@@ -3,12 +3,11 @@ define the mlp model for the mpnet in the baxter environment
 '''
 from . mlp_pipeline import mlp_pipeline
 import tensorflow as tf
-from tensorflow.python.keras.layers import PReLU
+from tflearn.activations import prelu
 def wrap_prelu(in_signal):
     # first time call this will construct class
     # tensorflow will use this constructed PReLU afterwards without constructing again
-    prelu = PReLU(channel_shared=True)
-    return prelu(in_signal)
+    return prelu(in_signal, channel_shared=True)
 def baxter_mpnet_mlp(input_size, output_size):
     mlp = mlp_pipeline
 
