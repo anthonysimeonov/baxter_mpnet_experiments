@@ -70,6 +70,8 @@ class fileImport():
 
 		Return: env_paths (list) - list of numpy arrays
 		"""
+		print(path_fname)
+		print(env_name)
 		if not single_env:
 			with open (path_fname, "rb") as paths_f:
 				paths_dict = pickle.load(paths_f)
