@@ -39,7 +39,7 @@ def IsInCollision(state, print_depth=False):
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
     importer = fileImport()
     env_data_path = args.env_data_path
