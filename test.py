@@ -120,6 +120,13 @@ def main(args):
     conf = Conf.load(train_dir + '/configuration')
     reset_tf_graph()
     mpnet = MPNet(conf.experiment_name, conf)
+    # print out mpnet model structure
+    vars = tf.trainable_variables()
+    print(vars) #some infos about variables...
+    vars_vals = mpnet.sess.run(vars)
+    for var, val in zip(vars, vars_vals):
+        print("var: {}, value: {}".format(var.name, val))
+
     if args.AE_restore_pretrain:
         # filename is pretrain_ae
         mpnet.restore_model(mpnet.AE_saver, conf.train_dir, epoch=args.AE_start_epoch, filename='pretrain_ae')
