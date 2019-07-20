@@ -334,7 +334,7 @@ class MPNet(Neural_Net):
     def train(self, train_pc, train_pc_inds, train_input, train_targets, configuration, log_file=None, held_out_data=None):
         c = configuration
         stats = []
-        writer = tf.summary.FileWriter(c.train_dir+'/tmp/log/', sess.graph)
+        writer = tf.summary.FileWriter(c.train_dir+'/tmp/log/', self.sess.graph)
         if c.saver_step is not None:
             create_dir(c.train_dir)
 
