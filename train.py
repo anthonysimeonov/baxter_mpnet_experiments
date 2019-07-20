@@ -113,10 +113,11 @@ def main(args):
         mpnet.restore_model(mpnet.mlp_saver, conf.train_dir, epoch=args.start_epoch, filename='mlp')
     # print out mpnet model structure
     vars = tf.trainable_variables()
+    print('printing trainable variables...')
     print(vars) #some infos about variables...
-    vars_vals = mpnet.sess.run(vars)
-    for var, val in zip(vars, vars_vals):
-        print("var: {}, value: {}".format(var.name, val))
+    #vars_vals = mpnet.sess.run(vars)
+    #for var, val in zip(vars, vars_vals):
+    #    print("var: {}, value: {}".format(var.name, val))
 
     # training AE
     if args.pretrain:
