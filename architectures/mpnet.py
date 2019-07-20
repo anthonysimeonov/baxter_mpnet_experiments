@@ -182,9 +182,10 @@ class MPNet(Neural_Net):
 
     def mlp_fit(self, pc, x, target):
         is_training(True, session=self.sess)
-        _, output, loss, grads = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss, self.grads), \
+        _, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
-        for grad in grads:
+        for grad in self.grads:
+            grad = self.sess.run(grad)
             print grad.name, grad
 
         #_, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
