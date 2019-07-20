@@ -184,10 +184,10 @@ class MPNet(Neural_Net):
 
     def mlp_fit(self, pc, x, target):
         is_training(True, session=self.sess)
-        grads = self.sess.run((self.grads), \
-                            feed_dict={self.o: pc, self.x: x, self.target: target})
-        for grad in grads:
-            print grad.name, grad
+        #grads = self.sess.run((self.grads), \
+        #                    feed_dict={self.o: pc, self.x: x, self.target: target})
+        #for grad in grads:
+        #    print grad.name, grad
 
         _, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
@@ -234,12 +234,12 @@ class MPNet(Neural_Net):
 
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
         #trainables = tf.trainable_variables()
-        self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, var_list=\
-                self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
-                self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
+        #self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, var_list=\
+        #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
+        #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
         # try to print out grads first
-        print("printing gradients:")
-        print(self.grads)
+        #print("printing gradients:")
+        #print(self.grads)
         # print out gradients
         if c.fixAE:
             # only update mlp parameters
@@ -334,6 +334,7 @@ class MPNet(Neural_Net):
     def train(self, train_pc, train_pc_inds, train_input, train_targets, configuration, log_file=None, held_out_data=None):
         c = configuration
         stats = []
+        writer = tf.summary.FileWriter(c.train_dir+'/tmp/log/', sess.graph)
         if c.saver_step is not None:
             create_dir(c.train_dir)
 
@@ -367,6 +368,7 @@ class MPNet(Neural_Net):
                 print("Held Out Data :", 'forward time (minutes)=', "{:.4f}".format(duration / 60.0), "loss=", "{:.9f}".format(loss))
                 if log_file is not None:
                     log_file.write('On Held_Out: %04d\t%.9f\t%.4f\n' % (epoch, loss, duration / 60.0))
+        writer.close()
         return stats
 
     def plan(self, pc, x):
