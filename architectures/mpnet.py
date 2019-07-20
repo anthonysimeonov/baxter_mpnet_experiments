@@ -232,7 +232,7 @@ class MPNet(Neural_Net):
 
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
         trainables = tf.trainable_variables()
-        self.grads = tf.gradients(self.loss, trainables)
+        self.grads = tf.gradients(self.mlp_loss, trainables)
         # print out gradients
         if c.fixAE:
             # only update mlp parameters
