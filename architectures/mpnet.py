@@ -182,14 +182,13 @@ class MPNet(Neural_Net):
 
     def mlp_fit(self, pc, x, target):
         is_training(True, session=self.sess)
-        _, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
+        grads = self.sess.run((self.grads), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
-        for grad in self.grads:
-            grad = self.sess.run(grad)
+        for grad in grads:
             print grad.name, grad
 
-        #_, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
-        #                    feed_dict={self.o: pc, self.x: x, self.target: target})
+        _, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
+                            feed_dict={self.o: pc, self.x: x, self.target: target})
         is_training(False, session=self.sess)
         return output, loss
 
@@ -232,16 +231,14 @@ class MPNet(Neural_Net):
         # depending on if we are fixing autoencoder or not, set the learnable parameters
 
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
+        trainables = tf.trainable_variables()
+        self.grads = tf.gradients(self.loss, trainables)
         # print out gradients
         if c.fixAE:
             # only update mlp parameters
-            self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp'))
-            self.mlp_train_step = self.mlp_optimizer.apply_gradients(self.grads)
-            #self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp'))
+            self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp'))
         else:
-            self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss)
-            self.mlp_train_step = self.mlp_optimizer.apply_gradients(self.grads)
-            #self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss)
+            self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss)
 
 
     def _single_epoch_pretrain(self, train_pc, configuration, only_fw=False):
