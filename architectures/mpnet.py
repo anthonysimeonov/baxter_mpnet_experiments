@@ -188,8 +188,9 @@ class MPNet(Neural_Net):
 
     def mlp_fit(self, pc, x, target):
         is_training(True, session=self.sess)
-        #grads = self.sess.run((self.grads), \
-        #                    feed_dict={self.o: pc, self.x: x, self.target: target})
+        grads = self.sess.run((self.grads), \
+                            feed_dict={self.o: pc, self.x: x, self.target: target})
+        print(grads)
         #for grad in grads:
         #    print grad.name, grad
 
@@ -237,13 +238,15 @@ class MPNet(Neural_Net):
         # depending on if we are fixing autoencoder or not, set the learnable parameters
 
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
+        trainables = [v for v in tf.global_variables() if v.name == "no_pretrain_linear_2/mlp/p_re_lu_13/alpha:0"][0]
+        self.grads = tf.gradients(self.mlp_loss, trainables)
         #trainables = tf.trainable_variables()
         #self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, var_list=\
         #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
         #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
         # try to print out grads first
-        #print("printing gradients:")
-        #print(self.grads)
+        print("printing gradients:")
+        print(self.grads)
         # print out gradients
         if c.fixAE:
             # only update mlp parameters
