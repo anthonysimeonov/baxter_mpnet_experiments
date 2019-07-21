@@ -119,12 +119,12 @@ class MPNet(Neural_Net):
         x_shape = [None] + self.n_x_input
         #z_shape = [None] + self.n_z_input
         out_shape = [None] + self.n_output
-        with tf.variable_scope(name):
+        with tf.variable_scope(name, auxiliary_name_scope=False):
             with tf.device('/cpu:0'):
                 self.pretrain_epoch = tf.get_variable('pretrain_epoch', [], initializer=tf.constant_initializer(0), trainable=False)
             self.pretrain_increment_epoch = self.pretrain_epoch.assign_add(tf.constant(1.0))
 
-        with tf.variable_scope(name):
+        #with tf.variable_scope(name):
             with tf.variable_scope('AE'):
                 if c.AE_type == 'pointnet':
                     self.o = tf.placeholder(tf.float32, o_shape)
