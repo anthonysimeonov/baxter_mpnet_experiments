@@ -243,7 +243,7 @@ class MPNet(Neural_Net):
         # depending on if we are fixing autoencoder or not, set the learnable parameters
 
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
-        trainables = [v for v in tf.global_variables() if v.name == "no_pretrain_linear/mlp/alpha_7:"][0]
+        trainables = [v for v in tf.global_variables() if v.name == "no_pretrain_linear/mlp/alpha_7:0"][0]
         self.grads = tf.gradients(self.mlp_loss, trainables)
         self.v = trainables
         #trainables = tf.trainable_variables()
