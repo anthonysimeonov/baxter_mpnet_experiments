@@ -15,13 +15,7 @@ from tflearn.layers.normalization import batch_normalization
 from tflearn.layers.core import fully_connected, dropout
 
 from .. tf_utils import expand_scope_by_name, replicate_parameter_for_all_layers
-from tensorflow.python.keras.layers import PReLU
-import tensorflow as tf
-def wrap_prelu(in_signal):
-    # first time call this will construct class
-    # tensorflow will use this constructed PReLU afterwards without constructing again
-    prelu = PReLU(alpha_initializer=tf.constant_initializer(0.25), shared_axes=[1])
-    return prelu(in_signal)
+
 def encoder_with_convs_and_symmetry(in_signal, n_filters=[64, 128, 256, 1024], filter_sizes=[1], strides=[1],
                                         b_norm=True, non_linearity=tf.nn.relu, regularizer=None, weight_decay=0.001,
                                         symmetry=tf.reduce_max, dropout_prob=None, pool=avg_pool_1d, pool_sizes=None, scope=None,
@@ -199,7 +193,7 @@ def decoder_with_convs_only(in_signal, n_filters, filter_sizes, strides, padding
 
 
 
-def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=wrap_prelu,
+def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf.nn.relu,
                          regularizer=None, weight_decay=0.001, reuse=False, scope=None,
                          verbose=False):
     '''A decoding network which maps points from the latent space back onto the data space.

@@ -245,6 +245,8 @@ class MPNet(Neural_Net):
         #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
         #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
         # try to print out grads first
+        print('printing variables in scope:')
+        print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
         print("printing gradients:")
         print(self.grads)
         # print out gradients
