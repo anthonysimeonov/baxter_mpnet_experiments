@@ -46,6 +46,8 @@ class AutoEncoder(Neural_Net):
             The reconstructed (output) point-clouds.
         '''
         is_training(True, session=self.sess)
+        grads = self.sess.run(self.grads, feed_dict={self.x: X})
+        print(grads)
         try:
             if GT is not None:
                 _, loss, recon = self.sess.run((self.train_step, self.loss, self.x_reconstr), feed_dict={self.x: X, self.gt: GT})
