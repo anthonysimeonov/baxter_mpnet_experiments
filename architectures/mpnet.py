@@ -183,25 +183,25 @@ class MPNet(Neural_Net):
         is_training(True, session=self.sess)
         _, output, loss = self.sess.run((self.ae_train_step, self.x_reconstr, self.ae_loss), \
                             feed_dict={self.o: pc})
-        is_training(False, session=self.sess)
+        #is_training(False, session=self.sess)
         return output, loss
 
     def mlp_fit(self, pc, x, target):
         is_training(True, session=self.sess)
-        grads, vs = self.sess.run((self.grads, self.vs), feed_dict={self.o: pc, self.x: x, self.target: target})
+        grads, vs = self.sess.run((self.some_grads, self.vs), feed_dict={self.o: pc, self.x: x, self.target: target})
         print('gradient:')
         print(grads)
         print('vs')
         print(vs)
-        #grads = self.sess.run((self.grads), feed_dict={self.o: pc, self.x: x, self.target: target})
-        #print('grads:')
-        #print(grads)
+        grads = self.sess.run((self.grads), feed_dict={self.o: pc, self.x: x, self.target: target})
+        print('grads:')
+        print(grads)
         #for grad in grads:
         #    print grad.name, grad
 
         _, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
-        is_training(False, session=self.sess)
+        #is_training(False, session=self.sess)
         return output, loss
 
 
@@ -247,13 +247,13 @@ class MPNet(Neural_Net):
         variable_to_print = ['no_pretrain_linear/mlp/mlp_fc_6/W:0', 'no_pretrain_linear/mlp/alpha_6:0', \
                              'no_pretrain_linear/AE/encoder/alpha_1:0']
         self.vs = [v for v in tf.global_variables() if v.name in variable_to_print]
-        self.grads = tf.gradients(self.mlp_loss, self.vs)
+        self.some_grads = tf.gradients(self.mlp_loss, self.vs)
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
         print('printing variables in scope:')
         print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
-        #self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, \
-        #        var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
-        #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
+        self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, \
+                var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
+                self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
         print('printing grads:')
         print(self.grads)
         # print out gradients
@@ -261,9 +261,10 @@ class MPNet(Neural_Net):
             # only update mlp parameters
             self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp'))
         else:
-            self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, \
-                            var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
-                            self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
+            self.mlp_train_step = self.mlp_optimizer.apply_gradients(self.grads)
+            #self.mlp_train_step = self.mlp_optimizer.minimize(self.mlp_loss, \
+            #                var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
+            #                self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
 
 
     def _single_epoch_pretrain(self, train_pc, configuration, only_fw=False):
