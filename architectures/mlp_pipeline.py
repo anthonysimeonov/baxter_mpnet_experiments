@@ -32,7 +32,8 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
             intermediates.append(layer)
 
         if dropout_prob is not None and dropout_prob[i] > 0:
-            layer = dropout(layer, 1.0 - dropout_prob[i])
+            layer = dropout(layer, 0.5)
+            #layer = dropout(layer, 1.0 - dropout_prob[i])
             intermediates.append(layer)
 
         if verbose:
