@@ -249,7 +249,7 @@ class MPNet(Neural_Net):
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
         print('printing variables in scope:')
         print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
-        self.grads = eslf.mlp_optimizer.compute_gradients(self.mlp_loss)
+        self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss)
         print('printing grads:')
         print(self.grads)
         # print out gradients
