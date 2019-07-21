@@ -19,6 +19,6 @@ def baxter_mpnet_mlp(input_size, output_size):
                      'non_linearity': tf.nn.relu,
                      'regularizer': None,
                      'weight_decay': 0.0,
-                     'reuse': False, 'scope': None, 'dropout_prob': None, 'verbose': True
+                     'reuse': False, 'scope': None, 'dropout_prob': 0.5, 'verbose': True
                     }
     return mlp, mlp_arguments
