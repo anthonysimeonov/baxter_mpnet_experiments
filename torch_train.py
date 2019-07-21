@@ -120,7 +120,8 @@ def main(args):
             avg_loss = avg_loss+loss.data
             loss.backward()
             optimizer.step()
-
+            # print out variables
+            print(loss.grad)
         print("--average loss:")
         print(avg_loss/(len(dataset_train)/args.batch_size))
         total_loss.append(avg_loss/(len(dataset_train)/args.batch_size))
