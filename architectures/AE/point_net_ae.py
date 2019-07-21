@@ -21,6 +21,45 @@ from . external.structural_losses.tf_approxmatch import approx_match, match_cost
 #except:
 #    print('External Losses (Chamfer-EMD) cannot be loaded. Please install them first.')
 
+class Configuration():
+    def __init__(self, n_input, encoder, decoder, encoder_args={}, decoder_args={},
+                 training_epochs=200, batch_size=10, learning_rate=0.001, denoising=False,
+                 saver_step=None, train_dir=None, z_rotate=False, loss='chamfer', gauss_augment=None,
+                 saver_max_to_keep=None, loss_display_step=1, debug=False,
+                 n_z=None, n_output=None, latent_vs_recon=1.0, consistent_io=None):
+
+        # Parameters for any AE
+        self.n_input = n_input
+        self.is_denoising = denoising
+        self.loss = loss.lower()
+        self.decoder = decoder
+        self.encoder = encoder
+        self.encoder_args = encoder_args
+        self.decoder_args = decoder_args
+
+        # Training related parameters
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
+        self.loss_display_step = loss_display_step
+        self.saver_step = saver_step
+        self.train_dir = train_dir
+        self.gauss_augment = gauss_augment
+        self.z_rotate = z_rotate
+        self.saver_max_to_keep = saver_max_to_keep
+        self.training_epochs = training_epochs
+        self.debug = debug
+
+        # Used in VAE
+        self.latent_vs_recon = np.array([latent_vs_recon], dtype=np.float32)[0]
+        self.n_z = n_z
+
+        # Used in AP
+        if n_output is None:
+            self.n_output = n_input
+        else:
+            self.n_output = n_output
+
+        self.consistent_io = consistent_io
 
 class PointNetAutoEncoder(AutoEncoder):
     '''
