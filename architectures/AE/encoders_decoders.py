@@ -200,7 +200,7 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
     '''
     if verbose:
         print 'Building Encoder'
-
+    intermediates = []
     n_layers = len(layer_sizes)
 
     if n_layers < 2:
@@ -212,8 +212,10 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
 
         if i == 0:
             layer = latent_signal
+        intermediates.append(layer)
 
         layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+        intermediates.append(layer)
 
         if verbose:
             print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
@@ -227,6 +229,7 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
 
         if non_linearity is not None:
             layer = non_linearity(layer, name='alpha_%d' % (i))
+            intermediates.append(layer)
 
         if verbose:
             print layer
@@ -236,6 +239,8 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
     name = 'encoder_fc_' + str(n_layers - 1)
     scope_i = expand_scope_by_name(scope, name)
     layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+    intermediates.append(layer)
+
     if verbose:
         print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
 
@@ -243,4 +248,4 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
         print layer
         print 'output size:', np.prod(layer.get_shape().as_list()[1:]), '\n'
 
-    return layer
+    return layer, intermediates

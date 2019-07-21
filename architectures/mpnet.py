@@ -131,7 +131,7 @@ class MPNet(Neural_Net):
                 elif c.AE_type == 'linear':
                     self.o = tf.placeholder(tf.float32, [None] + [self.n_o_input[0]*self.n_o_input[1]])
                 with tf.variable_scope('encoder'):
-                    self.z = c.encoder(self.o, **c.encoder_args)
+                    self.z, self.encoder_nets = c.encoder(self.o, **c.encoder_args)
                 self.gt = self.o
                 if hasattr(c, 'decoder'):
                     with tf.variable_scope('decoder'):
@@ -144,7 +144,7 @@ class MPNet(Neural_Net):
                 self.input = tf.concat([self.z, self.x], axis=1)
                 self.target = tf.placeholder(tf.float32, out_shape)
                 # may also look at decoder if it is defined
-                layer = c.mlp(self.input, **c.mlp_args)
+                layer, self.mlp_nets = c.mlp(self.input, **c.mlp_args)
                 self.output = layer
 
             self._create_loss()
@@ -193,14 +193,16 @@ class MPNet(Neural_Net):
         #print(grads)
         #print('vs')
         #print(vs)
-        grads = self.sess.run((self.grads), feed_dict={self.o: pc, self.x: x, self.target: target})
-        print('grads:')
-        print(grads)
+        #grads = self.sess.run((self.grads), feed_dict={self.o: pc, self.x: x, self.target: target})
+        #print('grads:')
+        #print(grads)
         #for grad in grads:
         #    print grad.name, grad
 
-        _, output, loss = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss), \
+        _, output, loss, encoder_nets, mlp_nets = self.sess.run((self.mlp_train_step, self.output, self.mlp_loss, self.encoder_nets, self.mlp_nets), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
+        print(encoder_nets)
+        print(mlp_nets)
         is_training(False, session=self.sess)
         return output, loss
 
