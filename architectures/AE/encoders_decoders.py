@@ -104,7 +104,7 @@ def decoder_with_fc_only(latent_signal, layer_sizes=[], b_norm=True, non_lineari
         if i == 0:
             layer = latent_signal
 
-        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
         if verbose:
             print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
@@ -129,7 +129,7 @@ def decoder_with_fc_only(latent_signal, layer_sizes=[], b_norm=True, non_lineari
     # Last decoding layer never has a non-linearity.
     name = 'decoder_fc_' + str(n_layers - 1)
     scope_i = expand_scope_by_name(scope, name)
-    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
     if verbose:
         print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
 
@@ -217,7 +217,7 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
         if i == 0:
             layer = latent_signal
 
-        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
         if verbose:
             print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
@@ -239,7 +239,7 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
     # Last decoding layer never has a non-linearity.
     name = 'encoder_fc_' + str(n_layers - 1)
     scope_i = expand_scope_by_name(scope, name)
-    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
     if verbose:
         print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),

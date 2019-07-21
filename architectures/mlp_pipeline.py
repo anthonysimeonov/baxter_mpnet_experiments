@@ -19,7 +19,7 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
     for i in xrange(0, n_layers - 2):
         name = 'mlp_fc_' + str(i)
         scope_i = expand_scope_by_name(scope, name)
-        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+        layer = fully_connected(layer, layer_sizes[i], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
         if verbose:
             print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
@@ -42,7 +42,7 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
     # Last 2nd fc layer never has a dropout layer, but has a non-linearity.
     name = 'mlp_fc_' + str(n_layers - 2)
     scope_i = expand_scope_by_name(scope, name)
-    layer = fully_connected(layer, layer_sizes[n_layers - 2], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+    layer = fully_connected(layer, layer_sizes[n_layers - 2], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
     if verbose:
         print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
@@ -57,7 +57,7 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
     # Last fc layer never has a non-linearity.
     name = 'mlp_fc_' + str(n_layers - 1)
     scope_i = expand_scope_by_name(scope, name)
-    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='xavier', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
+    layer = fully_connected(layer, layer_sizes[n_layers - 1], activation='linear', weights_init='uniform_scaling', name=name, regularizer=regularizer, weight_decay=weight_decay, reuse=reuse, scope=scope_i)
 
     if verbose:
         print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
