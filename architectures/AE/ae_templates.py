@@ -32,7 +32,7 @@ def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
                     'strides': [1],
                     'b_norm': True,
                     'verbose': True,
-                    'dropout': True
+                    'dropout_prob': [0.5]
                     }
 
     decoder_args = {'layer_sizes': [256, 256, np.prod(n_input)],
