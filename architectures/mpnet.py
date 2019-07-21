@@ -136,8 +136,7 @@ class MPNet(Neural_Net):
                 if hasattr(c, 'decoder'):
                     with tf.variable_scope('decoder'):
                         self.x_reconstr = c.decoder(self.z, **c.decoder_args)
-                        # uncomment the following when using 3D
-                        #self.x_reconstr = tf.reshape(self.x_reconstr, [-1, o_shape[1], o_shape[2]])
+                        self.x_reconstr = tf.reshape(self.x_reconstr, [-1, o_shape[1], o_shape[2]])
 
             with tf.variable_scope('mlp'):
                 self.x = tf.placeholder(tf.float32, x_shape)
@@ -212,9 +211,8 @@ class MPNet(Neural_Net):
         c = self.configuration
 
         if c.loss == 'chamfer':
-            #cost_p1_p2, _, cost_p2_p1, _ = nn_distance(self.x_reconstr, self.gt)
-            #self.ae_loss = tf.reduce_mean(cost_p1_p2) + tf.reduce_mean(cost_p2_p1)
-            self.ae_loss = tf.losses.mean_squared_error(self.x_reconstr, self.gt)
+            cost_p1_p2, _, cost_p2_p1, _ = nn_distance(self.x_reconstr, self.gt)
+            self.ae_loss = tf.reduce_mean(cost_p1_p2) + tf.reduce_mean(cost_p2_p1)
         elif c.loss == 'emd':
             match = approx_match(self.x_reconstr, self.gt)
             self.ae_loss = tf.reduce_mean(match_cost(self.x_reconstr, self.gt, match))
