@@ -6,13 +6,15 @@ Created on September 2, 2017
 import numpy as np
 
 from . encoders_decoders import encoder_with_convs_and_symmetry, decoder_with_fc_only, linear_encoder
-from tensorflow.python.keras.layers import PReLU
 import tensorflow as tf
-def wrap_prelu(in_signal):
-    # first time call this will construct class
-    # tensorflow will use this constructed PReLU afterwards without constructing again
-    prelu = PReLU(alpha_initializer=tf.constant_initializer(0.25), shared_axes=[1])
-    return prelu(in_signal)
+def wrap_prelu(_x):
+    # ref: https://stackoverflow.com/questions/39975676/how-to-implement-prelu-activation-in-tensorflow
+    alphas = tf.get_variable('alpha', _x.get_shape()[-1],
+                           initializer=tf.constant_initializer(0.25),
+                            dtype=tf.float32)
+    pos = tf.nn.relu(_x)
+    neg = alphas * (_x - abs(_x)) * 0.5
+    return pos + neg
 
 def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
     ''' Single class experiments.
