@@ -4,9 +4,9 @@ define the mlp model for the mpnet in the baxter environment
 from . mlp_pipeline import mlp_pipeline
 import tensorflow as tf
 import tensorflow as tf
-def wrap_prelu(_x):
+def wrap_prelu(_x, name=None):
     # ref: https://stackoverflow.com/questions/39975676/how-to-implement-prelu-activation-in-tensorflow
-    alphas = tf.get_variable('alpha', _x.get_shape()[-1],
+    alphas = tf.get_variable(name, _x.get_shape()[-1],
                            initializer=tf.constant_initializer(0.25),
                             dtype=tf.float32)
     pos = tf.nn.relu(_x)

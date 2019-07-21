@@ -113,7 +113,7 @@ def decoder_with_fc_only(latent_signal, layer_sizes=[], b_norm=True, non_lineari
                 print 'bnorm params = ', np.prod(layer.beta.get_shape().as_list()) + np.prod(layer.gamma.get_shape().as_list())
 
         if non_linearity is not None:
-            layer = non_linearity(layer)
+            layer = non_linearity(layer, name='alpha_%d' % (i))
 
         if dropout_prob is not None and dropout_prob[i] > 0:
             layer = dropout(layer, 1.0 - dropout_prob[i])
@@ -226,7 +226,7 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
                 print 'bnorm params = ', np.prod(layer.beta.get_shape().as_list()) + np.prod(layer.gamma.get_shape().as_list())
 
         if non_linearity is not None:
-            layer = non_linearity(layer)
+            layer = non_linearity(layer, name='alpha_%d' % (i))
 
         if verbose:
             print layer

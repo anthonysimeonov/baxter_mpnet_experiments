@@ -26,7 +26,7 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
             print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
 
         if non_linearity is not None:
-            layer = non_linearity(layer)
+            layer = non_linearity(layer, name='alpha_%d' % (i))
 
         if dropout_prob is not None and dropout_prob[i] > 0:
             layer = dropout(layer, 1.0 - dropout_prob[i])
@@ -43,7 +43,7 @@ def mlp_pipeline(in_signal, layer_sizes=[], non_linearity=tf.nn.relu, regularize
         print name, 'FC params = ', np.prod(layer.W.get_shape().as_list()) + np.prod(layer.b.get_shape().as_list()),
 
     if non_linearity is not None:
-        layer = non_linearity(layer)
+        layer = non_linearity(layer, name='alpha_%d' % (n_layers-2))
 
     if verbose:
         print layer
