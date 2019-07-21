@@ -20,7 +20,6 @@ from . external.structural_losses.tf_nndistance import nn_distance
 from . external.structural_losses.tf_approxmatch import approx_match, match_cost
 #except:
 #    print('External Losses (Chamfer-EMD) cannot be loaded. Please install them first.')
-
 class Configuration():
     def __init__(self, n_input, encoder, decoder, encoder_args={}, decoder_args={},
                  training_epochs=200, batch_size=10, learning_rate=0.001, denoising=False,
@@ -60,6 +59,31 @@ class Configuration():
             self.n_output = n_output
 
         self.consistent_io = consistent_io
+
+    def exists_and_is_not_none(self, attribute):
+        return hasattr(self, attribute) and getattr(self, attribute) is not None
+
+    def __str__(self):
+        keys = self.__dict__.keys()
+        vals = self.__dict__.values()
+        index = np.argsort(keys)
+        res = ''
+        for i in index:
+            if callable(vals[i]):
+                v = vals[i].__name__
+            else:
+                v = str(vals[i])
+            res += '%30s: %s\n' % (str(keys[i]), v)
+        return res
+
+    def save(self, file_name):
+        pickle_data(file_name + '.pickle', self)
+        with open(file_name + '.txt', 'w') as fout:
+            fout.write(self.__str__())
+
+    @staticmethod
+    def load(file_name):
+        return unpickle_data(file_name + '.pickle').next()
 
 class PointNetAutoEncoder(AutoEncoder):
     '''
