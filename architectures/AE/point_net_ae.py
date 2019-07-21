@@ -97,6 +97,7 @@ class PointNetAutoEncoder(AutoEncoder):
 
         self.optimizer = tf.train.AdamOptimizer(learning_rate=self.lr)
         self.train_step = self.optimizer.minimize(self.loss)
+        self.grads = self.optimizer.compute_gradients(self.loss)
 
     def _single_epoch_train(self, train_data, configuration, only_fw=False):
         n_examples = train_data.num_examples

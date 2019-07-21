@@ -66,7 +66,8 @@ class AutoEncoder(Neural_Net):
             loss = self.loss
         else:
             loss = self.no_op
-
+        grads = self.sess.run(self.grads, feed_dict={self.x: X})
+        print(grads)
         if GT is None:
             return self.sess.run((self.x_reconstr, loss), feed_dict={self.x: X})
         else:
