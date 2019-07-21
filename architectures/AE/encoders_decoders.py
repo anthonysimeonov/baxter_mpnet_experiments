@@ -61,7 +61,11 @@ def encoder_with_convs_and_symmetry(in_signal, n_filters=[64, 128, 256, 1024], f
                 layer = pool(layer, kernel_size=pool_sizes[i])
 
         if dropout_prob is not None and dropout_prob[i] > 0:
+            print('before dropout:')
+            print(layer)
             layer = dropout(layer, 1.0 - dropout_prob[i])
+            print('after dropout:')
+            print(layer)
 
         if verbose:
             print layer
