@@ -15,7 +15,7 @@ from . in_out import create_dir
 from . autoencoder import AutoEncoder
 from .. general_utils import apply_augmentations
 
-
+import numpy as np
 from . external.structural_losses.tf_nndistance import nn_distance
 from . external.structural_losses.tf_approxmatch import approx_match, match_cost
 #except:
