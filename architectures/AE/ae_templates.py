@@ -60,7 +60,7 @@ def linear_ae(n_pc_points, bneck_size, bneck_post_mlp=False):
     encoder_args = {'layer_sizes': [786, 512, 256, bneck_size],
                     'verbose': True,
                     'weight_decay': 0.,
-                    'non_linearity': wrap_prelu
+                    'non_linearity': tf.nn.relu
                     }
 
     decoder_args = {'layer_sizes': [256, 512, 786, np.prod(n_input)],
@@ -68,7 +68,7 @@ def linear_ae(n_pc_points, bneck_size, bneck_post_mlp=False):
                     'b_norm_finish': False,
                     'verbose': True,
                     'weight_decay': 0.,
-                    'non_linearity': wrap_prelu
+                    'non_linearity': tf.nn.relu
                     }
 
     return encoder, decoder, encoder_args, decoder_args
