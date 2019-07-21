@@ -14,7 +14,7 @@ from tflearn.layers.core import fully_connected
 from . in_out import create_dir
 from . autoencoder import AutoEncoder
 from .. general_utils import apply_augmentations
-
+from . AE.in_out import create_dir, pickle_data, unpickle_data
 import numpy as np
 from . external.structural_losses.tf_nndistance import nn_distance
 from . external.structural_losses.tf_approxmatch import approx_match, match_cost
