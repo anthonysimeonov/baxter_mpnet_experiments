@@ -190,7 +190,12 @@ class MPNet(Neural_Net):
         is_training(True, session=self.sess)
         grads = self.sess.run((self.grads), \
                             feed_dict={self.o: pc, self.x: x, self.target: target})
+        vs = self.sess.run((self.v))
+        print('gradient:')
         print(grads)
+        print('vs')
+        print(vs)
+
         #for grad in grads:
         #    print grad.name, grad
 
@@ -233,13 +238,14 @@ class MPNet(Neural_Net):
             tf.summary.scalar('ae_learning_rate', self.mlp_lr)
 
         self.ae_optimizer = tf.train.AdamOptimizer(learning_rate=self.ae_lr)
+        print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'))
         self.ae_train_step = self.ae_optimizer.minimize(self.ae_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'))
         # depending on if we are fixing autoencoder or not, set the learnable parameters
 
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
-        trainables = self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
-                        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder')
+        trainables = [v for v in tf.global_variables() if v.name == "no_pretrain_linear/mlp/alpha_7:"][0]
         self.grads = tf.gradients(self.mlp_loss, trainables)
+        self.v = trainables
         #trainables = tf.trainable_variables()
         #self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, var_list=\
         #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
