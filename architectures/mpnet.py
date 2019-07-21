@@ -172,7 +172,7 @@ class MPNet(Neural_Net):
 
             # Launch the session
             self.sess = tf.Session(config=config)
-            self.sess = tf_debug.LocalCLIDebugWrapperSession(self.sess)  # debug
+            #self.sess = tf_debug.LocalCLIDebugWrapperSession(self.sess)  # debug
 
             self.sess.run(self.init)
 
@@ -188,9 +188,7 @@ class MPNet(Neural_Net):
 
     def mlp_fit(self, pc, x, target):
         is_training(True, session=self.sess)
-        grads = self.sess.run((self.grads), \
-                            feed_dict={self.o: pc, self.x: x, self.target: target})
-        vs = self.sess.run((self.v))
+        grads, vs = self.sess.run((self.grads, vs), feed_dict={self.o: pc, self.x: x, self.target: target})
         print('gradient:')
         print(grads)
         print('vs')
@@ -241,19 +239,15 @@ class MPNet(Neural_Net):
         print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'))
         self.ae_train_step = self.ae_optimizer.minimize(self.ae_loss, var_list=self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE'))
         # depending on if we are fixing autoencoder or not, set the learnable parameters
-
+        variable_to_print = ['no_pretrain_linear/mlp/mlp_fc_6/W:0', 'no_pretrain_linear/mlp/alpha_6:0', \
+                             'no_pretrain_li$ear/mlp/mlp_fc_6/b:0', 'no_pretrain_linear/AE/encoder/alpha_1:0', \
+                             'no_pretrain_linear/AE/encoder/encoder_fc_1/W:0']
+        self.vs = [v for v in tf.global_variables() if v.name in varaible_to_print]
+        self.grads = tf.gradients(self.mlp_loss, self.vs)
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
-        trainables = [v for v in tf.global_variables() if v.name == "no_pretrain_linear/mlp/alpha_7:0"][0]
-        self.grads = tf.gradients(self.mlp_loss, trainables)
-        self.v = trainables
-        #trainables = tf.trainable_variables()
-        #self.grads = self.mlp_optimizer.compute_gradients(self.mlp_loss, var_list=\
-        #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+ \
-        #        self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
-        # try to print out grads first
         print('printing variables in scope:')
         print(self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/mlp')+self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, c.experiment_name+'/AE/encoder'))
-        print("printing gradients:")
+        print('printing grads:')
         print(self.grads)
         # print out gradients
         if c.fixAE:
