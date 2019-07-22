@@ -416,7 +416,7 @@ def main(args):
     acc = []
 
     for i, env in enumerate(envs):
-        with open (good_paths_path+env+'/env_data.pkl', 'rb') as data_f:
+        with open (good_paths_path+'/'+env+'/env_data.pkl', 'rb') as data_f:
             data = pickle.load(data_f)
         acc.append(100.0*data['fp_env']/data['tp_env'])
         print("env: " + env)
