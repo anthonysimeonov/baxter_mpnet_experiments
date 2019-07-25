@@ -46,7 +46,7 @@ def main(args):
     print("Loading obstacle data...\n")
     #dataset_train, targets_train, pc_inds_train, obstacles = [], [], [], []
     dataset_train, targets_train, pc_inds_train, obstacles = load_dataset_end2end(
-        envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=1000)
+        envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=args.NP)
 
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
     print(str(len(dataset_train)) + " " +
@@ -185,5 +185,6 @@ if __name__ == "__main__":
     parser.add_argument('--saver_step', type=int, default=10)
     parser.add_argument('--z_rotate', type=int, default=0)
     parser.add_argument('--device', type=int, default=0)
+    parser.add_argument('--NP', type=int, default=1000)
     args = parser.parse_args()
     main(args)
