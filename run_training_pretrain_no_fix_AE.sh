@@ -3,7 +3,7 @@ python train.py \
 --envs_file trainEnvironments.pkl --path_data_file trainPaths.pkl \
 --trained_model_path ./models/sample/ \
 --batch_size 100 --ae_learning_rate 0.001 --mlp_learning_rate 0.001 --num_epochs 200 \
---enc_input_size 16053 --enc_output_size 1024 --mlp_input_size 1038 --mlp_output_size 7 --start_epoch 90 \
+--enc_input_size 16053 --enc_output_size 1024 --mlp_input_size 1038 --mlp_output_size 7 --start_epoch 0 \
 --AE_start_epoch 0 --AE_restore_pretrain 0 --pretrain 1 --pretrain_epochs 500 --pretrain_batch_size 50 \
 --fixAE 0 --experiment_name pretrain_no_fix_AE --device 2
 
