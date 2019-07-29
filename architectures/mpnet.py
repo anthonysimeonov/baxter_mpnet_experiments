@@ -244,8 +244,8 @@ class MPNet(Neural_Net):
         #variable_to_print = ['no_pretrain_linear/mlp/mlp_fc_6/W:0', 'no_pretrain_linear/mlp/alpha_6:0', \
         #                     'no_pretrain_li$ear/mlp/mlp_fc_6/b:0', 'no_pretrain_linear/AE/encoder/alpha_1:0', \
         #                     'no_pretrain_linear/AE/encoder/encoder_fc_1/W:0']
-        variable_to_print = ['no_pretrain_linear/mlp/mlp_fc_6/W:0', 'no_pretrain_linear/mlp/alpha_6:0', \
-                             'no_pretrain_linear/AE/encoder/alpha_1:0']
+        variable_to_print = ['no_pretrain/mlp/mlp_fc_6/W:0', 'no_pretrain/mlp/alpha_6:0', \
+                             'no_pretrain/AE/encoder/alpha_1:0']
         self.vs = [v for v in tf.global_variables() if v.name in variable_to_print]
         self.some_grads = tf.gradients(self.mlp_loss, self.vs)
         self.mlp_optimizer = tf.train.AdagradOptimizer(learning_rate=self.mlp_lr)
