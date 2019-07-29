@@ -35,7 +35,7 @@ def mlp_architecture_ala_iclr_18(n_pc_points, bneck_size, bneck_post_mlp=False):
                     'verbose': True
                     }
     """
-    encoder_args = {'n_filters': [64, 128, 128, 256, bneck_size],
+    encoder_args = {'n_filters': [64, 128, bneck_size],
                     'filter_sizes': [1],
                     'strides': [1],
                     'b_norm': False,
