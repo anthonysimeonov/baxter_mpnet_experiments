@@ -306,7 +306,7 @@ class MPNet(Neural_Net):
             batch_i = train_input[i:i+batch_size]
             target_i = train_targets[i:i+batch_size]
             _, loss = self.mlp_fit(pc_i, batch_i, target_i)
-
+            print('batch loss: %f' % (loss))
             # Compute average loss
             epoch_loss += loss
         epoch_loss /= n_batches
