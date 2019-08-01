@@ -5,7 +5,7 @@ Created on September 2, 2017
 '''
 import numpy as np
 
-from . encoders_decoders import encoder_with_convs_and_symmetry, decoder_with_fc_only, linear_encoder
+from . encoders_decoders import *
 import tensorflow as tf
 def wrap_prelu(_x, name=None):
     # ref: https://stackoverflow.com/questions/39975676/how-to-implement-prelu-activation-in-tensorflow
@@ -82,6 +82,33 @@ def linear_ae(n_pc_points, bneck_size, bneck_post_mlp=False):
                     }
 
     return encoder, decoder, encoder_args, decoder_args
+
+def voxel_ae(in_shape=[32,32,32], bneck_size=128, bneck_post_mlp=False):
+    ''' Single class experiments.
+    '''
+    #if n_pc_points != 2048:
+    #    raise ValueError()
+
+    encoder = encoder_voxelnet
+    decoder = decoder_with_fc_only
+
+    n_input = [n_pc_points, 3]
+
+    encoder_args = {'output_size': bneck_size
+                    }
+    """
+    currently not using decoder
+    """
+    decoder_args = {'layer_sizes': [256, 2],
+                    'b_norm': False,
+                    'b_norm_finish': False,
+                    'verbose': True,
+                    'weight_decay': 0.,
+                    'non_linearity': wrap_prelu
+                    }
+
+    return encoder, decoder, encoder_args, decoder_args
+
 
 
 

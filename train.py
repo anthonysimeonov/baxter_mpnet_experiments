@@ -61,6 +61,8 @@ def main(args):
         encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
     elif args.AE_type == 'linear':
         encoder, decoder, enc_args, dec_args = linear_ae(n_pc_points, bneck_size)
+    elif args.AE_type == 'voxelnet':
+        encoder, decoder, enc_args, dec_args = voxel_ae([32,32,32], bneck_size)
 
     # write mpnet pipeline
     mlp, mlp_args = baxter_mpnet_mlp(args.mlp_input_size, args.mlp_output_size)
@@ -144,6 +146,10 @@ def main(args):
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
     elif args.AE_type == 'linear':
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1)
+    elif args.AE_type == 'voxelnet':
+        # transform obstacles to voxels
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+        obstacles = importer.pointcloud_to_voxel(obstacles)
     train_stats = mpnet.train(obstacles, pc_inds_train, dataset_train, targets_train, conf, log_file=fout)
     fout.close()
 

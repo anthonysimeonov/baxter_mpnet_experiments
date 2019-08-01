@@ -112,13 +112,21 @@ class MPNet(Neural_Net):
         Neural_Net.__init__(self, name, graph)
         self.n_o_input = c.n_o_input
         self.n_x_input = c.n_x_input
-        #self.n_z_input = c.n_z_input
         self.n_output = c.n_output
-        o_shape = [None] + self.n_o_input
+        """
+            depending on the autoencoder used, decide the output shape
+        """
+        if c.AE_type == 'pointnet':
+            o_shape = [None] + self.n_o_input
+        elif c.AE_type == 'linear':
+            o_shape = [None] + self.n_o_input
+        elif c.AE_type == 'voxelnet':
+            o_shape = [None] + [self.n_o_input,self.n_o_input,self.n_o_input]
 
         x_shape = [None] + self.n_x_input
         #z_shape = [None] + self.n_z_input
         out_shape = [None] + self.n_output
+
         with tf.variable_scope(name, auxiliary_name_scope=False):
             with tf.device('/cpu:0'):
                 self.pretrain_epoch = tf.get_variable('pretrain_epoch', [], initializer=tf.constant_initializer(0), trainable=False)
@@ -130,6 +138,8 @@ class MPNet(Neural_Net):
                     self.o = tf.placeholder(tf.float32, o_shape)
                 elif c.AE_type == 'linear':
                     self.o = tf.placeholder(tf.float32, [None] + [self.n_o_input[0]*self.n_o_input[1]])
+                elif c.AE_type == 'voxelnet':
+                    self.o = tf.placeholder(tf.float32, o_shape)
                 with tf.variable_scope('encoder'):
                     self.z = c.encoder(self.o, **c.encoder_args)
                 self.gt = self.o

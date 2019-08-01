@@ -249,3 +249,77 @@ def linear_encoder(latent_signal, layer_sizes=[], b_norm=False, non_linearity=tf
         print 'output size:', np.prod(layer.get_shape().as_list()[1:]), '\n'
 
     return layer
+
+
+
+"""
+adapted from https://github.com/Durant35/VoxNet
+"""
+def _lrelu(x, alpha=0.1):
+    """a leaky rectified nonlinearity unit (Leaky ReLU) with parameter alpha=0.1"""
+    return tf.nn.relu(x) - alpha * tf.nn.relu(-x)
+
+def encoder_voxelnet(in_signal, in_shape, output_size, scope=None):
+    layer = tf.reshape(in_signal, [-1]+in_shape+[1])
+    name = 'encoder_conv1'
+    scope_i = expand_scope_by_name(scope, name)
+    conv1 = tf.layers.conv3d(
+        inputs=layer,
+        filters=32,
+        kernel_size=[5,5,5],
+        strides=[2,2,2],
+        activation=_lrelu,
+        name=name,
+        scope=scope_i
+    )
+    name = 'encoder_conv2'
+    scope_i = expand_scope_by_name(scope, name)
+    # Layer 2: 3D conv(filters_num=32, filter_kernel_size=3, strides=1)
+    # Input: 32@14x14x14, Output: 32@12x12x12
+    conv2 = tf.layers.conv3d(
+        inputs=conv1,
+        filters=32,
+        kernel_size=3,
+        strides=1,
+        activation=_lrelu,
+        name=name,
+        scope=scope_i
+    )
+
+    name = 'encoder_pool1'
+    scope_i = expand_scope_by_name(scope, name)
+    # Layer 3: Max-pooling (2x2x2)
+    # Input: 32@12x12x12, Output: 32@6x6x6
+    max_pool1 = tf.layers.max_pooling3d(
+        inputs=conv2,
+        pool_size=2,
+        strides=2,
+        name=name,
+        scope=scope_i
+    )
+
+    # Layer 4: Fully Connected 128
+    # TODO: (vincent.cheung.mcer@gmail.com), later can try 3D conv instead of Fully Connect dense layer
+    max_pool1_flat = tf.reshape(max_pool1, [-1,6*6*6*32])
+    name = 'encoder_fc1'
+    scope_i = expand_scope_by_name(scope, name)
+    # Input: 1@(6*6*6)*32, Output: 1@128
+    dense4 = tf.layers.dense(
+        inputs=max_pool1_flat,
+        units=128,
+        name=name,
+        scope=scope_i
+    )
+
+    name = 'encoder_fc2'
+    scope_i = expand_scope_by_name(scope, name)
+    # Layer 5: Fully Connected K class
+    # Input: 1@128, Output: 1@K
+    dense5 = tf.layers.dense(
+        inputs=dense4,
+        units=output_size,
+        activation=tf.nn.relu,
+        name=name,
+        scope=scope_i
+    )
+    return dense5

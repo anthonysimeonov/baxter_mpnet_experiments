@@ -25,7 +25,7 @@ from architectures.mpnet import Configuration as Conf
 from architectures.mpnet import MPNet
 
 from architectures.mlp_models import baxter_mpnet_mlp
-from architectures.AE.ae_templates import mlp_architecture_ala_iclr_18, default_train_params, linear_ae
+from architectures.AE.ae_templates import *
 
 from neuralplanner_functions import *
 
@@ -81,6 +81,8 @@ def main(args):
         encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
     elif args.AE_type == 'linear':
         encoder, decoder, enc_args, dec_args = linear_ae(n_pc_points, bneck_size)
+    elif args.AE_type == 'voxelnet':
+        encoder, decoder, enc_args, dec_args = voxel_ae([args.enc_input_size,args.enc_input_size,args.enc_input_size], bneck_size)
 
     # write mpnet pipeline
     mlp, mlp_args = baxter_mpnet_mlp(args.mlp_input_size, args.mlp_output_size)
@@ -210,6 +212,15 @@ def main(args):
         new_pose = envDict['poses'][env_name]
         sceneModifier.permute_obstacles(new_pose)
 
+        # reshaping obstacles according to AE_type
+        obs=obstacles[i]
+        if args.AE_type == 'pointnet':
+            obs=obs.reshape(1, -1, 3)
+        elif args.AE_type == 'linear':
+            obs = obs.reshape(1, -1)
+        elif args.AE_type == 'voxelnet':
+            obs = importer.pointcloud_to_voxel(obs.reshape(1,-1,3))
+
         for j in range(0,path_lengths.shape[1]):
             print ("step: i="+str(i)+" j="+str(j))
             print("fp: " + str(fp_env))
@@ -218,11 +229,6 @@ def main(args):
             p2_ind=0
             p_ind=0
 
-            obs=obstacles[i]
-            if args.AE_type == 'pointnet':
-                obs=obs.reshape(1, -1, 3)
-            elif args.AE_type == 'linear':
-                obs = obs.reshape(1, -1)
             if path_lengths[i][j]>0:
                 global counter
                 global col_time
