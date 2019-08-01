@@ -92,8 +92,6 @@ def voxel_ae(in_shape=[32,32,32], bneck_size=128, bneck_post_mlp=False):
     encoder = encoder_voxelnet
     decoder = decoder_with_fc_only
 
-    n_input = [n_pc_points, 3]
-
     encoder_args = {'output_size': bneck_size
                     }
     """
