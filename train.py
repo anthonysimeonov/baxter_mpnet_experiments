@@ -64,7 +64,7 @@ def main(args):
         encoder, decoder, enc_args, dec_args = linear_ae(n_pc_points, bneck_size)
         n_o_input = [n_pc_points, 3]
     elif args.AE_type == 'voxelnet':
-        encoder, decoder, enc_args, dec_args = voxel_ae([32,32,32], bneck_size)
+        encoder, decoder, enc_args, dec_args = voxel_ae([args.enc_input_size,args.enc_input_size,args.enc_input_size], bneck_size)
         # this means the number of grids in each dimension
         n_o_input = args.enc_input_size
 
