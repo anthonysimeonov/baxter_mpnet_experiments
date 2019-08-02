@@ -269,8 +269,7 @@ def encoder_voxelnet(in_signal, in_shape, output_size, scope=None):
         kernel_size=[5,5,5],
         strides=[2,2,2],
         activation=_lrelu,
-        name=name,
-        scope=scope_i
+        name=name
     )
     name = 'encoder_conv2'
     scope_i = expand_scope_by_name(scope, name)
@@ -282,8 +281,7 @@ def encoder_voxelnet(in_signal, in_shape, output_size, scope=None):
         kernel_size=3,
         strides=1,
         activation=_lrelu,
-        name=name,
-        scope=scope_i
+        name=name
     )
 
     name = 'encoder_pool1'
@@ -294,8 +292,7 @@ def encoder_voxelnet(in_signal, in_shape, output_size, scope=None):
         inputs=conv2,
         pool_size=2,
         strides=2,
-        name=name,
-        scope=scope_i
+        name=name
     )
 
     # Layer 4: Fully Connected 128
@@ -307,8 +304,7 @@ def encoder_voxelnet(in_signal, in_shape, output_size, scope=None):
     dense4 = tf.layers.dense(
         inputs=max_pool1_flat,
         units=128,
-        name=name,
-        scope=scope_i
+        name=name
     )
 
     name = 'encoder_fc2'
@@ -319,7 +315,6 @@ def encoder_voxelnet(in_signal, in_shape, output_size, scope=None):
         inputs=dense4,
         units=output_size,
         activation=tf.nn.relu,
-        name=name,
-        scope=scope_i
+        name=name
     )
     return dense5
