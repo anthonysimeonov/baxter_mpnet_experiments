@@ -206,5 +206,5 @@ class fileImport():
 	    y_idx = (center_points[:, 1] / resolution[1]).astype(int)
 	    z_idx = (center_points[:, 2] / resolution[2]).astype(int)
 	    voxels[x_idx, y_idx, z_idx] = OCCUPIED
-
-	    return voxels, inside_box_points
+		return voxels
+	    #return voxels, inside_box_points
