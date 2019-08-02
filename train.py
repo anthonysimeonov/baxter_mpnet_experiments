@@ -59,10 +59,14 @@ def main(args):
     # write encoder and decoder pipeline
     if args.AE_type == 'pointnet':
         encoder, decoder, enc_args, dec_args = mlp_architecture_ala_iclr_18(n_pc_points, bneck_size)
+        n_o_input = [n_pc_points, 3]
     elif args.AE_type == 'linear':
         encoder, decoder, enc_args, dec_args = linear_ae(n_pc_points, bneck_size)
+        n_o_input = [n_pc_points, 3]
     elif args.AE_type == 'voxelnet':
         encoder, decoder, enc_args, dec_args = voxel_ae([32,32,32], bneck_size)
+        # this means the number of grids in each dimension
+        n_o_input = args.enc_input_size
 
     # write mpnet pipeline
     mlp, mlp_args = baxter_mpnet_mlp(args.mlp_input_size, args.mlp_output_size)
@@ -86,7 +90,7 @@ def main(args):
             encoder_args = enc_args,
             decoder_args = dec_args,
             mlp_args = mlp_args,
-            n_o_input = [n_pc_points, 3],
+            n_o_input = n_o_input,
             n_x_input = [args.mlp_input_size-args.enc_output_size],
             n_output = [args.mlp_output_size],
             pretrain = args.pretrain,
