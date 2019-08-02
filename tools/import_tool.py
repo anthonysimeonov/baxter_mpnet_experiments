@@ -12,7 +12,8 @@ import torch.nn as nn
 import math
 import pypcd
 import sys
-
+OCCUPIED = 1
+FREE = 0
 class fileImport():
     def __init__(self):
         #parameters of the baxter
