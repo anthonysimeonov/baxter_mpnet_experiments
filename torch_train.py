@@ -67,7 +67,10 @@ def main(args):
 
     # Build the models
     mlp = MLP(args.mlp_input_size, args.mlp_output_size)
-    encoder = Encoder(args.enc_input_size, args.enc_output_size)
+    if args.AE_type == 'linear':
+        encoder = Encoder(args.enc_input_size, args.enc_output_size)
+    elif args.AE_type == 'voxel':
+        encoder = Encoder(args.enc_input_size, args.enc_output_size)
 
     if torch.cuda.is_available():
         encoder.cuda()
@@ -168,6 +171,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainPaths.pkl')
-
+    parser.add_argument('--AE_type', type=str, default='linear')
     args = parser.parse_args()
     main(args)

@@ -37,6 +37,34 @@ class MLP_Path(nn.Module):
  		out = self.fc(x)
  		return out
 
+
+class VoxelEncoder(nn.Module):
+	# ref: https://github.com/lxxue/voxnet-pytorch/blob/master/models/voxnet.py
+	def __init__(self, input_size, output_size):
+		super(VoxelEncoder, self).__init__()
+		self.encoder = nn.Sequntial(
+			nn.Conv3d(in_channels=1, out_channels=32, kernel_size=[5,5,5], stride=[2,2,2]),
+			nn.PReLU(),
+			nn.Conv3d(in_channels=32, out_channels=32, kernel_size=[3,3,3], stride=[1,1,1]),
+			nn.PReLU(),
+			nn.MaxPool3d(kernel_size=[2,2,2], stride=[2,2,2])
+		)
+		first_fc_in_features = 1
+    	for n in x.size()[1:]:
+        	first_fc_in_features *= n
+		self.head = nn.Sequential(
+			nn.Linear(first_fc_in_features, 128),
+			nn.PReLU(),
+			nn.Linear(128, output_size)
+		)
+	def forward(self, x):
+		x = self.encoder(x)
+		x = x.view(x.size(0), -1)
+		x = self.head(x)
+		return x
+
+
+
 class Encoder(nn.Module):
     def __init__(self, input_size, output_size):
         super(Encoder, self).__init__()

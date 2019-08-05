@@ -93,7 +93,8 @@ def voxel_ae(in_shape=[32,32,32], bneck_size=128, bneck_post_mlp=False):
     decoder = decoder_with_fc_only
 
     encoder_args = {'in_shape': in_shape,
-                    'output_size': bneck_size
+                    'output_size': bneck_size,
+                    'non_linearity': wrap_prelu
                     }
     """
     currently not using decoder
