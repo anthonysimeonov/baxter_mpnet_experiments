@@ -269,9 +269,9 @@ def encoder_voxelnet(in_signal, in_shape, output_size, non_linearity=tf.nn.relu,
         filters=32,
         kernel_size=[5,5,5],
         strides=[2,2,2],
-        activation=non_linearity,
         name=name
     )
+    conv1 = non_linearity(conv1, name='alpha_1')
     name = 'encoder_conv2'
     scope_i = expand_scope_by_name(scope, name)
     # Layer 2: 3D conv(filters_num=32, filter_kernel_size=3, strides=1)
@@ -281,9 +281,9 @@ def encoder_voxelnet(in_signal, in_shape, output_size, non_linearity=tf.nn.relu,
         filters=32,
         kernel_size=3,
         strides=1,
-        activation=non_linearity,
         name=name
     )
+    conv2 = non_linearity(conv2, name='alpha_2')
 
     name = 'encoder_pool1'
     scope_i = expand_scope_by_name(scope, name)
@@ -305,9 +305,9 @@ def encoder_voxelnet(in_signal, in_shape, output_size, non_linearity=tf.nn.relu,
     dense4 = tf.layers.dense(
         inputs=max_pool1_flat,
         units=128,
-        activation=non_linearity,
         name=name
     )
+    dense4 = non_linearity(dense4, name='alpha_3')
 
     name = 'encoder_fc2'
     scope_i = expand_scope_by_name(scope, name)
