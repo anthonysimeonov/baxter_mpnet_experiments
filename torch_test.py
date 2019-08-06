@@ -58,7 +58,7 @@ def main(args):
         encoder = VoxelEncoder(args.enc_input_size, args.enc_output_size)
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
-        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles,1,args.enc_input_size,args.enc_input_size,args.enc_input_size))
+        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
     mlp = MLP(args.mlp_input_size, args.mlp_output_size)
 
     # device = torch.device('cpu')
