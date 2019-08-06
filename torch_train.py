@@ -152,7 +152,7 @@ def main(args):
             record_loss += loss.data
             record_i += 1
             if record_i % 100 == 0:
-                writer.add_scalar('loss', record_loss / 100)
+                writer.add_scalar('loss', record_loss / 100, record_i)
                 record_loss = 0.
             #print('encoder...')
             #for name, param in encoder.named_parameters():
