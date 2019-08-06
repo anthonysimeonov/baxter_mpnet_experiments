@@ -12,7 +12,7 @@ import time
 import sys
 
 ###
-from torch_architectures import MLP, MLP_Path, Encoder, Encoder_End2End
+from torch_architectures import MLP, MLP_Path, Encoder, Encoder_End2End, VoxelEncoder
 
 
 def to_var(x, volatile=False):
@@ -44,7 +44,7 @@ def get_input(i, data, targets, pc_inds, obstacles, bs):
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "%d" % (args.device)
 
     importer = fileImport()
     env_data_path = args.env_data_path
@@ -55,7 +55,7 @@ def main(args):
 
     print("Loading obstacle data...\n")
     dataset_train, targets_train, pc_inds_train, obstacles = load_dataset_end2end(
-        envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=100)
+        envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=args.NP)
 
     print("Loaded dataset, targets, and pontcloud obstacle vectors: ")
     print(str(len(dataset_train)) + " " +
@@ -70,7 +70,10 @@ def main(args):
     if args.AE_type == 'linear':
         encoder = Encoder(args.enc_input_size, args.enc_output_size)
     elif args.AE_type == 'voxel':
-        encoder = Encoder(args.enc_input_size, args.enc_output_size)
+        encoder = VoxelEncoder(args.enc_input_size, args.enc_output_size)
+        # convert obstacles to voxel
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles,1,args.enc_input_size,args.enc_input_size))
 
     if torch.cuda.is_available():
         encoder.cuda()
@@ -172,5 +175,7 @@ if __name__ == "__main__":
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainPaths.pkl')
     parser.add_argument('--AE_type', type=str, default='linear')
+    parser.add_argument('--NP', type=int, default=1000)
+    parser.add_argument('--device', type=int, default=0)
     args = parser.parse_args()
     main(args)
