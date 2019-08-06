@@ -78,7 +78,7 @@ class fileImport():
                 paths_dict = pickle.load(paths_f)
             print(paths_dict[env_names])
             # for non single environment, need to use the environment name as a dictionary key to get the right path list
-            env_paths = self.moveit_unscramble(paths_dict[env_name])
+            env_paths = self.moveit_unscramble(paths_dict[env_names])
             return env_paths
 
         else:
