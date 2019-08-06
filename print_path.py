@@ -62,8 +62,8 @@ def main(args):
         str(len(targets_train)) + " " + str(len(pc_inds_train)))
     print("\n")
 
-    for i in range(len(dataset_train)):
-        print(dataset_train[i])
+    #for i in range(len(dataset_train)):
+    #    print(dataset_train[i])
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
