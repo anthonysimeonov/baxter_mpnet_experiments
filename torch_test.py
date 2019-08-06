@@ -154,11 +154,11 @@ def main(args):
             p2_ind=0
             p_ind=0
 
-            obs=obstacles[i]
+            obs=np.array([obstacles[i]])
             obs=torch.from_numpy(obs).type(torch.FloatTensor)
 
             en_inp=to_var(obs)
-            h=encoder(en_inp)
+            h=encoder(en_inp)[0]
 
             if path_lengths[i][j]>0:
                 global counter
