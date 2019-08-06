@@ -82,7 +82,7 @@ The experiments can alternatively be run in a container which has all the system
 ```
 docker build -t baxter-moveit-docker .
 ```
-Once the container has been built, navigate the root directory, and run the ```run image.bash``` executable. This will run the docker image and open a new terminal inside the container, and this repository and all its source code for running the experiments will be mounted inside the image. All the scripts and environments can then be run inside the container (see below for details).
+Once the container has been built, navigate the root directory, and run the ```run_image.bash``` executable. This will run the docker image and open a new terminal inside the container, and this repository and all its source code for running the experiments will be mounted inside the image. All the scripts and environments can then be run inside the container (see below for details).
 
 In the terminal opened after launching the image, follow the below steps to set up the MoveIt! planning environment.
 ```
