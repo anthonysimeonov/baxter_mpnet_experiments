@@ -372,6 +372,7 @@ if __name__ == "__main__":
     parser.add_argument('--pointcloud_data_path', type=str, default='./data/test/pcd/')
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainEnvironments_testPaths.pkl')
+    parser.add_argument('--AE_type', type=str, default='linear')
 
     parser.add_argument('--enc_input_size', type=int, default=16053)
     parser.add_argument('--enc_output_size', type=int, default=60)
