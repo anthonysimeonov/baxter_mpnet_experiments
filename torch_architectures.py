@@ -119,7 +119,6 @@ class VoxelEncoder3(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.head(x)
         return x
-
 class VoxelEncoder4(nn.Module):
     # ref: https://github.com/lxxue/voxnet-pytorch/blob/master/models/voxnet.py
     def __init__(self, input_size, output_size):
@@ -128,9 +127,9 @@ class VoxelEncoder4(nn.Module):
         self.encoder = nn.Sequential(
             nn.Conv3d(in_channels=1, out_channels=16, kernel_size=[3,3,3], stride=[1,1,1]),
             nn.PReLU(),
-            nn.Conv3d(in_channels=16, out_channels=16, kernel_size=[5,5,5], stride=[1,1,1]),
+            nn.Conv3d(in_channels=16, out_channels=16, kernel_size=[3,3,3], stride=[2,2,2]),
             nn.PReLU(),
-            nn.Conv3d(in_channels=16, out_channels=16, kernel_size=[5,5,5], stride=[2,2,2]),
+            nn.Conv3d(in_channels=16, out_channels=32, kernel_size=[5,5,5], stride=[2,2,2]),
             nn.PReLU()
         )
         x = self.encoder(torch.autograd.Variable(torch.rand([1, 1] + input_size)))
