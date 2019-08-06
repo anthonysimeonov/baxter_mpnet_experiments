@@ -53,7 +53,7 @@ class fileImport():
         """
         with open (path_fname, "rb") as paths_f:
             paths_dict = pickle.load(paths_f)
-
+        print(paths_dict)
         # keyed by environment name
         unscrambled_dict = {}
         for key in paths_dict.keys():
