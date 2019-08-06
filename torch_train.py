@@ -125,15 +125,18 @@ def main(args):
             loss = criterion(bo, bt)
             avg_loss = avg_loss+loss.data
             loss.backward()
-            print('encoder...')
-            for name, param in encoder.named_parameters():
-                if param.requires_grad:
-                    print name, param.data, param.grad
-            print('mlp...')
-            for name, param in mlp.named_parameters():
-                if param.requires_grad:
-                    print name, param.data, param.grad
+            print('loss:')
+            print(loss)
+            #print('encoder...')
+            #for name, param in encoder.named_parameters():
+            #    if param.requires_grad:
+            #        print name, param.data, param.grad
+            #print('mlp...')
+            #for name, param in mlp.named_parameters():
+            #    if param.requires_grad:
+            #        print name, param.data, param.grad
             optimizer.step()
+
         print("--average loss:")
         print(avg_loss/(len(dataset_train)/args.batch_size))
         total_loss.append(avg_loss/(len(dataset_train)/args.batch_size))
