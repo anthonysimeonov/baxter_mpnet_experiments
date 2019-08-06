@@ -298,7 +298,7 @@ def encoder_voxelnet(in_signal, in_shape, output_size, non_linearity=tf.nn.relu,
 
     # Layer 4: Fully Connected 128
     # TODO: (vincent.cheung.mcer@gmail.com), later can try 3D conv instead of Fully Connect dense layer
-    max_pool1_flat = tf.reshape(max_pool1, [-1,np.prod(layer.get_shape().as_list()[1:])])
+    max_pool1_flat = tf.reshape(max_pool1, [-1,np.prod(max_pool1.get_shape().as_list()[1:])])
     name = 'encoder_fc1'
     scope_i = expand_scope_by_name(scope, name)
     # Input: 1@(6*6*6)*32, Output: 1@128
