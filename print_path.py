@@ -84,7 +84,7 @@ if __name__ == "__main__":
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainPaths.pkl')
     parser.add_argument('--AE_type', type=str, default='linear')
-    parser.add_argument('--NP', type=int, default=1000)
+    parser.add_argument('--NP', type=int, default=100)
     parser.add_argument('--device', type=int, default=0)
     args = parser.parse_args()
     main(args)
