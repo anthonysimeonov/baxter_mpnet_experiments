@@ -39,7 +39,7 @@ def get_input(i, data, targets, pc_inds, obstacles, bs):
         bpc = pc_inds[i:]
         bobs = obstacles[bpc]
 
-    return torch.from_numpy(bi), torch.from_numpy(bt), torch.from_numpy(bobs)
+    return torch.from_numpy(bi), torch.from_numpy(bt), torch.from_numpy(bobs).type(torch.FloatTensor)
 
 
 def main(args):
