@@ -155,7 +155,7 @@ def main(args):
             p_ind=0
 
             obs=obstacles[i]
-            obs=torch.from_numpy(obs)
+            obs=torch.from_numpy(obs).type(torch.FloatTensor)
 
             en_inp=to_var(obs)
             h=encoder(en_inp)
