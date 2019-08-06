@@ -98,11 +98,11 @@ class VoxelEncoder3(nn.Module):
         super(VoxelEncoder3, self).__init__()
         input_size = [input_size, input_size, input_size]
         self.encoder = nn.Sequential(
-            nn.Conv3d(in_channels=1, out_channels=16, kernel_size=[3,3,3], stride=[1,1,1]),
+            nn.Conv3d(in_channels=1, out_channels=8, kernel_size=[3,3,3], stride=[1,1,1]),
             nn.PReLU(),
-            nn.Conv3d(in_channels=16, out_channels=32, kernel_size=[5,5,5], stride=[1,1,1]),
+            nn.Conv3d(in_channels=8, out_channels=16, kernel_size=[5,5,5], stride=[2,2,2]),
             nn.PReLU(),
-            nn.Conv3d(in_channels=32, out_channels=32, kernel_size=[5,5,5], stride=[2,2,2]),
+            nn.Conv3d(in_channels=16, out_channels=32, kernel_size=[5,5,5], stride=[2,2,2]),
             nn.PReLU()
         )
         x = self.encoder(torch.autograd.Variable(torch.rand([1, 1] + input_size)))
@@ -110,9 +110,9 @@ class VoxelEncoder3(nn.Module):
         for n in x.size()[1:]:
             first_fc_in_features *= n
         self.head = nn.Sequential(
-            nn.Linear(first_fc_in_features, 256),
+            nn.Linear(first_fc_in_features, 128),
             nn.PReLU(),
-            nn.Linear(256, output_size)
+            nn.Linear(128, output_size)
         )
     def forward(self, x):
         x = self.encoder(x)
