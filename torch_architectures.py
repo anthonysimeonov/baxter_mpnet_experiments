@@ -42,7 +42,7 @@ class VoxelEncoder(nn.Module):
     # ref: https://github.com/lxxue/voxnet-pytorch/blob/master/models/voxnet.py
     def __init__(self, input_size, output_size):
         super(VoxelEncoder, self).__init__()
-        input_size = [input_size, input_size]
+        input_size = [input_size, input_size, input_size]
         self.encoder = nn.Sequential(
             nn.Conv3d(in_channels=1, out_channels=32, kernel_size=[5,5,5], stride=[2,2,2]),
             nn.PReLU(),
