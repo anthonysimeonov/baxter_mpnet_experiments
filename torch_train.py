@@ -10,9 +10,9 @@ import math
 from tools.import_tool import fileImport
 import time
 import sys
-
+from tensorboardX import SummaryWriter
 ###
-from torch_architectures import MLP, MLP_Path, Encoder, Encoder_End2End, VoxelEncoder
+from torch_architectures import *
 
 
 def to_var(x, volatile=False):
@@ -53,6 +53,8 @@ def main(args):
 
     envs = importer.environments_import(env_data_path + args.envs_file)
 
+    # select how many envs to train on
+    envs = envs[:args.N]
     print("Loading obstacle data...\n")
     dataset_train, targets_train, pc_inds_train, obstacles = load_dataset_end2end(
         envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=args.NP)
@@ -74,6 +76,22 @@ def main(args):
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
         obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+    elif args.AE_type == 'voxel2':
+        encoder = VoxelEncoder2(args.enc_input_size, args.enc_output_size)
+        # convert obstacles to voxel
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+    elif args.AE_type == 'voxel3':
+        encoder = VoxelEncoder3(args.enc_input_size, args.enc_output_size)
+        # convert obstacles to voxel
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+    elif args.AE_type == 'voxel4':
+        encoder = VoxelEncoder3(args.enc_input_size, args.enc_output_size)
+        # convert obstacles to voxel
+        obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
+        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+
 
     if torch.cuda.is_available():
         encoder.cuda()
@@ -93,6 +111,9 @@ def main(args):
     print("Starting epochs...\n")
     # epoch=1
     done = False
+    writer = SummaryWriter('./runs/'+args.exp_name)
+    record_i = 0
+    record_loss = 0.
     for epoch in range(args.num_epochs):
         # while (not done)
         start = time.time()
@@ -127,6 +148,12 @@ def main(args):
             loss.backward()
             print('loss:')
             print(loss)
+            # every 100 batches record loss
+            record_loss += loss.data
+            record_i += 1
+            if record_i % 100 == 0:
+                writer.add_scalar('loss', record_loss / 100)
+                record_loss = 0.
             #print('encoder...')
             #for name, param in encoder.named_parameters():
             #    if param.requires_grad:
@@ -158,6 +185,8 @@ def main(args):
     model_path = 'mlp_PReLU_ae_dd_final.pkl'
     torch.save(mlp.state_dict(), os.path.join(args.trained_model_path, model_path))
 
+    writer.export_scalars_to_json("./all_scalars.json")
+    writer.close()
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -165,6 +194,8 @@ if __name__ == "__main__":
     parser.add_argument('--path_data_path', type=str, default='./data/train/paths/')
     parser.add_argument('--pointcloud_data_path', type=str, default='./data/train/pcd/')
     parser.add_argument('--trained_model_path', type=str, default='./models/sample_train/', help='path for saving trained models')
+    parser.add_argument('--exp_name', type=str, default='aa', help='for comparing different experiments')
+
 
     parser.add_argument('--batch_size', type=int, default=100)
     parser.add_argument('--learning_rate', type=float, default=0.001)
@@ -178,6 +209,7 @@ if __name__ == "__main__":
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainPaths.pkl')
     parser.add_argument('--AE_type', type=str, default='linear')
+    parser.add_argument('--N', type=int, default=10)
     parser.add_argument('--NP', type=int, default=1000)
     parser.add_argument('--device', type=int, default=0)
     args = parser.parse_args()

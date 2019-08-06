@@ -47,10 +47,11 @@ def main(args):
     pcd_data_path = args.pointcloud_data_path
 
     envs = importer.environments_import(env_data_path + args.envs_file)
+    envs = envs[:args.N]
     with open (env_data_path+args.envs_file, 'rb') as env_f:
         envDict = pickle.load(env_f)
 
-    obstacles, paths, path_lengths = load_test_dataset_end2end(envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=100)
+    obstacles, paths, path_lengths = load_test_dataset_end2end(envs, path_data_path, pcd_data_path, args.path_data_file, importer, NP=args.NP)
 
     if args.AE_type == 'linear':
         encoder = Encoder(args.enc_input_size, args.enc_output_size)
@@ -373,6 +374,9 @@ if __name__ == "__main__":
     parser.add_argument('--envs_file', type=str, default='trainEnvironments.pkl')
     parser.add_argument('--path_data_file', type=str, default='trainEnvironments_testPaths.pkl')
     parser.add_argument('--AE_type', type=str, default='linear')
+    parser.add_argument('--exp_name', type=str, default='linear')
+    parser.add_argument('--N', type=int, default=10)
+    parser.add_argument('--NP', type=int, default=100)
 
     parser.add_argument('--enc_input_size', type=int, default=16053)
     parser.add_argument('--enc_output_size', type=int, default=60)
