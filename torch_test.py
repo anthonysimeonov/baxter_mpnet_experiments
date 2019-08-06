@@ -39,7 +39,7 @@ def IsInCollision(state, print_depth=False):
 
 def main(args):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "%d" % (args.device)
 
     importer = fileImport()
     env_data_path = args.env_data_path
@@ -58,7 +58,7 @@ def main(args):
         encoder = VoxelEncoder(args.enc_input_size, args.enc_output_size)
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
-        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles,1,args.enc_input_size,args.enc_input_size))
+        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles,1,args.enc_input_size,args.enc_input_size,args.enc_input_size))
     mlp = MLP(args.mlp_input_size, args.mlp_output_size)
 
     # device = torch.device('cpu')
@@ -377,6 +377,7 @@ if __name__ == "__main__":
     parser.add_argument('--enc_output_size', type=int, default=60)
     parser.add_argument('--mlp_input_size', type=int, default=74)
     parser.add_argument('--mlp_output_size', type=int, default=7)
+    parser.add_argument('--device', type=int, default=0)
 
     args = parser.parse_args()
     main(args)
