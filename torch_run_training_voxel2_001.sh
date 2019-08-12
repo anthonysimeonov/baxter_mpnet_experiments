@@ -3,5 +3,5 @@ python torch_train.py \
 --envs_file trainEnvironments.pkl --path_data_file trainPaths.pkl \
 --trained_model_path ./models/sample/voxel2_128_001/ \
 --batch_size 100 --learning_rate 0.001  --num_epochs 200 \
---enc_input_size 128 --enc_vox_size 128 --enc_output_size 128 --mlp_input_size 142 --mlp_output_size 7 \
+--enc_input_size 80 --enc_vox_size 80 --enc_output_size 128 --mlp_input_size 142 --mlp_output_size 7 \
 --AE_type voxel2 --N 1 --NP 100 --device 0 --exp_name voxel2
