@@ -75,22 +75,30 @@ def main(args):
         encoder = VoxelEncoder(args.enc_input_size, args.enc_output_size)
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
-        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+        obstacles = importer.pointcloud_to_voxel(obstacles,
+                voxel_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size),
+                padding_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size)).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
     elif args.AE_type == 'voxel2':
         encoder = VoxelEncoder2(args.enc_input_size, args.enc_output_size)
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
-        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+        obstacles = importer.pointcloud_to_voxel(obstacles,
+                voxel_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size),
+                padding_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size)).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
     elif args.AE_type == 'voxel3':
         encoder = VoxelEncoder3(args.enc_input_size, args.enc_output_size)
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
-        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+        obstacles = importer.pointcloud_to_voxel(obstacles,
+                voxel_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size),
+                padding_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size)).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
     elif args.AE_type == 'voxel4':
         encoder = VoxelEncoder3(args.enc_input_size, args.enc_output_size)
         # convert obstacles to voxel
         obstacles = obstacles.astype(float).reshape(len(obstacles),-1,3)
-        obstacles = importer.pointcloud_to_voxel(obstacles).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
+        obstacles = importer.pointcloud_to_voxel(obstacles,
+                voxel_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size),
+                padding_size=(args.enc_input_size, args.enc_input_size, args.enc_input_size)).reshape(len(obstacles),1,args.enc_input_size,args.enc_input_size,args.enc_input_size)
 
 
     if torch.cuda.is_available():
@@ -201,6 +209,7 @@ if __name__ == "__main__":
     parser.add_argument('--learning_rate', type=float, default=0.001)
     parser.add_argument('--num_epochs', type=int, default=200)
 
+    parser.add_argument('--enc_vox_size', type=int, default=28)
     parser.add_argument('--enc_input_size', type=int, default=16053)
     parser.add_argument('--enc_output_size', type=int, default=60)
     parser.add_argument('--mlp_input_size', type=int, default=74)
