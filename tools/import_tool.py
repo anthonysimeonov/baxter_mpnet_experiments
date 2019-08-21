@@ -102,9 +102,11 @@ class fileImport():
         # flatten into vector
         # obs_pc = np.zeros((3, pc.pc_data['x'].shape[0]))
         obs_pc = np.zeros((3, min_length_array))
-        obs_pc[0] = pc.pc_data['x'][~np.isnan(pc.pc_data['x'])][:min_length_array]
-        obs_pc[1] = pc.pc_data['y'][~np.isnan(pc.pc_data['x'])][:min_length_array]
-        obs_pc[2] = pc.pc_data['z'][~np.isnan(pc.pc_data['x'])][:min_length_array]
+        # randomly select min_length_array number of points
+        indice = np.random.choice(len(pc.pc_data['x'][~np.isnan(pc.pc_data['x'])]), size=min_length_array, replace=True)
+        obs_pc[0] = pc.pc_data['x'][~np.isnan(pc.pc_data['x'])][indice]
+        obs_pc[1] = pc.pc_data['y'][~np.isnan(pc.pc_data['x'])][indice]
+        obs_pc[2] = pc.pc_data['z'][~np.isnan(pc.pc_data['x'])][indice]
 
         return obs_pc
 
