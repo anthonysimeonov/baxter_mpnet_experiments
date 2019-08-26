@@ -18,7 +18,9 @@ docker run -it \
     -env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
     -v $PWD:/root/catkin_ws/src/baxter_mpnet_experiments/ \
-    --mount type=bind,source=/media/arclabdl1/HD1/YLmiao/ \
     --runtime=nvidia \
     baxter-moveit-docker \
     bash
+
+# use this later
+#--mount type=bind,source=/media/arclabdl1/HD1/YLmiao/ \
