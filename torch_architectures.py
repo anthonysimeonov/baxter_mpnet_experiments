@@ -163,9 +163,9 @@ class MultiViewVoxelEncoder3(nn.Module):
     def forward(self, x):
         # x shape: BxCxWxHxD
         size = x.size()
-        x1 = x.permute(0, 2, 3, 1, 4).reshape(size[0], size[2], size[3], -1)# transpose to BxWxHx(CxD)
-        x2 = x.permute(0, 2, 4, 1, 3).reshape(size[0], size[2], size[4], -1)# transpose to BxWxDx(CxH)
-        x3 = x.permute(0, 3, 4, 1, 2).reshape(size[0], size[3], size[4], -1)# transpose to BxHxDx(CxW)
+        x1 = x.permute(0, 1, 4, 2, 3).reshape(size[0], -1, size[2], size[3])# transpose to Bx(CxD)xWxH
+        x2 = x.permute(0, 1, 3, 2, 4).reshape(size[0], -1, size[2], size[4])# transpose to Bx(CxH)xWxD
+        x3 = x.permute(0, 1, 2, 3, 4).reshape(size[0], -1, size[3], size[4])# transpose to Bx(CxW)xHxD
         x1, x2, x3 = self.encoder1(x1),self.encoder2(x2),self.encoder3(x3)
         x1, x2, x3 = x1.view(x1.size(0), -1), x2.view(x2.size(0), -1), x3.view(x3.size(0, -1))
         # cat x1 x2 x3 into x
