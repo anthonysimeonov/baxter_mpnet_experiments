@@ -149,7 +149,7 @@ class MultiViewVoxelEncoder3(nn.Module):
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[3,3], stride=[1,1]),
             nn.PReLU()
         )
-        x = self.encoder(torch.autograd.Variable(torch.rand([1] + input_size)))
+        x = self.encoder1(torch.autograd.Variable(torch.rand([1] + input_size)))
         first_fc_in_features = 1
         for n in x.size()[1:]:
             first_fc_in_features *= n
