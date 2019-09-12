@@ -190,7 +190,7 @@ def main(args):
             time_stop = time.time()
             print('training time: %fs\n' % (time_stop - time_start))
             print('estimated remaining time: %fs\n' %
-                (((len(dataset_train)-i) / float(args.batch_size) - 1) * (time_stop - time_start)) * args.num_epochs)
+                (((len(dataset_train)-i) / float(args.batch_size) - 1) * (time_stop - time_start) * args.num_epochs))
         print("--average loss:")
         print(avg_loss/(len(dataset_train)/args.batch_size))
         total_loss.append(avg_loss/(len(dataset_train)/args.batch_size))
