@@ -153,10 +153,12 @@ class MultiViewVoxelEncoder3(nn.Module):
         first_fc_in_features = 1
         for n in x.size()[1:]:
             first_fc_in_features *= n
+        print('length of the output of one encoder')
+        print(first_fc_in_features)
         self.head = nn.Sequential(
-            nn.Linear(first_fc_in_features*3, first_fc_in_features),
+            nn.Linear(first_fc_in_features*3, 256),
             nn.PReLU(),
-            nn.Linear(first_fc_in_features, 128),
+            nn.Linear(256, 128),
             nn.PReLU(),
             nn.Linear(128, output_size)
         )
