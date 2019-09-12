@@ -143,6 +143,7 @@ def main(args):
         print("epoch" + str(epoch))
         avg_loss = 0
         for i in range(0, len(dataset_train), args.batch_size):
+            time_start = time.time()
             print("number of batch: %d/%d" % (i/args.batch_size, len(dataset_train)/args.batch_size))
             # Forward, Backward and Optimize
             # zero gradients
@@ -186,7 +187,10 @@ def main(args):
             #    if param.requires_grad:
             #        print name, param.data, param.grad
             optimizer.step()
-
+            time_stop = time.time()
+            print('training time: %f' % (time_stop - time_start))
+            print('estimated remaining time: %f' %
+                ((len(dataset_train) / float(args.batch_size) - 1) * (time_stop - time_start)) * args.num_epochs)
         print("--average loss:")
         print(avg_loss/(len(dataset_train)/args.batch_size))
         total_loss.append(avg_loss/(len(dataset_train)/args.batch_size))
