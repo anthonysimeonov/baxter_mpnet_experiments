@@ -128,25 +128,25 @@ class MultiViewVoxelEncoder3(nn.Module):
         self.encoder1 = nn.Sequential(
             nn.Conv2d(in_channels=input_size[0], out_channels=8, kernel_size=[3,3], stride=[1,1]),
             nn.PReLU(),
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=[3,3], stride=[1,1]),
+            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=[5,5], stride=[2,2]),
             nn.PReLU(),
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[3,3], stride=[1,1]),
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[5,5], stride=[2,2]),
             nn.PReLU()
         )
         self.encoder2 = nn.Sequential(
             nn.Conv2d(in_channels=input_size[0], out_channels=8, kernel_size=[3,3], stride=[1,1]),
             nn.PReLU(),
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=[3,3], stride=[1,1]),
+            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=[5,5], stride=[2,2]),
             nn.PReLU(),
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[3,3], stride=[1,1]),
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[5,5], stride=[2,2]),
             nn.PReLU()
         )
         self.encoder3 = nn.Sequential(
             nn.Conv2d(in_channels=input_size[0], out_channels=8, kernel_size=[3,3], stride=[1,1]),
             nn.PReLU(),
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=[3,3], stride=[1,1]),
+            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=[5,5], stride=[2,2]),
             nn.PReLU(),
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[3,3], stride=[1,1]),
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=[5,5], stride=[2,2]),
             nn.PReLU()
         )
         x = self.encoder1(torch.autograd.Variable(torch.rand([1] + input_size)))
@@ -179,7 +179,7 @@ class MultiViewVoxelEncoder3(nn.Module):
         x1, x2, x3 = self.encoder1(x1),self.encoder2(x2),self.encoder3(x3)
         print('after encoder x1 size:')
         print(x1.size())
-        x1, x2, x3 = x1.view(x1.size(0), -1), x2.view(x2.size(0), -1), x3.view(x3.size(0, -1))
+        x1, x2, x3 = x1.view(x1.size(0), -1), x2.view(x2.size(0), -1), x3.view(x3.size(0), -1)
         # cat x1 x2 x3 into x
         x = torch.cat([x1, x2, x3], dim=1)
         x = self.head(x)
