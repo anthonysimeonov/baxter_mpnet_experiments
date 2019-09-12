@@ -123,7 +123,7 @@ class VoxelEncoder3(nn.Module):
 class MultiViewVoxelEncoder3(nn.Module):
     # ref: https://github.com/lxxue/voxnet-pytorch/blob/master/models/voxnet.py
     def __init__(self, input_size, output_size):
-        super(VoxelEncoder3, self).__init__()
+        super(MultiViewVoxelEncoder3, self).__init__()
         input_size = [input_size, input_size, input_size]
         self.encoder1 = nn.Sequential(
             nn.Conv2d(in_channels=input_size[0], out_channels=8, kernel_size=[3,3], stride=[1,1]),
