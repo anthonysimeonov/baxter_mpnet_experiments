@@ -1,5 +1,5 @@
 python torch_train.py \
---env_data_path ./env/environment_data/ --path_data_path ./data/train/paths/ --pointcloud_data_path ../multiview_data/train/pcd/ \
+--env_data_path ./env/environment_data/ --path_data_path ./data/train/paths/ --pointcloud_data_path ./multiview_data/train/pcd/ \
 --envs_file trainEnvironments.pkl --path_data_file trainPaths.pkl \
 --trained_model_path ./models/sample/mvvoxel5_01/ \
 --batch_size 100 --learning_rate 0.01  --num_epochs 200 \
