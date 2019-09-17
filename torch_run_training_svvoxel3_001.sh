@@ -4,4 +4,4 @@ python torch_train.py \
 --trained_model_path ./models/sample/svvoxel3_001/ \
 --batch_size 100 --learning_rate 0.001  --num_epochs 200 \
 --enc_input_size 32 --enc_output_size 128 --mlp_input_size 142 --mlp_output_size 7 --AE_type svvoxel3 --N 10 --NP 100 \
---device 1 --exp_name svvoxel3
+--device 3 --exp_name svvoxel3
