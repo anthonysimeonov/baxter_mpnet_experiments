@@ -38,7 +38,7 @@ nbformat==4.4.0
 networkx==2.2
 nltk==3.4
 notebook==5.7.4
-numpy==1.15.4
+numpy==1.22.0
 pandocfilters==1.4.2
 pathlib2==2.3.3
 pexpect==4.6.0
